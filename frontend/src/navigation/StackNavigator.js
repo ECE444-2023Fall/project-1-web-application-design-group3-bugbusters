@@ -1,22 +1,21 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import React, { useState, useReducer, useContext } from "react";
-import {
-  Text,
-  StyleSheet,
-  View,
-  Button,
-  FlatList,
-  TextInput,
-  TouchableOpacity,
-} from "react-native";
+import React from "react";
+import { StyleSheet } from "react-native";
 import LandingPageScreen from "../screens/LandingPageScreen";
+import BottomTab from "./BottomTabNavigator";
 
 const Stack = createStackNavigator();
 
 const MainStack = function () {
   return (
-    <Stack.Navigator>
-        <Stack.Screen name="Landing Page" component={LandingPageScreen}/>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen
+        name="Bottom Tab"
+        component={BottomTab}
+        options={{
+          headerTitle: "Landing Page",
+        }}
+      />
     </Stack.Navigator>
   );
 };
