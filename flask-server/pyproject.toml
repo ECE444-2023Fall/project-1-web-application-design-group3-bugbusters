@@ -1,5 +1,5 @@
 [project]
-name = "flask-server"
+name = "flask_server"
 authors = [
     {name = "Benjamin Goel", email = "ben_goel@rogers.com"},
 ]
@@ -8,6 +8,11 @@ description = "The flask server for the ClubHub application."
 dependencies = [
     "flask",
     "firebase_admin",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
 ]
 
 [build-system]
