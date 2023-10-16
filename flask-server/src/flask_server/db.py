@@ -1,8 +1,13 @@
 import firebase_admin
 from firebase_admin import credentials, firestore
+import git
+import os
 
 # Authenticate credentials so we can access our firebase project
-cred = credentials.Certificate("/Users/bengoel/Documents/clubhub/flask-server/ece444bulletin-firebase-adminsdk.json")
+git_repo = git.Repo(os.getcwd(), search_parent_directories=True)
+repo_root = git_repo.git.rev_parse("--show-toplevel")
+json_path = "flask-server/ece444bulletin-firebase-adminsdk.json"
+cred = credentials.Certificate(os.path.join(repo_root, json_path))
 firebase_admin.initialize_app(cred)
 
 # Initialize Firestore db
