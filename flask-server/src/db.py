@@ -2,7 +2,7 @@ import firebase_admin
 from firebase_admin import credentials, firestore
 
 # Authenticate credentials so we can access our firebase project
-cred = credentials.Certificate("./ece444bulletin-firebase-adminsdk.json")
+cred = credentials.Certificate("/Users/bengoel/Documents/clubhub/flask-server/ece444bulletin-firebase-adminsdk.json")
 firebase_admin.initialize_app(cred)
 
 # Initialize Firestore db

@@ -1,0 +1,15 @@
+[project]
+name = "flask-server"
+authors = [
+    {name = "Benjamin Goel", email = "ben_goel@rogers.com"},
+]
+version = "1.0.0"
+description = "The flask server for the ClubHub application."
+dependencies = [
+    "flask",
+    "firebase_admin",
+]
+
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend = "setuptools.build_meta"
