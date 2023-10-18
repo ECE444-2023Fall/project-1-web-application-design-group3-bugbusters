@@ -1,6 +1,10 @@
+import git
+import os
 from flask_server.classes.DataBaseClient import DataBaseClient
 
-# Specify path of authenticate credentials here
-# auth_path = "/Users/bengoel/Documents/clubhub/flask-server/ece444bulletin-firebase-adminsdk.json"
-auth_path = "/Users/mskre/OneDrive/Desktop/Y4/Y4S1/ECE444/Project 1/Code_Base/auth_key.json"
-db_client = DataBaseClient(auth_path)
+# Authenticate credentials so we can access our firebase project
+git_repo = git.Repo(os.getcwd(), search_parent_directories=True)
+repo_root = git_repo.git.rev_parse("--show-toplevel")
+json_path = "flask-server/ece444bulletin-firebase-adminsdk.json"
+json_path = os.path.join(repo_root, json_path)
+db_client = DataBaseClient(json_path)
