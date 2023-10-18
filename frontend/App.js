@@ -1,12 +1,14 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { StatusBar } from 'expo-status-bar';
-import { Text, View } from 'react-native';
-import MainStack from './src/navigation/StackNavigator';
+import { NavigationContainer } from "@react-navigation/native";
+import { store } from "./src/store/Store";
+import { Provider } from "react-redux";
+import MainStack from "./src/navigation/StackNavigator";
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <MainStack/>
-    </NavigationContainer>
+    <Provider store={store}>
+      <NavigationContainer>
+        <MainStack />
+      </NavigationContainer>
+    </Provider>
   );
 }
