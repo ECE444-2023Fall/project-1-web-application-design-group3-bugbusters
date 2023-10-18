@@ -1,7 +1,7 @@
 import os
 
 from flask import Flask
-
+from flask_server.services.event_service import event_service
 
 def create_app(test_config=None):
     # create and configure the app
@@ -27,5 +27,8 @@ def create_app(test_config=None):
     @app.route('/')
     def hello():
         return 'Hello, World!'
+    
+    # Event service
+    app.register_blueprint(event_service)
 
     return app
