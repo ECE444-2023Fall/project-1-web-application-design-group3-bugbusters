@@ -1,0 +1,11 @@
+version: "3.8"
+services:
+  flask-server:
+    build: ./flask-server
+    container_name: flask-server-container
+    ports:
+      - '5001:5001'
+    volumes:
+      - ./flask-server:/app
+    stdin_open: true
+    tty: true
