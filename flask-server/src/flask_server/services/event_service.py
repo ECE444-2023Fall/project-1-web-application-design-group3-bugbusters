@@ -1,9 +1,10 @@
 from flask import Blueprint, abort
 from flask_server.db import db_client
 
-event_service = Blueprint('event_service', __name__, template_folder='templates')
+event_service = Blueprint('event_service', __name__, template_folder='templates',
+                          url_prefix='/event-service')
 
-@event_service.route('/event_service/<event_id>')
+@event_service.route('/<event_id>')
 def getEvent(event_id):
     '''Given an event_id, return the corresponding event to it'''
     event_doc_ref = db_client._events_collection.document(event_id)
@@ -16,7 +17,7 @@ def getEvent(event_id):
 
     return event_data
 
-@event_service.route('/event_service/')
+@event_service.route('/')
 def getAllEvents():
     '''No inputs, returns all events in the events collection within the database'''
     # Get colleciton reference
