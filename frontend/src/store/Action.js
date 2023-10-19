@@ -1,10 +1,3 @@
-// AuthData
-import { SETAUTHDATA } from "./ActionType";
-export const setAuthData = (value) => ({
-  type: SETAUTHDATA,
-  payload: value,
-});
-
 // ProfileData
 import { SETUSERDATA } from "./ActionType";
 export const setUserData = (value) => ({
