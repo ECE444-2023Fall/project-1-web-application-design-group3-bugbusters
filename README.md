@@ -2,10 +2,34 @@
 ## Getting Started
 1. Clone the repository
 `git clone git@github.com:ECE444-2023Fall/project-1-web-application-design-group3-bugbusters.git`
-2. 
+2. Read README.md for setting up flask-server
+3. Read README.md for setting up fronted
+### NOTE: the installation steps will be dockerized in a future update
+
+## Project Management Tools
+We are using Notion to perform project management, however, it is a private project
+which cannot be shared
 
 ## File Structure
-Helps reader understand what files do what and where to find certain files
+    .
+    ├── flask-server/           # flask server project
+    │   ├── src/                # source for server files
+    │   ├── test/               # test
+    │   ├── .gitignore          # gitignore file for server
+    │   ├── pyproject.toml      # python configuration of flask_server module
+    │   └── README.md           # installation and scripting instructions
+    ├── frontend/               # react application project
+    │   ├── assets/             # static application assets
+    │   ├── src/                # source for react app files
+    │   ├── .gitignore          # gitignore file for react app
+    │   ├── App.js              # main application file
+    │   ├── app.json            # app configuration
+    │   ├── babel.config.json   # transpiler configuration
+    │   ├── package-lock.json   # dependency tree
+    │   ├── package.json        # dependency configuration
+    └── CODE_OF_CONDUCT.MD      # code of conduct
+    └── CONTRIBUTION.MD         # rules for contribution
+    └── README.MD               # repository information
 
 ## Contributing
 If you want to make a contribution, please follow the next steps:
