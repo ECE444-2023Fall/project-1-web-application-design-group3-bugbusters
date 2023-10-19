@@ -15,9 +15,10 @@ if __name__ == "__main__":
     "_event_end_time" : "2023-10-17 12:23:33.361628",
     "_images" : {
         "_header_image" : "header_image_url",
+        "_profile_image" : "rgLV0SQuAa0QPAXH9wl7",
         "_image_gallery" : ["image_1_url", "image_2_url"]
     },
-    "creator_id" : "rgLV0SQuAa0QPAXH9wl7",
+    "_creator_id" : "rgLV0SQuAa0QPAXH9wl7",
     }
     
     new_doc_ref = events_ref.add(data_to_upload)

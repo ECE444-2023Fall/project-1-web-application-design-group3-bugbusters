@@ -28,7 +28,7 @@ def create_app(test_config=None):
     def hello():
         return 'Hello, World!'
     
-    # Event service
+    # Register event service
     app.register_blueprint(event_service)
 
     return app
