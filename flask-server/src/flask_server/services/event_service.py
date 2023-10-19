@@ -3,7 +3,7 @@ from jinja2 import TemplateNotFound
 from flask_server.db import db_client
 
 event_service = Blueprint('event_service', __name__, template_folder='templates',
-                          url_prefix='event_service')
+                          url_prefix='/event-service')
 
 @event_service.route('/<event_id>')
 def getEvent(event_id):
