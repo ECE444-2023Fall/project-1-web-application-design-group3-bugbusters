@@ -4,10 +4,10 @@ services:
     build:
       context: ./flask-server
       args:
-        PORT: ${PORT-5001}
+        PORT: ${PORT}
     container_name: flask-server-container
     ports:
-      - ${PORT-5001}:${PORT-5001}
+      - ${PORT}:${PORT}
     volumes:
       - ./flask-server:/app
     stdin_open: true

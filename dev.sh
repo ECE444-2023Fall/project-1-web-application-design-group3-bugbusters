@@ -2,11 +2,15 @@
 set -ex
 
 if [[ -z "${PORT}" ]]; then
-  PORT=5001
+  export PORT=5001
 else
-  PORT="${PORT}"
+  export PORT="${PORT}"
 fi
 
 if [[ $1 = "build" ]]; then
     docker compose build
+elif [[ $1 = "up" ]]; then
+    docker compose up
+elif [[ $1 = "down" ]]; then
+    docker compose down
 fi
