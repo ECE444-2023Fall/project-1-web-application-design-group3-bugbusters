@@ -2,9 +2,10 @@ from flask import Blueprint, render_template, abort
 from jinja2 import TemplateNotFound
 from flask_server.db import db_client
 
-event_service = Blueprint('event_service', __name__, template_folder='templates')
+event_service = Blueprint('event_service', __name__, template_folder='templates',
+                          url_prefix='event_service')
 
-@event_service.route('/event_service/<event_id>')
+@event_service.route('/<event_id>')
 def getEvent(event_id):
     '''Given an event_id, return the corresponding event to it'''
     try:
@@ -20,7 +21,7 @@ def getEvent(event_id):
     except TemplateNotFound:
         abort(404)
 
-@event_service.route('/event_service/')
+@event_service.route('/')
 def getAllEvents():
     '''No inputs, returns all events in the events collection within the database'''
     try:
