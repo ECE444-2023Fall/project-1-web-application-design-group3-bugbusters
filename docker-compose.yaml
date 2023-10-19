@@ -1,10 +1,13 @@
 version: "3.8"
 services:
   flask-server:
-    build: ./flask-server
+    build:
+      context: ./flask-server
+      args:
+        PORT: ${PORT-5001}
     container_name: flask-server-container
     ports:
-      - '5001:5001'
+      - ${PORT-5001}:${PORT-5001}
     volumes:
       - ./flask-server:/app
     stdin_open: true
