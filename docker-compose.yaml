@@ -4,23 +4,22 @@ services:
     build:
       context: ./flask-server
       args:
-        PORT: ${PORT}
+        PORT: ${FLASK_PORT}
     container_name: flask-server-container
     ports:
-      - ${PORT}:${PORT}
+      - ${FLASK_PORT}:${FLASK_PORT}
     volumes:
       - ./flask-server:/app
-    stdin_open: true
+    stdin_open: false
     tty: true
   react-app:
     build:
       context: ./frontend
+      args:
+        PORT: ${REACT_PORT}
     container_name: react-app-container
     ports:
-      - '8081:8081'
-      - '8082:8082'
-      - '8083:8083'
-      - '19006:19006'
+      - ${REACT_PORT}:${REACT_PORT}
     volumes: 
       - ./frontend/:/app/
       - /app/node_modules
