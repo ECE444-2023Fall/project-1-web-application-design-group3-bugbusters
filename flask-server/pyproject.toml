@@ -15,7 +15,6 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest",
-    "werkzeug",
 ]
 
 [build-system]
