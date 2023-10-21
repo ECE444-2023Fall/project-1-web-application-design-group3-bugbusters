@@ -1,4 +1,4 @@
-from flask_server.classes.Event import Event
+from flask_server.classes.event import Event
 from flask_server.services.event_service import getEvent, getAllEvents
 from flask_server.db import db_client
 import pytest

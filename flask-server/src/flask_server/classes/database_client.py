@@ -16,4 +16,3 @@ class DataBaseClient:
         self._users_collection = self._db.collection("Users")
 
         return
-    

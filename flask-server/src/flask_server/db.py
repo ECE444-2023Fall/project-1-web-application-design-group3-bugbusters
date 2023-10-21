@@ -1,6 +1,6 @@
 import git
 import os
-from flask_server.classes.DataBaseClient import DataBaseClient
+from flask_server.classes.database_client import DataBaseClient
 
 # Authenticate credentials so we can access our firebase project
 git_repo = git.Repo(os.getcwd(), search_parent_directories=True)

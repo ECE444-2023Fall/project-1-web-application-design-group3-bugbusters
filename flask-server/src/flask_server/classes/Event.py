@@ -1,6 +1,16 @@
-from flask_server.classes.EventImages import EventImages
+from flask_server.classes.event_images import EventImages
+from flask_server.classes.common import ClassField, DataField
 
-EVENT_FIELDS = ["_event_id", "_creator_id", "_event_title", "_description", "_location", "_event_start_time", "_event_end_time", "_images",]
+EVENT_FIELDS = DataField([
+    ClassField("_event_id"),
+    ClassField("_creator_id"),
+    ClassField("_event_title"),
+    ClassField("_description"),
+    ClassField("_location"),
+    ClassField("_event_start_time"),
+    ClassField("_event_end_time"),
+    ClassField("_images", lambda arg: EventImages.from_json(arg)),
+])
 # Out of scope fields '_tags', '_flagged', '_rsvp_email_list'
 
 class Event:
@@ -35,10 +45,8 @@ class Event:
         event_instance = cls(event_id, creator_id)
 
         for key, value in json.items():
-            if key == "_images":
-                event_instance._images = EventImages.from_json(json['_images'])
+            factory_func = getattr(EVENT_FIELDS, key)
+            value = factory_func(value)
+            setattr(event_instance, key, value)
 
-            if key in EVENT_FIELDS:
-                setattr(event_instance, key, value)
-                
         return event_instance

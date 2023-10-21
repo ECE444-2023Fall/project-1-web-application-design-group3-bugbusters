@@ -1,4 +1,11 @@
-EVENT_IMAGE_FIELDS = ["_header_image", "profile_image", "_image_gallery"]
+from flask_server.classes.common import ClassField, DataField
+
+EVENT_IMAGE_FIELDS = DataField([
+    ClassField("_header_image"),
+    ClassField("_profile_image"),
+    ClassField("_image_gallery"),
+])
+
 class EventImages:
     def __init__(self):
         self._header_image = ""
@@ -13,8 +20,8 @@ class EventImages:
             return event_images_instance
         
         for key, value in json.items():
-            if key in EVENT_IMAGE_FIELDS:
-                setattr(event_images_instance, key, value)
+            factory_func = getattr(EVENT_IMAGE_FIELDS, key)
+            value = factory_func(value)
+            setattr(event_images_instance, key, value)
         
         return event_images_instance
-    
