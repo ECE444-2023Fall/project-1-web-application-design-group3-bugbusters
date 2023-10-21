@@ -11,22 +11,23 @@ class TestEventService():
 
         event = Event.from_json(event_json)
 
-        assert(event._event_id == valid_event_id, "Test failed: could not fetch valid event") 
+        # Test failed: could not fetch valid event
+        assert(event._event_id == valid_event_id)
         return
+    
     def test_invalid_Event(self):
         with pytest.raises(werkzeug.exceptions.NotFound):
             invalid_event_id = "Invalid_event_id"
             event_json = getEvent(invalid_event_id)
             event = Event.from_json(event_json)
-            assert(event == None, "Test failed: invalid event retured a value") 
+            # Test failed: invalid event retured a value
+            assert(event == None)
         return
     
-
     def test_get_all_events(self):
         event_size = len(list(db_client._events_collection.stream()))
         event_json = getAllEvents()
         events = []
-
         for json in event_json:
             event = Event.from_json(json) 
             if event:
@@ -34,9 +35,11 @@ class TestEventService():
             else:
                 event_size -= 1
 
-        assert((events != None and event_size != 0), "Test failed: getAllEvents query returned no events")
+        # Test failed: getAllEvents query returned no events
+        assert(events != None and event_size != 0)
 
-        assert(event_size == len(events), "Test failed: getAllEvents query did not return all events")
+        # Test failed: getAllEvents query did not return all events
+        assert(event_size == len(events))
 
         return
     

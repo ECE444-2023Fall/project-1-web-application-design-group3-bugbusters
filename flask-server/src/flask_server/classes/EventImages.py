@@ -1,3 +1,4 @@
+EVENT_IMAGE_FIELDS = ["_header_image", "profile_image", "_image_gallery"]
 class EventImages:
     def __init__(self):
         self._header_image = ""
@@ -11,8 +12,9 @@ class EventImages:
         if json is None:
             return event_images_instance
         
-        if '_header_image' in json: event_images_instance._header_image = json['_header_image']
-        if '_profile_image' in json: event_images_instance._profile_image = json['_profile_image']
-        if '_image_gallery' in json :event_images_instance._image_gallery = json['_image_gallery']
+        for key, value in json.items():
+            if key in EVENT_IMAGE_FIELDS:
+                setattr(event_images_instance, key, value)
+        
         return event_images_instance
     

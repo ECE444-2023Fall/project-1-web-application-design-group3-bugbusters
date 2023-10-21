@@ -1,5 +1,8 @@
 from flask_server.classes.EventImages import EventImages
 
+EVENT_FIELDS = ["_event_id", "_creator_id", "_event_title", "_description", "_location", "_event_start_time", "_event_end_time", "_images",]
+# Out of scope fields '_tags', '_flagged', '_rsvp_email_list'
+
 class Event:
     """Event class"""
     def __init__(self, event_id, creator_id):
@@ -24,7 +27,6 @@ class Event:
     def from_json(cls, json):
         if json is None:
             return None
-        
         if '_event_id' not in json or '_creator_id' not in json: 
             return None
         
@@ -32,17 +34,11 @@ class Event:
         creator_id = json['_creator_id']
         event_instance = cls(event_id, creator_id)
 
-        if '_event_id' in json : event_instance._event_title = json['_event_title']
-        if '_description' in json : event_instance._description = json['_description']
-        if '_location' in json : event_instance._location = json['_location']
-        if '_event_start_time' in json : event_instance._event_start_time = json['_event_start_time']
-        if '_event_end_time' in json : event_instance._event_end_time = json['_event_end_time']
-        if '_images' in json : event_instance._images = EventImages.from_json(json['_images'])
-        if '_creator_id' in json : event_instance._creator_id = json['_creator_id']
+        for key, value in json.items():
+            if key == "_images":
+                event_instance._images = EventImages.from_json(json['_images'])
 
-        # # out of scope for the time being
-        # if '_tags' in json : event_instance._tags = json['_tags']
-        # if '_flagged' in json : event_instance._flagged = json['_flagged']
-        # if '_rsvp_email_list' in json : event_instance._rsvp_email_list = json['_rsvp_email_list']
-
+            if key in EVENT_FIELDS:
+                setattr(event_instance, key, value)
+                
         return event_instance
