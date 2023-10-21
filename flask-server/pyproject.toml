@@ -9,6 +9,7 @@ dependencies = [
     "flask",
     "firebase_admin",
     "gitpython",
+
 ]
 
 [project.optional-dependencies]
