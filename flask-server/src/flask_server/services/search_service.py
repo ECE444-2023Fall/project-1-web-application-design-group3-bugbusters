@@ -9,12 +9,12 @@ ALGOLIA_APP_ID = 'GS4ISHV4RC'
 ALGOLIA_API_KEY = os.getenv('ALGOLIA_API_KEY')
 ALGOLIA_INDEX_NAME = 'ClubHubSearchIndex'
 
-search_service = Blueprint('search_service', __name__)
+search_service = Blueprint('search_service', __name__, url_prefix='/search-service')
 
 # Initialize the AlgoliaSearchClient
 search_client = AlgoliaSearchClient(ALGOLIA_APP_ID, ALGOLIA_API_KEY, ALGOLIA_INDEX_NAME)
 
-@search_service.route('/search', methods=['GET'])
+@search_service.route('/', methods=['GET'])
 def search():
     query = request.args.get('q')
     if not query:
