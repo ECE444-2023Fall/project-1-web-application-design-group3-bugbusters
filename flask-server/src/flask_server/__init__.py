@@ -1,7 +1,10 @@
 import os
+from dotenv import load_dotenv
+
 
 from flask import Flask
 from flask_server.services.event_service import event_service
+from flask_server.services.search_service import search_service
 
 def create_app(test_config=None):
     # create and configure the app
@@ -23,6 +26,12 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    # load in environment variables, throw an error if there is no .env file
+    try:
+        load_dotenv()
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+
     # a simple page that says hello
     @app.route('/')
     def hello():
@@ -30,5 +39,8 @@ def create_app(test_config=None):
     
     # Register event service
     app.register_blueprint(event_service)
+
+    # Register search service
+    app.register_blueprint(search_service)
 
     return app
