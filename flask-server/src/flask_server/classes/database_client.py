@@ -6,8 +6,9 @@ class DataBaseClient:
 
     def __init__(self, auth_path):
         # Authenticate credentials so we can access our firebase project
-        cred = credentials.Certificate(auth_path)
-        firebase_admin.initialize_app(cred)
+        if not firebase_admin._apps:
+            cred = credentials.Certificate(auth_path)
+            firebase_admin.initialize_app(cred)
 
         # Initialize Firestore db
         self._db = firestore.client()
