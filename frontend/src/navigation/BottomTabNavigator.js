@@ -14,8 +14,10 @@ export default function BottomTab() {
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, user => {
       if (user) {
+        // user is signed in
         navigation.navigate("Landing Page")
       } else {
+        // user is signed out
         navigation.navigate("Authentication Page")
       }
     })
