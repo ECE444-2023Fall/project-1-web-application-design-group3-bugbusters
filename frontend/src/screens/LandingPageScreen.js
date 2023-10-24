@@ -1,11 +1,21 @@
-import React, { useState, useContext } from "react";
-import { Text, StyleSheet, View, TextInput, Button } from "react-native";
+import React, { useState } from "react";
+import { Text, StyleSheet, View, TextInput, TouchableOpacity } from "react-native";
 import HeaderBar from "../components/HeaderBar";
-import { useSelector, useDispatch } from "react-redux";
-import { setUserData } from "../store/Action";
+import { getAuth, signOut } from "firebase/auth";
 
 const LandingPageScreen = function () {
   const [text, setText] = useState("");
+
+  const handleSignOut = () => {
+    const auth = getAuth();
+    signOut(auth).then(() => {
+      // Sign-out successful.
+      console.log("SIGNED OUT")
+    }).catch((error) => {
+      // An error happened.
+      console.log(error);
+    });
+  }
 
   return (
     <View>
@@ -30,6 +40,12 @@ const LandingPageScreen = function () {
         }}
       />
       <Text style={{ padding: 20 }}>User Input: {text}</Text>
+      <TouchableOpacity
+          onPress={handleSignOut}
+          style={styles.button}
+      >
+          <Text style={styles.buttonText}>SIGN OUT</Text>
+      </TouchableOpacity>
     </View>
   );
 };

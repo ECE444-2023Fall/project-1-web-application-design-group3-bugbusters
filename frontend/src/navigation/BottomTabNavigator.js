@@ -1,12 +1,27 @@
-import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useNavigation } from "@react-navigation/native";
+import { useEffect } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import LandingPageScreen from "../screens/LandingPageScreen";
 import AuthPageScreen from "../screens/AuthPageScreen";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const Tab = createBottomTabNavigator();
 
 export default function BottomTab() {
+  const auth = getAuth();
+  const navigation = useNavigation();
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, user => {
+      if (user) {
+        navigation.navigate("Landing Page")
+      } else {
+        navigation.navigate("Authentication Page")
+      }
+    })
+    return unsubscribe;
+  }, [])
+
   return (
     <Tab.Navigator
       initialRouteName="Home"
@@ -39,7 +54,8 @@ export default function BottomTab() {
       />
       <Tab.Screen
         name="Authentication Page"
-        component={AuthPageScreen}
+        // TODO: REPLACE LANDINGPAGESCREEN WITH PROFILE
+        component={auth.currentUser ? LandingPageScreen : AuthPageScreen}
         options={{
           tabBarIcon: ({ color, size }) => {
             return (

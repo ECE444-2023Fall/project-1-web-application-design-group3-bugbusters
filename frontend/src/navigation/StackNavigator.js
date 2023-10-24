@@ -1,7 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 import { StyleSheet } from "react-native";
-import LandingPageScreen from "../screens/LandingPageScreen";
 import BottomTab from "./BottomTabNavigator";
 
 const Stack = createStackNavigator();
