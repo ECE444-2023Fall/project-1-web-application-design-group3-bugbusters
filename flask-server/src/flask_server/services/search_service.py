@@ -1,26 +1,20 @@
 from flask import Blueprint, request, jsonify
-from ..classes.search_client import AlgoliaSearchClient
-from dotenv import load_dotenv
-import os
-
-# Load configuration from some source
-load_dotenv()
-ALGOLIA_APP_ID = 'GS4ISHV4RC'
-ALGOLIA_API_KEY = os.getenv('ALGOLIA_API_KEY')
-ALGOLIA_INDEX_NAME = 'ClubHubSearchIndex'
+from flask_server.global_config import search_client
 
 search_service = Blueprint('search_service', __name__, url_prefix='/search-service')
 
-# Initialize the AlgoliaSearchClient
-search_client = AlgoliaSearchClient(ALGOLIA_APP_ID, ALGOLIA_API_KEY, ALGOLIA_INDEX_NAME)
-
-@search_service.route('/', methods=['GET'])
+@search_service.route('/search', methods=['POST'])
 def search():
-    query = request.args.get('q')
-    if not query:
-        return jsonify({"error": "Query parameter 'q' is required"}), 400
+    data = request.json
+    query = data.get('query', "")
+    filters = data.get('filters', [])
 
-    search_results = search_client.search_index(query)
+    # convert search results into query results
+    filters = " AND ".join(f"{tag}" for tag in filters)
+    print(filters)
+
+    search_results = search_client.search_index(query, filters)
+
     return jsonify(search_results)
 
 

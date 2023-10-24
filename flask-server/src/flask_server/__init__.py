@@ -1,6 +1,4 @@
 import os
-from dotenv import load_dotenv
-
 
 from flask import Flask
 from flask_server.services.event_service import event_service
@@ -25,12 +23,6 @@ def create_app(test_config=None):
         os.makedirs(app.instance_path)
     except OSError:
         pass
-
-    # load in environment variables, throw an error if there is no .env file
-    try:
-        load_dotenv()
-    except Exception as e:
-        print(f"An unexpected error occurred: {e}")
 
     # a simple page that says hello
     @app.route('/')
