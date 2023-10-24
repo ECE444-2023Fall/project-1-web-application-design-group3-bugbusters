@@ -2,6 +2,7 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { MaterialIcons } from "@expo/vector-icons";
 import LandingPageScreen from "../screens/LandingPageScreen";
+import AuthPageScreen from "../screens/AuthPageScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -36,6 +37,20 @@ export default function BottomTab() {
           headerBackground: "blue",
         }}
       />
+      <Tab.Screen
+        name="Authentication Page"
+        component={AuthPageScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => {
+            return (
+              <MaterialIcons name="account-circle" size={size + 10} color={color} />
+            );
+          },
+          gestureEnabled: false,
+          headerBackground: "blue",
+        }}
+      />
+
     </Tab.Navigator>
   );
 }
