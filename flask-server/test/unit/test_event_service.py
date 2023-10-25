@@ -1,8 +1,9 @@
 from flask_server.classes.event import Event
 from flask_server.services.event_service import getEvent, getAllEvents
-from flask_server.db import db_client
+from flask_server.global_config import db_client
 import pytest
 import werkzeug
+import json
 
 class TestEventService(): 
     def test_valid_Event(self):
@@ -40,6 +41,21 @@ class TestEventService():
 
         # Test failed: getAllEvents query did not return all events
         assert(event_size == len(events))
+
+        return
+    
+    def test_to_json(self):
+        valid_event_id = "DttWcIu4XOe5vdskk79v"
+        originial_event_json = getEvent(valid_event_id)
+
+        event_obj = Event.from_json(originial_event_json)
+        print(event_obj._event_id)
+        new_event_json = event_obj.to_json()
+        # print(new_event_json)
+
+        for key, value in json.loads(new_event_json):
+            # Test failed: incorrect information in transformation
+            assert(value == originial_event_json[key])
 
         return
     

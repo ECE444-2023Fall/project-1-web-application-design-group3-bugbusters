@@ -1,4 +1,4 @@
-from flask_server.db import db_client
+from flask_server.global_config import db_client
 
 if __name__ == "__main__":
     # Get events collection
