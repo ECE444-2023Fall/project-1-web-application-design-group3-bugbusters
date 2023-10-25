@@ -4,6 +4,7 @@ import {
     getAuth, createUserWithEmailAndPassword,
     signInWithEmailAndPassword, updateProfile
 } from "firebase/auth";
+import HorizontalTextBuffer from "../components/HorizontalTextBuffer";
 
 const AuthPageScreen = function () {
     const [displayName, setDisplayName] = useState("");
@@ -68,6 +69,7 @@ const AuthPageScreen = function () {
                 >
                     <Text style={styles.buttonText}>LOGIN</Text>
                 </TouchableOpacity>
+                <HorizontalTextBuffer></HorizontalTextBuffer>
                 <TouchableOpacity
                     onPress={navigateSignUp}
                     style={[styles.button, styles.buttonOutline]}
@@ -110,6 +112,7 @@ const AuthPageScreen = function () {
                 >
                     <Text style={styles.buttonText}>SIGN UP</Text>
                 </TouchableOpacity>
+                <HorizontalTextBuffer></HorizontalTextBuffer>
                 <TouchableOpacity
                     onPress={navigateLogIn}
                     style={[styles.button, styles.buttonOutline]}
