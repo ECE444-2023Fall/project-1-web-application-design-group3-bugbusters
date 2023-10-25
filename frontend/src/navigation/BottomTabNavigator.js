@@ -5,6 +5,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import LandingPageScreen from "../screens/LandingPageScreen";
 import AuthPageScreen from "../screens/AuthPageScreen";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
+import ProfilePageScreen from "../screens/ProfilePageScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -57,7 +58,7 @@ export default function BottomTab() {
       <Tab.Screen
         name="Authentication Page"
         // TODO: REPLACE LANDINGPAGESCREEN WITH PROFILE
-        component={auth.currentUser ? LandingPageScreen : AuthPageScreen}
+        component={auth.currentUser ? ProfilePageScreen : AuthPageScreen}
         options={{
           tabBarIcon: ({ color, size }) => {
             return (

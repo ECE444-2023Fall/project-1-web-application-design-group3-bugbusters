@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { StyleSheet, KeyboardAvoidingView, Text, TextInput, View, TouchableOpacity } from "react-native";
 import { 
     getAuth, createUserWithEmailAndPassword,
-    signInWithEmailAndPassword
+    signInWithEmailAndPassword, updateProfile
 } from "firebase/auth";
 
 const AuthPageScreen = function () {
+    const [displayName, setDisplayName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
@@ -14,6 +15,7 @@ const AuthPageScreen = function () {
         createUserWithEmailAndPassword(auth, email, password)
         .then(userCredentials => {
             const user = userCredentials.user;
+            updateProfile(user, {displayName: displayName})
             console.log(user);
         })
         .catch(error => alert(error.message))
@@ -35,6 +37,12 @@ const AuthPageScreen = function () {
             behavior="padding"
         >
             <View style={styles.inputContainer}>
+                <TextInput
+                    placeholder="USERNAME"
+                    value={displayName}
+                    onChangeText={text => setDisplayName(text)}
+                    style={styles.input}
+                />
                 <TextInput
                     placeholder="E-MAIL"
                     value={email}
