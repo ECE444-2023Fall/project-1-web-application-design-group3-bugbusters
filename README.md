@@ -2,9 +2,16 @@
 ## Getting Started
 1. Clone the repository
 `git clone git@github.com:ECE444-2023Fall/project-1-web-application-design-group3-bugbusters.git`
-2. Read README.md for setting up flask-server
-3. Read README.md for setting up fronted
-### NOTE: the installation steps will be dockerized in a future update
+2. Install [docker](https://docs.docker.com/install/) and [docker-compose](https://docs.docker.com/compose/install/) on your machine
+3. Initialize `FLASK_PORT` environment variable to be the port the flask container should bind. For example `export FLASK_PORT=7001`. By Default, `FLASK_PORT=5001` will be used.
+4. Initialize `REACT_PORT` environment variable to be the port the react container should bind. For example `export REACT_PORT=7002`. By Default, `REACT_PORT=5002` will be used.
+5. Run `bash dev.sh build` from the root of the repository to build the development images
+6. Run `bash dev.sh up` from the root of the repository to attach to the development container
+    - To only build the flask-server and react-native application run `bash dev.sh build flask-server`
+    and `bash dev.sh build react-app` respectively
+7. The flask server should be running in the docker container on port 7001 and the react native
+application should be running in the development environment with expo on port 7002
+8. Bring down the container(s) with `bash dev.sh down`
 
 ## Project Management Tools
 We are using Notion to perform project management, however, it is a private project

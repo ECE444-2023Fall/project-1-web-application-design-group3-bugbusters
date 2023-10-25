@@ -1,0 +1,30 @@
+version: "3.8"
+services:
+  flask-server:
+    build:
+      context: ./flask-server
+      args:
+        PORT: ${FLASK_PORT}
+    container_name: flask-server-container
+    ports:
+      - ${FLASK_PORT}:${FLASK_PORT}
+    volumes:
+      - ./flask-server:/app
+    stdin_open: false
+    tty: true
+  react-app:
+    build:
+      context: ./frontend
+      args:
+        PORT: ${REACT_PORT}
+    container_name: react-app-container
+    ports:
+      - ${REACT_PORT}:${REACT_PORT}
+    volumes: 
+      - ./frontend/:/app/
+      - /app/node_modules
+    environment:
+      - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0 
+      - REACT_NATIVE_PACKAGER_HOSTNAME=127.0.0.1
+    stdin_open: true
+    tty: true
