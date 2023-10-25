@@ -9,6 +9,15 @@ const AuthPageScreen = function () {
     const [displayName, setDisplayName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [showLogin, setShowLogin] = useState(true);
+
+    const navigateSignUp = () => {
+        setShowLogin(false);
+    }
+
+    const navigateLogIn = () => {
+        setShowLogin(true);
+    }
 
     const handleSignUp = () => {
         const auth = getAuth();
@@ -31,7 +40,43 @@ const AuthPageScreen = function () {
         .catch(error => alert(error.message))
     }
 
-    return (
+    return (showLogin) ? (
+        <KeyboardAvoidingView
+            style={styles.container}
+            behavior="padding"
+        >
+            <View style={styles.inputContainer}>
+                <TextInput
+                    placeholder="E-MAIL"
+                    value={email}
+                    onChangeText={text => setEmail(text)}
+                    style={styles.input}
+                />
+                <TextInput
+                    placeholder="PASSWORD"
+                    value={password}
+                    onChangeText={text => setPassword(text)}
+                    style={styles.input}
+                    secureTextEntry
+                />
+            </View>
+
+            <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                    onPress={handleLogin}
+                    style={styles.button}
+                >
+                    <Text style={styles.buttonText}>LOGIN</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={navigateSignUp}
+                    style={[styles.button, styles.buttonOutline]}
+                >
+                    <Text style={styles.buttonOutlineText}>SIGN UP</Text>
+                </TouchableOpacity>
+            </View>
+        </KeyboardAvoidingView>
+    ) : (
         <KeyboardAvoidingView
             style={styles.container}
             behavior="padding"
@@ -60,16 +105,16 @@ const AuthPageScreen = function () {
 
             <View style={styles.buttonContainer}>
                 <TouchableOpacity
-                    onPress={handleLogin}
+                    onPress={handleSignUp}
                     style={styles.button}
                 >
-                    <Text style={styles.buttonText}>LOGIN</Text>
+                    <Text style={styles.buttonText}>SIGN UP</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={handleSignUp}
+                    onPress={navigateLogIn}
                     style={[styles.button, styles.buttonOutline]}
                 >
-                    <Text style={styles.buttonOutlineText}>REGISTER</Text>
+                    <Text style={styles.buttonOutlineText}>LOG IN</Text>
                 </TouchableOpacity>
             </View>
         </KeyboardAvoidingView>
