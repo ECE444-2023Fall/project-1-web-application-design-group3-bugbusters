@@ -2,6 +2,7 @@ import os
 
 from flask import Flask
 from flask_server.services.event_service import event_service
+from flask_server.services.search_service import search_service
 
 def create_app(test_config=None):
     # create and configure the app
@@ -30,5 +31,8 @@ def create_app(test_config=None):
     
     # Register event service
     app.register_blueprint(event_service)
+
+    # Register search service
+    app.register_blueprint(search_service)
 
     return app

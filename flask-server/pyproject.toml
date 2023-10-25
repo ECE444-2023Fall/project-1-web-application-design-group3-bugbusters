@@ -9,6 +9,8 @@ dependencies = [
     "flask",
     "firebase_admin",
     "gitpython",
+    "algoliasearch",
+    "python-dotenv",
 
 ]
 
