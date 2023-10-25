@@ -11,7 +11,6 @@ def search():
 
     # convert search results into query results
     filters = " AND ".join(f"{tag}" for tag in filters)
-    print(filters)
 
     search_results = search_client.search_index(query, filters)
 
