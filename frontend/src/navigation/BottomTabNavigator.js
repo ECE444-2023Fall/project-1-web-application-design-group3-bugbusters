@@ -34,7 +34,7 @@ export default function BottomTab() {
           tabBarInactiveTintColor: color,
           tabBarStyle: {
             position: "absolute",
-            paddingTop: 8,
+            justifyContent: "center",
             backgroundColor: "#1E3765",
           },
           headerShown: false,
