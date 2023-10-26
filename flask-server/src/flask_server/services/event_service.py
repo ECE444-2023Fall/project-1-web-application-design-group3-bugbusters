@@ -1,5 +1,5 @@
 from flask import Blueprint, abort
-from flask_server.db import db_client
+from flask_server.global_config import db_client
 
 event_service = Blueprint('event_service', __name__, template_folder='templates',
                           url_prefix='/event-service')
