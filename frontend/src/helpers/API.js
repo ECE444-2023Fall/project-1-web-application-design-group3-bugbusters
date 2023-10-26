@@ -4,11 +4,12 @@ import axios from "axios";
 export class Api {
   constructor(apiKey) {
     this.apiKey = apiKey;
-    this.url = "";
+    this.url = "http://127.0.0.1:7001";
     // this.tenantId = "01GZC2R8Y7K4AWHMP31EDQXT3D";
   }
 
   async makeRequest(endpoint, data) {
+    // console.log();
     const result = {
       result: null,
       data: null,

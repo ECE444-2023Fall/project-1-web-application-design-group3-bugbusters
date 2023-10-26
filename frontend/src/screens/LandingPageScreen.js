@@ -4,17 +4,24 @@ import HeaderBar from "../components/HeaderBar";
 import { useSelector, useDispatch } from "react-redux";
 import { setUserData } from "../store/Action";
 import api from "../helpers/API";
-import EventCard from "../components/EventCard";
+import axios from "axios";
 
 const LandingPageScreen = function () {
   const [text, setText] = useState("");
 
   const fetchEvents = async () => {
-    const response = await api.getAllEvents({});
-    print("response:", response);
-    if (response.result == "SUCCESSFUL") {
-      print("Set something\n");
-    }
+    // const response = await api.getAllEvents({});
+    // console.log("response:", response);
+    // if (response.result == "SUCCESSFUL") {
+    //   console.log("Set something\n");
+    // }
+
+    const response = await axios
+      .get(`127.0.0.1:7001/event_service/`)
+      .catch((err) => ({ err }))
+      .then((response) => console.log(response));
+
+    console.log(response);
   };
 
   return (
