@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import { Text, StyleSheet, View, TextInput, TouchableOpacity } from "react-native";
+import { Text, StyleSheet, View, TextInput } from "react-native";
 import HeaderBar from "../components/HeaderBar";
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
 
 const LandingPageScreen = function () {
   const [text, setText] = useState("");
