@@ -57,7 +57,6 @@ export default function BottomTab() {
       />
       <Tab.Screen
         name="Authentication Page"
-        // TODO: REPLACE LANDINGPAGESCREEN WITH PROFILE
         component={auth.currentUser ? ProfilePageScreen : AuthPageScreen}
         options={{
           tabBarIcon: ({ color, size }) => {
