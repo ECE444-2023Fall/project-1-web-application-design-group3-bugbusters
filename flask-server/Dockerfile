@@ -6,7 +6,7 @@ ENV PORT ${PORT}
 WORKDIR /app
 COPY pyproject.toml /app/pyproject.toml
 RUN apt-get update
-RUN apt-get -y install gcc wget
+RUN apt-get -y install gcc wget git
 COPY . /app
 RUN pip3 install -e '.[dev]'
 
