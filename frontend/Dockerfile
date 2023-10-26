@@ -7,7 +7,7 @@ WORKDIR /app
 COPY package.json package-lock.json /app/
 RUN npm install
 RUN apt-get update
-RUN apt-get -y install gcc wget
+RUN apt-get -y install gcc wget git
 COPY . /app/
 
 CMD /bin/bash
