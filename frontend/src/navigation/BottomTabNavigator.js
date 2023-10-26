@@ -19,7 +19,7 @@ export default function BottomTab() {
         navigation.navigate("Landing Page")
       } else {
         // user is signed out
-        navigation.navigate("Authentication Page")
+        navigation.navigate("Landing Page")
       }
     })
     return unsubscribe;
