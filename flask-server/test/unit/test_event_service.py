@@ -45,16 +45,25 @@ class TestEventService():
         return
     
     def test_to_json(self):
-        valid_event_id = "DttWcIu4XOe5vdskk79v"
-        originial_event_json = getEvent(valid_event_id)
 
-        event_obj = Event.from_json(originial_event_json)
-        print(event_obj._event_id)
-        new_event_json = event_obj.to_json()
-        # print(new_event_json)
+        originial_event_json = {"_event_title": "SKULE Band Meeting", "_event_id": "DttWcIu4XOe5vdskk79v", "_creator_id": "rgLV0SQuAa0QPAXH9wl7"}
+        event_obj = Event(originial_event_json['_event_id'], originial_event_json['_creator_id'])
+        event_obj._event_title = originial_event_json['_event_title']
 
-        for key, value in json.loads(new_event_json):
+        new_event_json = Event.to_json(event_obj)
+        # print("A")
+        # print(originial_event_json['_description'])
+        # print("A")
+
+        # print(new_event_json['_description'])
+        # print("A")
+
+
+        for key, value in new_event_json.items():
             # Test failed: incorrect information in transformation
+            if value is None:
+                assert(originial_event_json[key] is None)
+                continue
             assert(value == originial_event_json[key])
 
         return

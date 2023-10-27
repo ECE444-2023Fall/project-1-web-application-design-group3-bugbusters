@@ -7,6 +7,10 @@ EVENT_IMAGE_FIELDS = DataField([
 ])
 
 class EventImages:
+    _header_image = ""
+    _profile_image = ""
+    _image_gallery = []
+    
     def __init__(self):
         self._header_image = ""
         self._profile_image = ""
