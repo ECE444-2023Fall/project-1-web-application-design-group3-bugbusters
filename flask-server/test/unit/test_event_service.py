@@ -61,8 +61,14 @@ class TestEventService():
 
         for key, value in new_event_json.items():
             # Test failed: incorrect information in transformation
-            if value is None:
-                assert(originial_event_json[key] is None)
+            print(key)
+            print(value)
+            if value is [] or value is "":
+                print(originial_event_json[key])
+                print("SKIP")
+                assert(originial_event_json[key] is "" or originial_event_json[key]  is [])
+                # assert((originial_event_json[key] is None) or (originial_event_json[key] is ""))
+                print("next")
                 continue
             assert(value == originial_event_json[key])
 
