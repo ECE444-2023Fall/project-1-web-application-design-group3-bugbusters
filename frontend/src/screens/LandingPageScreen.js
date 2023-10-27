@@ -17,11 +17,9 @@ const LandingPageScreen = function () {
     // }
 
     const response = await axios
-      .get(`127.0.0.1:7001/event_service/`)
+      .get(`http://localhost:5001/`)
       .catch((err) => ({ err }))
       .then((response) => console.log(response));
-
-    console.log(response);
   };
 
   return (
