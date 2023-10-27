@@ -25,3 +25,15 @@ class EventImages:
             setattr(event_images_instance, key, value)
         
         return event_images_instance
+    
+    @classmethod
+    def to_json(cls):
+        if cls is None:
+            return None
+        event_images_json = {}
+        event_images_json['_header_image'] = cls._header_image
+        event_images_json['_profile_image'] = cls._profile_image
+        event_images_json['_image_gallery'] = cls._image_gallery
+        return event_images_json
+
+

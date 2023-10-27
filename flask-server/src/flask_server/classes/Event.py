@@ -63,21 +63,37 @@ class Event:
 
     @classmethod
     def to_json(self):
-        cls = self
+        # cls = self
         if cls is None:
             return None
+        
+        event_json = {}
+
         print("HERE")
-        print(self._event_id)
-        print(dir(cls))
-        print(cls.__dict__)
-        print(" ")
-        print(cls.__getattribute__)
+        print(cls._event_id)
+
+        event_json['_event_id'] = cls._event_id
+        event_json['_creator_id'] = cls._creator_id
+        event_json['_event_title'] = cls._event_title
+        event_json['_description'] = cls._description
+        event_json['_location'] = cls._location
+        event_json['_event_start_time'] = cls._event_start_time
+        event_json['_event_end_time'] = cls._event_start_time
+        event_json['_images'] = cls._images.to_json()
+
+        print(event_json)
+        print("HERE")
+
+
+        # print(dir(cls))
+        # print(cls.__dict__)
+        # print(" ")
+        # print(cls.__getattribute__)
         # test_funct = getattr(EVENT_FIELDS , '_event_id')
         # print(test_funct("DttWcIu4XOe5vdskk79v"))
         # # print(tesfunct)
         # print(getattr(EVENT_FIELDS , '_event_id'))
         # print(getattr(EVENT_FIELDS , '_event_id'))
-        event_json = {}
         # print(dir(cls))
         # print("  ")
         # print(cls.__dict__)
@@ -97,13 +113,21 @@ class Event:
         #         event_json[key] = factory_func(value)
         
         # for field in cls.fields:
-        for field in EVENT_FIELDS.fields:
-            key = field.name
-            value = getattr(self, key)
-            if value is not None:
-                event_json[key] = field.serialize(value)
+        # print(dir(EVENT_FIELDS))
+        # print(EVENT_FIELDS.__dict__)
+        # event_dict = EVENT_FIELDS.__dict__
+        # for key in event_dict:
+        #     print(key)
+        #     print("AAs")
+        #     classfield = event_dict[key].fields
+        #     # print(event_dict[key])
+        #     print(classfield)
+        #     key = field.name
+        #     value = getattr(self, key)
+        #     if value is not None:
+        #         event_json[key] = value#field.serialize(value)
 
-        print(event_json)
+        # print(event_json)
         # print(event_json)
 
         # for att in cls.__getattribute__:
