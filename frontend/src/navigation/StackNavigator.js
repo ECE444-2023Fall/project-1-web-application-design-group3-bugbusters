@@ -3,19 +3,15 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import LandingPageScreen from "../screens/LandingPageScreen";
 import BottomTab from "./BottomTabNavigator";
+import EventDetailsScreen from "../screens/EventDetailsScreen";
 
 const Stack = createStackNavigator();
 
 const MainStack = function () {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen
-        name="Bottom Tab"
-        component={BottomTab}
-        options={{
-          headerTitle: "Landing Page",
-        }}
-      />
+      <Stack.Screen name="Bottom Tab" component={BottomTab} />
+      <Stack.Screen name="Event Details" component={EventDetailsScreen} />
     </Stack.Navigator>
   );
 };
