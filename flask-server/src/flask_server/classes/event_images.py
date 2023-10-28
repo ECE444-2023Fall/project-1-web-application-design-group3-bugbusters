@@ -7,10 +7,7 @@ EVENT_IMAGE_FIELDS = DataField([
 ])
 
 class EventImages:
-    _header_image = ""
-    _profile_image = ""
-    _image_gallery = []
-    
+
     def __init__(self):
         self._header_image = ""
         self._profile_image = ""
@@ -35,7 +32,7 @@ class EventImages:
         if cls is None:
             return None
         event_images_json = {}
-        
+
         if cls._header_image is not None: event_images_json['_header_image'] = cls._header_image
         if cls._profile_image is not None: event_images_json['_profile_image'] = cls._profile_image
         if not cls._image_gallery == []: event_images_json['_image_gallery'] = cls._image_gallery

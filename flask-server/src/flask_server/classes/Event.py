@@ -15,15 +15,7 @@ EVENT_FIELDS = DataField([
 
 class Event:
     """Event class"""
-    _event_id = ""
-    _event_title = ""
-    _description = ""
-    _location = ""
-    _event_start_time = ""
-    _event_end_time = ""
-    _images = EventImages()
-
-    _creator_id = ""
+    
     def __init__(self, event_id, creator_id):
         self._event_id = event_id
         self._event_title = ""
