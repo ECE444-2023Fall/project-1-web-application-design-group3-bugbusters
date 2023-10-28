@@ -1,6 +1,9 @@
 import { SETUSERDATA, RESET } from "./ActionType";
 
 const initialState = {
+  primaryColor: "#25355A",
+  secondaryColor: "#007FA3",
+  contrastColor: "white",
   userData: {},
 };
 

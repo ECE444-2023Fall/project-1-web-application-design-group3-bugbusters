@@ -1,5 +1,6 @@
 import React from "react";
 import { Text, StyleSheet, View } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
 
 const HeaderBar = function ({
   childrenLeft,
@@ -10,18 +11,24 @@ const HeaderBar = function ({
   height,
   align,
 }) {
+  const dispatchRedux = useDispatch();
+  const primaryColor = useSelector((state) => state.main.primaryColor);
+  const secondaryColor = useSelector((state) => state.main.secondaryColor);
+  const contrastColor = useSelector((state) => state.main.contrastColor);
+
   return (
     <View
       style={
         height || align
           ? {
               ...styles.containerStyle,
+              backgroundColor: primaryColor,
               height: height ? height : styles.containerStyle.height,
               justifyContent: align
                 ? align
                 : styles.containerStyle.justifyContent,
             }
-          : styles.containerStyle
+          : { ...styles.containerStyle, backgroundColor: primaryColor }
       }
     >
       {childrenLeft}
