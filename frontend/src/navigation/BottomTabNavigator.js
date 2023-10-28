@@ -2,6 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useEffect } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import LandingPageScreen from "../screens/LandingPageScreen";
 import AuthPageScreen from "../screens/AuthPageScreen";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -9,7 +10,7 @@ import ProfilePageScreen from "../screens/ProfilePageScreen";
 
 const Tab = createBottomTabNavigator();
 
-export default function BottomTab({navigation}) {
+export default function BottomTab({ navigation }) {
   const dispatchRedux = useDispatch();
   const primaryColor = useSelector((state) => state.main.primaryColor);
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
@@ -29,17 +30,18 @@ export default function BottomTab({navigation}) {
     return unsubscribe;
   }, []);
 
-
   return (
     <Tab.Navigator
       initialRouteName="Home"
       screenOptions={(_, color, __) => {
         return {
           tabBarActiveTintColor: contrastColor,
+          tabBarActiveTintColor: contrastColor,
           tabBarInactiveTintColor: color,
           tabBarStyle: {
             position: "absolute",
             paddingTop: 8,
+            backgroundColor: primaryColor,
             backgroundColor: primaryColor,
           },
           headerShown: false,
