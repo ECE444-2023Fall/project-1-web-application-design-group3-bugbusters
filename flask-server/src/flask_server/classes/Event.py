@@ -1,6 +1,5 @@
 from flask_server.classes.event_images import EventImages
 from flask_server.classes.common import ClassField, DataField
-import json
 
 EVENT_FIELDS = DataField([
     ClassField("_event_id"),
@@ -13,14 +12,6 @@ EVENT_FIELDS = DataField([
     ClassField("_images", lambda arg: EventImages.from_json(arg)),
 ])
 # Out of scope fields '_tags', '_flagged', '_rsvp_email_list'
-
-# def object_to_dict(cls):
-#     if hasattr(cls, '__dict__'):
-#         return cls.__dict__
-#     elif isinstance(cls, list):
-#         return [object_to_dict(item) for item in cls]
-#     else:
-#         return cls
 
 class Event:
     """Event class"""
@@ -84,7 +75,7 @@ class Event:
         if cls._location is not None: event_json['_location'] = cls._location
         if cls._event_start_time is not None: event_json['_event_start_time'] = cls._event_start_time
         if cls._event_end_time is not None: event_json['_event_end_time'] = cls._event_start_time
-        if cls._images is not None: event_json['_images'] = cls._images.to_json()
+        if cls._images is not None: event_json['_images'] = cls._images.to_json(cls._images)
 
         return event_json
     

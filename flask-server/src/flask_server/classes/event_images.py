@@ -31,13 +31,14 @@ class EventImages:
         return event_images_instance
     
     @classmethod
-    def to_json(cls):
+    def to_json(self, cls):
         if cls is None:
             return None
         event_images_json = {}
-        event_images_json['_header_image'] = cls._header_image
-        event_images_json['_profile_image'] = cls._profile_image
-        event_images_json['_image_gallery'] = cls._image_gallery
+        
+        if cls._header_image is not None: event_images_json['_header_image'] = cls._header_image
+        if cls._profile_image is not None: event_images_json['_profile_image'] = cls._profile_image
+        if not cls._image_gallery == []: event_images_json['_image_gallery'] = cls._image_gallery
         return event_images_json
 
 
