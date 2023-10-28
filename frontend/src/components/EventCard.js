@@ -1,16 +1,14 @@
-import React, { useState, useContext } from "react";
-import {
-  Text,
-  StyleSheet,
-  View,
-  Button,
-  TextInput,
-  TouchableOpacity,
-  Image,
-} from "react-native";
+import React from "react";
+import { Text, StyleSheet, View, TouchableOpacity, Image } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
+import { useSelector, useDispatch } from "react-redux";
 
-const EventCard = function () {
+const EventCard = function ({ navigation, image, title, owner }) {
+  const dispatchRedux = useDispatch();
+  const primaryColor = useSelector((state) => state.main.primaryColor);
+  const secondaryColor = useSelector((state) => state.main.secondaryColor);
+  const contrastColor = useSelector((state) => state.main.contrastColor);
+
   return (
     <View style={styles.cardContainer}>
       {/* <Image source={}/> */}
@@ -32,11 +30,11 @@ const EventCard = function () {
       <View style={styles.cardBar}>
         <View style={{ width: 50 }}></View>
         <View>
-          <Text style={styles.eventTitle}>Event Title</Text>
-          <Text style={styles.eventOwner}>Event Owner</Text>
+          <Text style={styles.eventTitle}>{title}</Text>
+          <Text style={styles.eventOwner}>{owner}</Text>
         </View>
         <TouchableOpacity style={styles.reportButton}>
-          <MaterialIcons name="report" size={40} color="#25355A" />
+          <MaterialIcons name="report" size={40} color={primaryColor} />
         </TouchableOpacity>
       </View>
     </View>

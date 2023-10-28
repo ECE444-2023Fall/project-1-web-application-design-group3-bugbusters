@@ -1,13 +1,24 @@
-import React, { useState } from "react";
-import { Button, Text, StyleSheet, View, TextInput } from "react-native";
+import React, { useState, useContext } from "react";
+import {
+  Text,
+  StyleSheet,
+  View,
+  TextInput,
+  Button,
+  TouchableOpacity,
+} from "react-native";
 import HeaderBar from "../components/HeaderBar";
 import api from "../helpers/API";
 import { useSelector, useDispatch } from "react-redux";
 import { setUserData } from "../store/Action";
 import EventCard from "../components/EventCard";
 
-const LandingPageScreen = function () {
+const LandingPageScreen = function ({ navigation }) {
   // const [text, setText] = useState("");
+  const dispatchRedux = useDispatch();
+  const primaryColor = useSelector((state) => state.main.primaryColor);
+  const secondaryColor = useSelector((state) => state.main.secondaryColor);
+  const contrastColor = useSelector((state) => state.main.contrastColor);
 
   const fetchEvents = async () => {
     const response = await api.getAllEvents();
@@ -20,26 +31,15 @@ const LandingPageScreen = function () {
   return (
     <View style={{ backgroundColor: "white", flex: 1 }}>
       <HeaderBar title="Landing Page" align="center" />
-      <EventCard />
-      {/* <Text style={{ padding: 20, paddingTop: 0 }}> What's your name?</Text>
-      <TextInput
-        label="Email"
-        placeholder="Your input here..."
-        placeholderTextColor="white"
-        style={{
-          marginHorizontal: 40,
-          paddingLeft: 14,
-          fontSize: 20,
-          backgroundColor: "grey",
-          color: "white",
-          borderRadius: 20,
-        }}
-        value={text}
-        onChangeText={(text) => {
-          setText(text);
-        }}
-      /> */}
-      {/* <Text style={{ padding: 20 }}>User Input: {text}</Text> */}
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("Event Details", {
+            title: "Event Details",
+          })
+        }
+      >
+        <EventCard title="Event Title" owner="Event Owner" />
+      </TouchableOpacity>
     </View>
   );
 };
