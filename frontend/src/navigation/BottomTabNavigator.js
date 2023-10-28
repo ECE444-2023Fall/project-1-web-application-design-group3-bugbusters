@@ -9,7 +9,7 @@ import ProfilePageScreen from "../screens/ProfilePageScreen";
 
 const Tab = createBottomTabNavigator();
 
-export default function BottomTab({navigation}) {
+export default function BottomTab({ navigation }) {
   const dispatchRedux = useDispatch();
   const primaryColor = useSelector((state) => state.main.primaryColor);
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
@@ -28,7 +28,6 @@ export default function BottomTab({navigation}) {
     });
     return unsubscribe;
   }, []);
-
 
   return (
     <Tab.Navigator
