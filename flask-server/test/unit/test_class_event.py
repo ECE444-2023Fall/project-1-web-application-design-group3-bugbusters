@@ -1,6 +1,6 @@
 import pytest
 from flask_server import create_app
-from flask_server.classes.Event import Event, EVENT_FIELDS
+from flask_server.classes.event import Event, EVENT_FIELDS
 
 # Lab 5 - Elliot P-K Unit Test 
 def test_serialize_event():
