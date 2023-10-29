@@ -1,7 +1,5 @@
 from flask_server.classes.Event import Event, EVENT_FIELDS
-from flask_server.classes.database_client import DataBaseClient
-from flask_server.services.event_service import event_service
-from flask_server.global_config import db_client, json_path
+from flask_server.global_config import db_client
 from flask_server import create_app
 import pytest
 import json
@@ -13,12 +11,13 @@ def test_client():
     app = create_app()
     app.config["TESTING"] = True
     client = app.test_client()
-    db_client = DataBaseClient(json_path, True)
+    db_client._testing = True
     yield client
+    db_client._testing = False
 
 # Lab 5 - Ben Unit Test 
 def test_valid_get_event(test_client):
-    response = test_client.get("/event-service/DttWcIu4XOe5vdskk79v")
+    response = test_client.get("/event-service/79h6hq5oW7lVX8gPwuXM")
     
     # Check if the response status code is 200 (OK)
     assert response.status_code == 200
@@ -27,7 +26,7 @@ def test_valid_get_event(test_client):
     data = json.loads(response.data)
 
     # Check if the 'event_id' key in the JSON response matches the expected value
-    assert data.get('_event_id') == "DttWcIu4XOe5vdskk79v"
+    assert data.get('_event_id') == "79h6hq5oW7lVX8gPwuXM"
 
 # Lab 5 - Ata Unit Test 
 def test_invalid_get_event(test_client):
