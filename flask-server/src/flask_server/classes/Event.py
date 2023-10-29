@@ -9,7 +9,7 @@ EVENT_FIELDS = DataField([
     ClassField("_location"),
     ClassField("_event_start_time"),
     ClassField("_event_end_time"),
-    ClassField("_images", lambda arg: EventImages.from_json(arg)),
+    ClassField("_images", lambda arg: EventImages.from_json(arg), lambda arg: arg.to_json()),
 ])
 # Out of scope fields '_tags', '_flagged', '_rsvp_email_list'
 
@@ -34,33 +34,34 @@ class Event:
         # self._expiry_time = ""
         return
 
-    def from_json(self, json):
+    @classmethod
+    def from_json(cls, json):
 
         required_keys = ['_event_id', '_creator_id', '_event_start_time', '_event_end_time', '_location']
-
+        
         if json is None:
             # Error, no input
             return 1, None
         if not all(key in json for key in required_keys):
             # Error, bad input
-            return 1, None
+            raise KeyError("Bad Input")
+
+        event_instance = Event(json['_event_id'], json['_creator_id'])
 
         for key, value in json.items():
-            factory_func = getattr(EVENT_FIELDS, key)
+            factory_func = EVENT_FIELDS.factory_funcs(key)
             value = factory_func(value)
-            setattr(self, key, value)
-
-        return 0, self
+            setattr(event_instance, key, value)
+        
+        return event_instance
 
     def to_json(self):
-        if self is None:
-            return 1, None
-        
         event_json = {}
 
-        for attr, value in vars(self).items():
-            if value is not None:
-                event_json[attr] = value
+        for event_field_name in EVENT_FIELDS:
+            event_value = eval(f"self.{event_field_name}")
+            if event_value is not None:
+                json_factory_func = EVENT_FIELDS.json_factory_funcs(event_field_name)
+                event_json[event_field_name] = json_factory_func(event_value)
 
-        return 0, event_json
-    
+        return event_json

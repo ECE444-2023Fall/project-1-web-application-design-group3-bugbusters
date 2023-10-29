@@ -51,8 +51,10 @@ def createEvent():
         event_obj = Event(event_id, creator_id)
         
         # Extract the rest of the json data
-        error_code, event_obj = event_obj.from_json(data)
-        if error_code == 1:
+        try:
+            error_code, event_obj = event_obj.from_json(data)
+        
+        except KeyError as key_error:
             return jsonify({'message': 'Error, bad input!'}), 400
 
         # Retrieve the json back from our obj

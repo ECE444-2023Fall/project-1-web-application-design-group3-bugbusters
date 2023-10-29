@@ -1,6 +1,7 @@
 from flask_server.classes.Event import Event, EVENT_FIELDS
 from flask_server.services.event_service import event_service
 from flask_server.global_config import db_client
+from flask_server import create_app
 import pytest
 import json
 
@@ -8,11 +9,13 @@ import json
 @pytest.fixture
 def test_client():
     # Here event_service is the flask app itself, imported from event_service.py
-    event_service.config["TESTING"] = True
-    return event_service.test_client()
+    app = create_app()
+    app.config["TESTING"] = True
+    client = app.test_client()
+    yield client
 
 def test_valid_get_event(test_client):
-    response = test_client.get("/DttWcIu4XOe5vdskk79v")
+    response = test_client.get("/event-service/DttWcIu4XOe5vdskk79v")
     
     # Check if the response status code is 200 (OK)
     assert response.status_code == 200
@@ -21,7 +24,7 @@ def test_valid_get_event(test_client):
     data = json.loads(response.data)
 
     # Check if the 'event_id' key in the JSON response matches the expected value
-    assert data.get('event_id') == "DttWcIu4XOe5vdskk79v"
+    assert data.get('_event_id') == "DttWcIu4XOe5vdskk79v"
 
 def test_invalid_get_event(test_client):
     response = test_client.get("bad_id")
@@ -33,10 +36,15 @@ def test_invalid_get_event(test_client):
 # This test will likely need to be re-written
 def test_get_all_events(test_client):
         event_size = len(list(db_client._events_collection.stream()))
-        event_json = test_client.get('/')
+        event_json_response = test_client.get('/event-service/')
         events = []
-        for json in event_json:
-            event = Event.from_json(json) 
+        print("response")
+        print(event_json_response.status_code)
+        print("data")
+        print(json.loads(event_json_response.data))
+
+        for event_json in json.loads(event_json_response.data):
+            event = Event.from_json(event_json)
             if event:
                 events.append(event)
             else:
@@ -47,4 +55,5 @@ def test_get_all_events(test_client):
 
         # Test failed: getAllEvents query did not return all events
         assert(event_size == len(events))
-    
+
+        return
