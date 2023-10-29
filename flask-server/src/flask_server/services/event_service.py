@@ -1,6 +1,6 @@
 from flask import Blueprint, abort, request, jsonify
 from flask_server.global_config import db_client
-from flask_server.classes.Event import Event
+from flask_server.classes.event import Event
 import uuid
 
 event_service = Blueprint('event_service', __name__, template_folder='templates',
@@ -41,11 +41,11 @@ def createEvent():
         event_id = str(uuid.uuid4())
         while db_client.events_collection.document(event_id).get().exists:
             event_id = str(uuid.uuid4())
-        
+
         # Extract the rest of the json data
         try:
             event_obj = Event.from_json(data)
-        
+
         except KeyError as key_error:
             return jsonify({'message': 'Error, bad input!'}), 400
 

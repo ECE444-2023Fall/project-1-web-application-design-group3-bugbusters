@@ -16,17 +16,18 @@ def test_client():
     db_client = DataBaseClient(json_path, True)
     yield client
 
-# Lab 5 - Ben Unit Test 
+# Lab 5 - Ben Goel Unit Test 
 def test_valid_get_event(test_client):
+    # call /event-service/<event_id> endpoint with test event ID
     response = test_client.get("/event-service/DttWcIu4XOe5vdskk79v")
     
-    # Check if the response status code is 200 (OK)
+    # ensure the response status code is 200 (OK)
     assert response.status_code == 200
     
-    # Parse the JSON response
+    # parse the JSON response
     data = json.loads(response.data)
 
-    # Check if the 'event_id' key in the JSON response matches the expected value
+    # check that the 'event_id' key in the JSON response matches the expected value
     assert data.get('_event_id') == "DttWcIu4XOe5vdskk79v"
 
 # Lab 5 - Ata Unit Test 

@@ -4,7 +4,7 @@ from firebase_admin import credentials, firestore
 class DataBaseClient:
     """DataBaseClient class"""
 
-    def __init__(self, auth_path, testing = False):
+    def __init__(self, auth_path, testing=False):
         # Authenticate credentials so we can access our firebase project
         cred = credentials.Certificate(auth_path)
         firebase_admin.initialize_app(cred)
@@ -12,8 +12,6 @@ class DataBaseClient:
         # Initialize Firestore db
         self._db = firestore.client()
         self._testing = testing
-        
-        return
 
     @property
     def events_collection(self):
