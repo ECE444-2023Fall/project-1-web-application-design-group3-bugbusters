@@ -15,6 +15,7 @@ EVENT_FIELDS = DataField([
 
 class Event:
     """Event class"""
+    
     def __init__(self, event_id, creator_id):
         self._event_id = event_id
         self._event_title = ""
@@ -50,3 +51,23 @@ class Event:
             setattr(event_instance, key, value)
 
         return event_instance
+
+
+    @classmethod
+    def to_json(self, cls):
+        if cls is None:
+            return None
+        
+        event_json = {}
+
+        if cls._event_id is not None: event_json['_event_id'] = cls._event_id
+        if cls._creator_id is not None: event_json['_creator_id'] = cls._creator_id
+        if cls._event_title is not None: event_json['_event_title'] = cls._event_title
+        if cls._description is not None: event_json['_description'] = cls._description
+        if cls._location is not None: event_json['_location'] = cls._location
+        if cls._event_start_time is not None: event_json['_event_start_time'] = cls._event_start_time
+        if cls._event_end_time is not None: event_json['_event_end_time'] = cls._event_start_time
+        if cls._images is not None: event_json['_images'] = cls._images.to_json(cls._images)
+
+        return event_json
+    

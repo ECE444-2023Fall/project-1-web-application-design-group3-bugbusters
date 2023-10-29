@@ -8,7 +8,8 @@ description = "The flask server for the ClubHub application."
 dependencies = [
     "flask",
     "firebase_admin",
-    "gitpython",
+    "algoliasearch",
+    "python-dotenv",
 
 ]
 

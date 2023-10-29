@@ -1,5 +1,5 @@
 from flask import Blueprint, abort, request, jsonify
-from flask_server.db import db_client
+from flask_server.global_config import db_client
 import uuid
 
 event_service = Blueprint('event_service', __name__, template_folder='templates',
