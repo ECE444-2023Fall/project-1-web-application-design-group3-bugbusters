@@ -9,13 +9,12 @@ EVENT_FIELDS = DataField([
     ClassField("_location"),
     ClassField("_event_start_time"),
     ClassField("_event_end_time"),
-    ClassField("_images", lambda arg: EventImages.from_json(arg)),
+    ClassField("_images", lambda arg: EventImages.from_json(arg), lambda arg: arg.to_json()),
 ])
 # Out of scope fields '_tags', '_flagged', '_rsvp_email_list'
 
 class Event:
     """Event class"""
-    
     def __init__(self, event_id, creator_id):
         self._event_id = event_id
         self._event_title = ""
@@ -46,28 +45,19 @@ class Event:
         event_instance = cls(event_id, creator_id)
 
         for key, value in json.items():
-            factory_func = getattr(EVENT_FIELDS, key)
+            factory_func = EVENT_FIELDS.factory_funcs(key)
             value = factory_func(value)
             setattr(event_instance, key, value)
 
         return event_instance
 
-
-    @classmethod
-    def to_json(self, cls):
-        if cls is None:
-            return None
-        
+    def to_json(self):
         event_json = {}
 
-        if cls._event_id is not None: event_json['_event_id'] = cls._event_id
-        if cls._creator_id is not None: event_json['_creator_id'] = cls._creator_id
-        if cls._event_title is not None: event_json['_event_title'] = cls._event_title
-        if cls._description is not None: event_json['_description'] = cls._description
-        if cls._location is not None: event_json['_location'] = cls._location
-        if cls._event_start_time is not None: event_json['_event_start_time'] = cls._event_start_time
-        if cls._event_end_time is not None: event_json['_event_end_time'] = cls._event_start_time
-        if cls._images is not None: event_json['_images'] = cls._images.to_json(cls._images)
+        for event_field_name in EVENT_FIELDS:
+            event_value = eval(f"self.{event_field_name}")
+            if event_value is not None:
+                json_factory_func = EVENT_FIELDS.json_factory_funcs(event_field_name)
+                event_json[event_field_name] = json_factory_func(event_value)
 
         return event_json
-    
