@@ -14,6 +14,7 @@ def test_client():
     client = app.test_client()
     yield client
 
+# Lab 5 - Ben Unit Test 
 def test_valid_get_event(test_client):
     response = test_client.get("/event-service/DttWcIu4XOe5vdskk79v")
     
@@ -26,34 +27,38 @@ def test_valid_get_event(test_client):
     # Check if the 'event_id' key in the JSON response matches the expected value
     assert data.get('_event_id') == "DttWcIu4XOe5vdskk79v"
 
+# Lab 5 - Ata Unit Test 
 def test_invalid_get_event(test_client):
     response = test_client.get("bad_id")
     
     # Check if the response status code is 404 (FAIL/Does not exist)
     assert response.status_code == 404
 
-
-# This test will likely need to be re-written
+# Lab 5 - Chris Unit Test 
 def test_get_all_events(test_client):
-        event_size = len(list(db_client._events_collection.stream()))
-        event_json_response = test_client.get('/event-service/')
-        events = []
-        print("response")
-        print(event_json_response.status_code)
-        print("data")
-        print(json.loads(event_json_response.data))
+    event_size = len(list(db_client._events_collection.stream()))
+    event_json_response = test_client.get('/event-service/')
+    events = []
+    print("response")
+    print(event_json_response.status_code)
+    print("data")
+    print(json.loads(event_json_response.data))
 
-        for event_json in json.loads(event_json_response.data):
-            event = Event.from_json(event_json)
-            if event:
-                events.append(event)
-            else:
-                event_size -= 1
+    for event_json in json.loads(event_json_response.data):
+        event = Event.from_json(event_json)
+        if event:
+            events.append(event)
+        else:
+            event_size -= 1
 
-        # Test failed: getAllEvents query returned no events
-        assert(events != None and event_size != 0)
+    # Test failed: getAllEvents query returned no events
+    assert(events != None and event_size != 0)
 
-        # Test failed: getAllEvents query did not return all events
-        assert(event_size == len(events))
+    # Test failed: getAllEvents query did not return all events
+    assert(event_size == len(events))
 
-        return
+    return
+
+# Lab 5 - Ali Unit Test
+def test_create_endpoint(test_client):
+    return
