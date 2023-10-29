@@ -44,7 +44,7 @@ def createEvent():
         
         # Get the creator id from the request
         creator_id = data.get('_creator_id')
-        if creator_id is None or creator_id is "":
+        if creator_id is None or creator_id == "":
             return jsonify({'message': "Bad creator id"}), 422
 
         # Create the event object

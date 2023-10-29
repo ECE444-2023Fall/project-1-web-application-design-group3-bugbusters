@@ -1,6 +1,6 @@
-from src.flask_server.classes.Event import Event, EVENT_FIELDS
-from src.flask_server.services.event_service import event_service, getEvent, getAllEvents
-from src.flask_server.global_config import db_client
+from flask_server.classes.Event import Event, EVENT_FIELDS
+from flask_server.services.event_service import event_service
+from flask_server.global_config import db_client
 import pytest
 import json
 
