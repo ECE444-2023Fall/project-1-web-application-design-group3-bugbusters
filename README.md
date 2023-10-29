@@ -49,3 +49,9 @@ If you want to make a contribution, please follow the next steps:
 
 ## Releases
 Releases are to be created by merging `develop` into `main`, `main` will then be used to create a release
+
+## Ben Goel Unit Testing
+All tests under test/unit/test_common.py were written by Ben Goel for Lab 5.
+
+# Pros / Cons of TDD
+There are many pros and cons of test driven development. In my experience, TDD's greatest strength is maintaining high levels of test coverage, if the "rules" of TDD are followed. From my PEY experience, a quote that resonates with me was said by my manager, that "tests aren't just written to make sure a feature works, its to make sure a feature will work tomorrow". In this regard, TDD helps to catch regressions in the code early. I also think TDD serves as a means of documentation, for if there exists a test, then it indirectly explains the functionality of the pieces of code it touches. I personally like TDD because it helps to quickly verify the implementation of whatever you are working on, whether that is a utility script, or an end-to-end integration test. On the other hand, TDD can often be cumbersome when a primary objective is rapid iteration and growth of the codebase. Although, I find that NOT testing the code ALWAYS costs more in the long run than the cost of typing tests! TDD requires a lot of testing infrastructure to be implemented first before actual features may be worked on. More importantly, the infrastructure can only be designed if an implementation is already in mind. This leads to a form of circular-dependency in the design of TDD. The most important aspect of TDD is that developers must write good, quality tests for TDD to be a good, recommendable practice. If the tests are incorrect, then the code will be too!
