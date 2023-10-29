@@ -1,5 +1,4 @@
 import os
-import git
 from dotenv import load_dotenv
 from flask_server.classes.search_client import AlgoliaSearchClient
 from flask_server.classes.database_client import DataBaseClient
