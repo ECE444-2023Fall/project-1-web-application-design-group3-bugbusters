@@ -20,6 +20,7 @@ class Event:
 
     def __init__(self, event_id, creator_id):
         self._event_id = event_id
+        self._creator_id = creator_id
         self._event_title = ""
         self._description = ""
         self._location = ""
@@ -27,7 +28,6 @@ class Event:
         self._event_end_time = ""
         self._images = EventImages()
 
-        self._creator_id = creator_id
 
         # out of scope for the time being
         # self._tags = []
@@ -38,10 +38,6 @@ class Event:
 
     @classmethod
     def from_json(cls, json):
-        
-        if json is None:
-            # Error, no input
-            return 1, None
         if not all(key in json for key in cls.required_keys):
             # Error, bad input
             raise KeyError("Bad Input")
