@@ -46,20 +46,14 @@ class TestEventService():
     
 
     # Lab 5 - Elliot P-K Unit Test 
-    def test_to_json(self):
+    def test_serialize_event(self):
 
         # Setup 
         originial_event_json = {'_event_title': 'SKULE Band Meeting', '_event_id': 'DttWcIu4XOe5vdskk79v', '_images': {'_profile_image': 'https://firebasestorage.googleapis.com/v0/b/ece444bulletin.appspot.com/o/images%2FSKULE.jpg?alt=media&token=6f6161fc-e3d5-46ad-a20c-855047ff66d0&_gl=1*1mu6xm5*_ga*MjAyMDkzOTUwNS4xNjk1OTE1NzI4*_ga_CW55HF8NVT*MTY5NzcyODMyMC4xMi4xLjE2OTc3MjgzMzguNDIuMC4w', '_image_gallery': ['https://firebasestorage.googleapis.com/v0/b/ece444bulletin.appspot.com/o/images%2FBNAD.jfif?alt=media&token=974ff480-9132-4ae7-9ead-6803eb9b9e9e&_gl=1*om634*_ga*MjAyMDkzOTUwNS4xNjk1OTE1NzI4*_ga_CW55HF8NVT*MTY5NzY1MTUzMC4xMC4xLjE2OTc2NTUxOTEuNTUuMC4w', 'https://firebasestorage.googleapis.com/v0/b/ece444bulletin.appspot.com/o/images%2Ffront_campus.jpeg?alt=media&token=d176f235-ee09-4e11-978b-624247b4d425&_gl=1*1uvnzpb*_ga*MjAyMDkzOTUwNS4xNjk1OTE1NzI4*_ga_CW55HF8NVT*MTY5NzY1MTUzMC4xMC4xLjE2OTc2NTUxODYuNjAuMC4w'], '_header_image': 'https://firebasestorage.googleapis.com/v0/b/ece444bulletin.appspot.com/o/images%2FSKULE.jpg?alt=media&token=6f6161fc-e3d5-46ad-a20c-855047ff66d0&_gl=1*ak4s2r*_ga*MjAyMDkzOTUwNS4xNjk1OTE1NzI4*_ga_CW55HF8NVT*MTY5NzY1MTUzMC4xMC4xLjE2OTc2NTUxOTUuNTEuMC4w'}, '_location': 'Stanford Flemming', '_creator_id': 'rgLV0SQuAa0QPAXH9wl7', '_event_start_time': '2023-10-17 12:23:33.361628', '_description': 'Testing event functionality with multiple events', '_event_end_time': '2023-10-17 12:23:33.361628'}
-        event_obj = Event(originial_event_json['_event_id'], originial_event_json['_creator_id'])
-        event_obj._event_title = originial_event_json['_event_title']
-
-        for key, value in originial_event_json.items():
-            factory_func = getattr(EVENT_FIELDS, key)
-            value = factory_func(value)
-            setattr(event_obj, key, value)
+        event = Event.from_json(originial_event_json)
 
         # Testing
-        new_event_json = event_obj.to_json(event_obj)
+        new_event_json = event.to_json()
 
         # Validation
         for key, value in new_event_json.items():
@@ -70,4 +64,3 @@ class TestEventService():
             assert(value == originial_event_json[key])
 
         return
-    
