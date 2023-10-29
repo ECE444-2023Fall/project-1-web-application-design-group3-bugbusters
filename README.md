@@ -49,3 +49,6 @@ If you want to make a contribution, please follow the next steps:
 
 ## Releases
 Releases are to be created by merging `develop` into `main`, `main` will then be used to create a release
+
+### Lab 5
+Ali - flask-server/test/unit/test_event_service.py. Unit test "test_create_event" - https://github.com/ECE444-2023Fall/project-1-web-application-design-group3-bugbusters/blob/Ali/CreateEventEndpoint/flask-server/test/unit/test_event_service.py#L64-L72
