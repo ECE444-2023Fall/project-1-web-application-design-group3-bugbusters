@@ -15,7 +15,7 @@ EVENT_FIELDS = DataField([
 
 class Event:
     """Event class"""
-    
+
     def __init__(self, event_id, creator_id):
         self._event_id = event_id
         self._event_title = ""
@@ -31,43 +31,36 @@ class Event:
         # self._tags = []
         # self._flagged = False
         # self._rsvp_email_list = []
-
+        # self._expiry_time = ""
         return
 
-    @classmethod
-    def from_json(cls, json):
+    def from_json(self, json):
+
+        required_keys = ['_event_id', '_creator_id', '_event_start_time', '_event_end_time', '_location']
+
         if json is None:
-            return None
-        if '_event_id' not in json or '_creator_id' not in json: 
-            return None
-        
-        event_id = json['_event_id']
-        creator_id = json['_creator_id']
-        event_instance = cls(event_id, creator_id)
+            # Error, no input
+            return 1, None
+        if not all(key in json for key in required_keys):
+            # Error, bad input
+            return 1, None
 
         for key, value in json.items():
             factory_func = getattr(EVENT_FIELDS, key)
             value = factory_func(value)
-            setattr(event_instance, key, value)
+            setattr(self, key, value)
 
-        return event_instance
+        return 0, self
 
-
-    @classmethod
-    def to_json(self, cls):
-        if cls is None:
-            return None
+    def to_json(self):
+        if self is None:
+            return 1, None
         
         event_json = {}
 
-        if cls._event_id is not None: event_json['_event_id'] = cls._event_id
-        if cls._creator_id is not None: event_json['_creator_id'] = cls._creator_id
-        if cls._event_title is not None: event_json['_event_title'] = cls._event_title
-        if cls._description is not None: event_json['_description'] = cls._description
-        if cls._location is not None: event_json['_location'] = cls._location
-        if cls._event_start_time is not None: event_json['_event_start_time'] = cls._event_start_time
-        if cls._event_end_time is not None: event_json['_event_end_time'] = cls._event_start_time
-        if cls._images is not None: event_json['_images'] = cls._images.to_json(cls._images)
+        for attr, value in vars(self).items():
+            if value is not None:
+                event_json[attr] = value
 
-        return event_json
+        return 0, event_json
     
