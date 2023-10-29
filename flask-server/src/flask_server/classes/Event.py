@@ -16,6 +16,8 @@ EVENT_FIELDS = DataField([
 class Event:
     """Event class"""
 
+    required_keys = ['_event_id', '_creator_id', '_event_start_time', '_event_end_time', '_location']
+
     def __init__(self, event_id, creator_id):
         self._event_id = event_id
         self._event_title = ""
@@ -36,13 +38,11 @@ class Event:
 
     @classmethod
     def from_json(cls, json):
-
-        required_keys = ['_event_id', '_creator_id', '_event_start_time', '_event_end_time', '_location']
         
         if json is None:
             # Error, no input
             return 1, None
-        if not all(key in json for key in required_keys):
+        if not all(key in json for key in cls.required_keys):
             # Error, bad input
             raise KeyError("Bad Input")
 

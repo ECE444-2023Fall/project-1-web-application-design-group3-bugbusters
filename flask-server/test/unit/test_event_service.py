@@ -1,6 +1,7 @@
 from flask_server.classes.Event import Event, EVENT_FIELDS
+from flask_server.classes.database_client import DataBaseClient
 from flask_server.services.event_service import event_service
-from flask_server.global_config import db_client
+from flask_server.global_config import db_client, json_path
 from flask_server import create_app
 import pytest
 import json
@@ -12,6 +13,7 @@ def test_client():
     app = create_app()
     app.config["TESTING"] = True
     client = app.test_client()
+    db_client = DataBaseClient(json_path, True)
     yield client
 
 # Lab 5 - Ben Unit Test 
@@ -36,7 +38,7 @@ def test_invalid_get_event(test_client):
 
 # Lab 5 - Chris Unit Test 
 def test_get_all_events(test_client):
-    event_size = len(list(db_client._events_collection.stream()))
+    event_size = len(list(db_client.events_collection.stream()))
     event_json_response = test_client.get('/event-service/')
     events = []
     print("response")
@@ -60,5 +62,11 @@ def test_get_all_events(test_client):
     return
 
 # Lab 5 - Ali Unit Test
-def test_create_endpoint(test_client):
+def test_create_event(test_client):
+    # required_keys = ['_event_id', '_creator_id', '_event_start_time', '_event_end_time', '_location']
+    required_keys = Event.required_keys
+    data = {key: "TEST" for key in required_keys}
+    response = test_client.post('/event-service/create-event', json=data)
+    assert response.status_code == 201
+    
     return
