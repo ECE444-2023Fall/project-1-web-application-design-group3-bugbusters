@@ -4,30 +4,21 @@ import axios from "axios";
 export class Api {
   constructor(apiKey) {
     this.apiKey = apiKey;
-    this.url = "http://127.0.0.1:7001";
+    this.url = "http://127.0.0.1:7001"; // Local testing
     // this.tenantId = "01GZC2R8Y7K4AWHMP31EDQXT3D";
   }
 
-  async makeRequest(endpoint, data) {
-    // console.log();
+  async makeRequest(endpoint, data, method) {
     const result = {
       result: null,
       data: null,
     };
 
-    const response = await axios
-      .post(
-        `${this.url}/${endpoint}`,
-        data
-        // {
-        //   headers: {
-        //     API_KEY: this.apiKey,
-        //     Authorization: `Bearer ${userToken}`,
-        //     tenantId: this.tenantId,
-        //   },
-        // }
-      )
-      .catch((err) => ({ err }));
+    const response = await axios({
+      method: method,
+      url: `${this.url}/${endpoint}`,
+      data: data,
+    }).catch((err) => ({ err }));
 
     if (!response || response.err) {
       // error
@@ -42,8 +33,8 @@ export class Api {
     return result;
   }
 
-  async getAllEvents(data) {
-    return this.makeRequest("", data);
+  async getAllEvents(data = null) {
+    return this.makeRequest("", data, "GET");
   }
 }
 

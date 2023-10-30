@@ -10,16 +10,11 @@ const LandingPageScreen = function () {
   const [text, setText] = useState("");
 
   const fetchEvents = async () => {
-    // const response = await api.getAllEvents({});
-    // console.log("response:", response);
-    // if (response.result == "SUCCESSFUL") {
-    //   console.log("Set something\n");
-    // }
-
-    const response = await axios
-      .get(`http://localhost:5001/`)
-      .catch((err) => ({ err }))
-      .then((response) => console.log(response));
+    const response = await api.getAllEvents();
+    console.log("response:", response);
+    if (response.result == "SUCCESSFUL") {
+      console.log("Set something\n");
+    }
   };
 
   return (
