@@ -4,6 +4,7 @@ import { StyleSheet } from "react-native";
 import LandingPageScreen from "../screens/LandingPageScreen";
 import BottomTab from "./BottomTabNavigator";
 import EventDetailsScreen from "../screens/EventDetailsScreen";
+import CreateEditEventScreen from "../screens/CreateEditEventScreen";
 
 const Stack = createStackNavigator();
 
@@ -12,6 +13,10 @@ const MainStack = function () {
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Bottom Tab" component={BottomTab} />
       <Stack.Screen name="Event Details" component={EventDetailsScreen} />
+      <Stack.Screen
+        name="Create/Edit Event"
+        component={CreateEditEventScreen}
+      />
     </Stack.Navigator>
   );
 };
