@@ -13,6 +13,6 @@ class DataBaseClient:
         self._db = firestore.client()
 
         self._events_collection = self._db.collection("Events")
-        self._users_collection = self._db.collection("Users")
+        self._user_profiles_collection = self._db.collection("UserProfiles")
 
         return
