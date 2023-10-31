@@ -63,7 +63,6 @@ def test_get_all_events(test_client):
 
 # Lab 5 - Ali Unit Test
 def test_create_event(test_client):
-    # required_keys = ['_event_id', '_creator_id', '_event_start_time', '_event_end_time', '_location']
     required_keys = Event.required_keys
     data = {key: "TEST" for key in required_keys}
     response = test_client.post('/event-service/create-event', json=data)
