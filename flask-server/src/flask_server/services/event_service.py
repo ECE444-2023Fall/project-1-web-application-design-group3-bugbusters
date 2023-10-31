@@ -42,9 +42,11 @@ def createEvent():
         while db_client.events_collection.document(event_id).get().exists:
             event_id = str(uuid.uuid4())
 
-        # Extract the rest of the json data
+        # Insert the generated event_id into the input json / data
+        data['_event_id'] = event_id
+
         try:
-            event_obj = Event.from_json(data, event_id)
+            event_obj = Event.from_json(data)
         except KeyError as key_error:
             return jsonify({'message': 'Error, bad input!'}), 400
 
@@ -58,4 +60,4 @@ def createEvent():
         return jsonify({'message': 'Event created successfully!', 'event_id': event_id}), 201
 
     except Exception as e:
-        return jsonify({'error': str(e)}), 400
+        return jsonify({'error': "An error has been thrown"}), 400
