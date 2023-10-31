@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Alert, StyleSheet, KeyboardAvoidingView, Text, TextInput, View, TouchableOpacity } from "react-native";
 import { 
-    getAuth, createUserWithEmailAndPassword,
+    getAuth, createUserWithEmailAndPassword, sendEmailVerification,
     signInWithEmailAndPassword, signOut, updateProfile
 } from "firebase/auth";
 import HorizontalTextBuffer from "../components/HorizontalTextBuffer";
@@ -29,6 +29,14 @@ const AuthPageScreen = function () {
         .then(userCredentials => {
             const user = userCredentials.user;
             updateProfile(user, {displayName: displayName})
+            // do not log in during account creation
+            signOut(auth).then(() => {
+                setShowLogin(true)
+                navigation.navigate("Authentication Page")
+            })
+            sendEmailVerification(user).then(() => {
+                console.log("EMAIL VERIFICATION SENT!")
+            })
             console.log(user);
         })
         .catch(error => alert(error.message))
@@ -39,6 +47,7 @@ const AuthPageScreen = function () {
         signInWithEmailAndPassword(auth, email, password)
         .then(userCredentials => {
             const user = userCredentials.user;
+            console.log(user)
             // user must be verified to log in
             if (!user.emailVerified) {
                 signOut(auth).then(() => {
