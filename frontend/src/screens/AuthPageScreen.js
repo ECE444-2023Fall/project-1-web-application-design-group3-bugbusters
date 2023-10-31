@@ -6,6 +6,7 @@ import {
     signInWithEmailAndPassword, signOut, updateProfile
 } from "firebase/auth";
 import HorizontalTextBuffer from "../components/HorizontalTextBuffer";
+import api from "../helpers/API";
 
 const AuthPageScreen = function () {
     const [displayName, setDisplayName] = useState("");
@@ -60,6 +61,12 @@ const AuthPageScreen = function () {
                     console.log(error);
                 });
             }
+            // user is verified, now get their UserProfile
+            // uid = user.uid
+            uid = 123
+            api.getUserProfile(uid).then((userProfile) => {
+                console.log(userProfile)
+            })
         })
         .catch(error => alert(error.message))
     }
