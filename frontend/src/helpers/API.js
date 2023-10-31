@@ -40,8 +40,14 @@ export class Api {
     return this.makeRequest(`user-service/${uid}`, null, "GET")
   }
 
-  async createUserProfile(uid) {
-    return this.makeRequest(`user-service/create-profile`, {uid: uid}, "POST")
+  async createUserProfile(displayName, email, uid) {
+    return this.makeRequest(`user-service/create-profile`,
+      {
+        displayName: displayName,
+        email: email,
+        uid: uid
+      },
+      "POST")
   }
 }
 
