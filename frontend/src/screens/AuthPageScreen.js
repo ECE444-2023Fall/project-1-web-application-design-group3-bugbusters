@@ -7,12 +7,16 @@ import {
 } from "firebase/auth";
 import HorizontalTextBuffer from "../components/HorizontalTextBuffer";
 import api from "../helpers/API";
+import { useDispatch } from "react-redux";
+import { SETUSERDATA } from "../store/ActionType";
 
 const AuthPageScreen = function () {
     const [displayName, setDisplayName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showLogin, setShowLogin] = useState(true);
+    // redux for user profile data
+    const dispatch = useDispatch()
 
     const navigation = useNavigation();
 
@@ -65,7 +69,7 @@ const AuthPageScreen = function () {
             // uid = user.uid
             uid = 123
             api.getUserProfile(uid).then((userProfile) => {
-                console.log(userProfile)
+                dispatch({ type: SETUSERDATA, payload: userProfile })
             })
         })
         .catch(error => alert(error.message))

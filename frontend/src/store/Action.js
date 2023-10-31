@@ -1,6 +1,6 @@
 // ProfileData
 import { SETUSERDATA } from "./ActionType";
-export const setUserData = (value) => ({
+export const setUserProfileData = (value) => ({
   type: SETUSERDATA,
   payload: value,
 });

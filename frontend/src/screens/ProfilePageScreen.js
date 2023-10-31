@@ -2,10 +2,15 @@ import React, { useState } from "react";
 import { Text, StyleSheet, View, TextInput, TouchableOpacity } from "react-native";
 import HeaderBar from "../components/HeaderBar";
 import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { useSelector } from "react-redux";
 
 const ProfilePageScreen = function () {
   const [text, setText] = useState("");
   const [displayName, setDisplayName] = useState("");
+  // read from redux store
+  const userProfileSelector = useSelector((state) => {
+    return state.main.userData
+  })
 
   const auth = getAuth();
   onAuthStateChanged(auth, (user) => {
@@ -51,7 +56,7 @@ const ProfilePageScreen = function () {
         }}
       />
       <Text style={{ padding: 20, fontSize: 24 }}>USER INPUT: {text}</Text>
-      <Text style={{ padding: 20, fontSize: 24 }}>Username: {displayName}</Text>
+      <Text style={{ padding: 20, fontSize: 24 }}>Username: {userProfileSelector.data?.displayName}</Text>
       <TouchableOpacity
           onPress={handleSignOut}
           style={styles.button}
