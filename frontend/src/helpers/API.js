@@ -39,6 +39,10 @@ export class Api {
   async getUserProfile(uid) {
     return this.makeRequest(`user-service/${uid}`, null, "GET")
   }
+
+  async createUserProfile(uid) {
+    return this.makeRequest(`user-service/create-profile`, {uid: uid}, "POST")
+  }
 }
 
 const api = new Api("apiKey");

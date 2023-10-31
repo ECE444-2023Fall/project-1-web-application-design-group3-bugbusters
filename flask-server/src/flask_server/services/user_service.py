@@ -1,4 +1,4 @@
-from flask import Blueprint, abort
+from flask import Blueprint, abort, request
 from flask_server.global_config import db_client
 from google.cloud.firestore_v1.base_query import FieldFilter
 from werkzeug.exceptions import NotFound
@@ -26,3 +26,11 @@ def getUserProfile(user_id):
 
     # error if no user profile exists
     abort(NotFound.code)
+
+@user_service.route('/create-profile', methods=['POST'])
+def createUserProfile():
+    data = request.json
+
+    # print data for now
+    print(f"JSON {data}")
+    return "JOE"

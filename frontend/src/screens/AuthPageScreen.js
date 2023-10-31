@@ -71,6 +71,9 @@ const AuthPageScreen = function () {
             api.getUserProfile(uid).then((userProfile) => {
                 dispatch({ type: SETUSERDATA, payload: userProfile })
             })
+            api.createUserProfile(uid).then((result) => {
+                console.log(result)
+            })
         })
         .catch(error => alert(error.message))
     }
