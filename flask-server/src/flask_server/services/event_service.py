@@ -34,30 +34,26 @@ def getAllEvents():
 
 @event_service.route('/create-event', methods=['POST'])
 def createEvent():
-    try:
-        data = request.json
+    data = request.json
 
-        # Generate a unique event ID TODO: Is this an efficient way of checking the uuid doesn't exist?
+    # Generate a unique event ID TODO: Is this an efficient way of checking the uuid doesn't exist?
+    event_id = str(uuid.uuid4())
+    while db_client.events_collection.document(event_id).get().exists:
         event_id = str(uuid.uuid4())
-        while db_client.events_collection.document(event_id).get().exists:
-            event_id = str(uuid.uuid4())
 
-        # Insert the generated event_id into the input json / data
-        data['_event_id'] = event_id
+    # Insert the generated event_id into the input json / data
+    data['_event_id'] = event_id
 
-        try:
-            event_obj = Event.from_json(data)
-        except KeyError as key_error:
-            return jsonify({'message': 'Error, bad input!'}), 400
+    try:
+        event_obj = Event.from_json(data)
+    except KeyError as key_error:
+        return jsonify({'message': 'Error, bad input!'}), 400
 
-        # Retrieve the json back from our obj
-        event_data = event_obj.to_json()
+    # Retrieve the json back from our obj
+    event_data = event_obj.to_json()
 
-        # Add the event data to the Firestore "Events" collection
-        event_ref = db_client.events_collection.document(event_id)
-        event_ref.set(event_data)
+    # Add the event data to the Firestore "Events" collection
+    event_ref = db_client.events_collection.document(event_id)
+    event_ref.set(event_data)
 
-        return jsonify({'message': 'Event created successfully!', 'event_id': event_id}), 201
-
-    except Exception as e:
-        return jsonify({'error': "An error has been thrown"}), 400
+    return jsonify({'message': 'Event created successfully!', 'event_id': event_id}), 201
