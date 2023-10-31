@@ -14,6 +14,7 @@ import api from "../helpers/API";
 import { useSelector, useDispatch } from "react-redux";
 import { setUserData } from "../store/Action";
 import EventCard from "../components/EventCard";
+import { AntDesign } from "@expo/vector-icons";
 
 const LandingPageScreen = function ({ navigation }) {
   // const [text, setText] = useState("");
