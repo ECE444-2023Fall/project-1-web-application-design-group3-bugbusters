@@ -1,9 +1,18 @@
 import React, { useState } from "react";
 import { Text, StyleSheet, View, TextInput } from "react-native";
 import HeaderBar from "../components/HeaderBar";
+import api from "../helpers/API";
 
 const LandingPageScreen = function () {
   const [text, setText] = useState("");
+
+  const fetchEvents = async () => {
+    const response = await api.getAllEvents();
+    console.log("response:", response);
+    if (response.result == "SUCCESSFUL") {
+      console.log("Set something\n");
+    }
+  };
 
   return (
     <View>
@@ -28,6 +37,7 @@ const LandingPageScreen = function () {
         }}
       />
       <Text style={{ padding: 20 }}>User Input: {text}</Text>
+      <Button title="Fetch" onPress={fetchEvents} />
     </View>
   );
 };
