@@ -9,7 +9,7 @@ EVENT_FIELDS = DataField([
     ClassField("_location"),
     ClassField("_event_start_time"),
     ClassField("_event_end_time"),
-    ClassField("_images", lambda arg: EventImages.from_json(arg)),
+    ClassField("_images", lambda arg: EventImages.from_json(arg), lambda arg: arg.to_json()),
 ])
 # Out of scope fields '_tags', '_flagged', '_rsvp_email_list'
 
@@ -45,8 +45,19 @@ class Event:
         event_instance = cls(event_id, creator_id)
 
         for key, value in json.items():
-            factory_func = getattr(EVENT_FIELDS, key)
+            factory_func = EVENT_FIELDS.factory_funcs(key)
             value = factory_func(value)
             setattr(event_instance, key, value)
 
         return event_instance
+
+    def to_json(self):
+        event_json = {}
+
+        for event_field_name in EVENT_FIELDS:
+            event_value = eval(f"self.{event_field_name}")
+            if event_value is not None:
+                json_factory_func = EVENT_FIELDS.json_factory_funcs(event_field_name)
+                event_json[event_field_name] = json_factory_func(event_value)
+
+        return event_json
