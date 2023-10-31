@@ -16,7 +16,7 @@ EVENT_FIELDS = DataField([
 class Event:
     """Event class"""
 
-    required_keys = ['_event_id', '_creator_id', '_event_title', '_location', '_event_start_time', '_event_end_time']
+    required_keys = ['_creator_id', '_event_title', '_location', '_event_start_time', '_event_end_time']
 
     def __init__(self, event_id, creator_id):
         self._event_id = event_id
