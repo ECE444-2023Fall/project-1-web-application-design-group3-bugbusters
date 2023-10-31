@@ -44,8 +44,7 @@ def createEvent():
 
         # Extract the rest of the json data
         try:
-            event_obj = Event.from_json(data)
-
+            event_obj = Event.from_json(data, event_id)
         except KeyError as key_error:
             return jsonify({'message': 'Error, bad input!'}), 400
 
