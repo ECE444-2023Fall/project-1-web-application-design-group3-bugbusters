@@ -4,8 +4,7 @@ import axios from "axios";
 export class Api {
   constructor(apiKey) {
     this.apiKey = apiKey;
-    this.url = "http://127.0.0.1:7001"; // Local testing
-    // this.tenantId = "01GZC2R8Y7K4AWHMP31EDQXT3D";
+    this.url = process.env.EXPO_PUBLIC_BASE_API_URL;
   }
 
   async makeRequest(endpoint, data, method) {
@@ -34,7 +33,7 @@ export class Api {
   }
 
   async getAllEvents(data = null) {
-    return this.makeRequest("", data, "GET");
+    return this.makeRequest("event-service/", data, "GET");
   }
 }
 
