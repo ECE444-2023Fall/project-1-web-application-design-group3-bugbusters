@@ -15,6 +15,11 @@ export const mainReducer = (state = initialState, action) => {
         ...state,
         userData: { ...state.userData, ...action.payload },
       };
+    case SETCURRENTEVENTDATA:
+      return {
+        ...state,
+        currentEventData: { ...state.currentEventData, ...action.payload },
+      };
     case RESET:
       return { ...initialState };
     default:
