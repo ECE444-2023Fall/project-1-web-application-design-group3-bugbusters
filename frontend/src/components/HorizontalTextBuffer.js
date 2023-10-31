@@ -3,9 +3,9 @@ import { StyleSheet, Text, View } from "react-native";
 const HorizontalTextBuffer = function ({ text="OR" }) {
     return (
         <View style={styles.horizontalLineBufferContainer}>
-            <hr style={styles.horizontalLineBuffer}></hr>
+            <View style={styles.horizontalLineBuffer}></View>
             <Text numberOfLines={1} style={styles.horizontalLineBufferText}>{text}</Text>
-            <hr style={styles.horizontalLineBuffer}></hr>
+            <View style={styles.horizontalLineBuffer}></View>
         </View>
     )
 }
@@ -16,19 +16,20 @@ const styles = StyleSheet.create({
     horizontalLineBufferContainer: {
         flexDirection: "row",
         width: "100%",
-        marginVertical: 10
+        marginVertical: 10,
+        alignItems: "center"
     },
     horizontalLineBufferText: {
-        flex: 1,
         textAlign: "center",
         fontWeight: 600,
-        fontSize: 14
+        fontSize: 14,
+        marginHorizontal: 5
     },
     horizontalLineBuffer: {
         color: "grey", 
         backgroundColor: "grey",
-        width: "45%",
+        flex: 1,
         borderRadius: 5,
-        height: 2
+        height: 1
     }
 })

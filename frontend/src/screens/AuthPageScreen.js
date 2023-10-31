@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { StyleSheet, KeyboardAvoidingView, Text, TextInput, View, TouchableOpacity } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import { Alert, StyleSheet, KeyboardAvoidingView, Text, TextInput, View, TouchableOpacity } from "react-native";
 import { 
     getAuth, createUserWithEmailAndPassword,
-    signInWithEmailAndPassword, updateProfile
+    signInWithEmailAndPassword, signOut, updateProfile
 } from "firebase/auth";
 import HorizontalTextBuffer from "../components/HorizontalTextBuffer";
 
@@ -11,6 +12,8 @@ const AuthPageScreen = function () {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [showLogin, setShowLogin] = useState(true);
+
+    const navigation = useNavigation();
 
     const navigateSignUp = () => {
         setShowLogin(false);
@@ -36,7 +39,18 @@ const AuthPageScreen = function () {
         signInWithEmailAndPassword(auth, email, password)
         .then(userCredentials => {
             const user = userCredentials.user;
-            console.log(user);
+            // user must be verified to log in
+            if (!user.emailVerified) {
+                signOut(auth).then(() => {
+                    navigation.navigate("Authentication Page")
+                    Alert.alert("Email is not verified!",
+                                message="Please check the email you used to register.")
+                    console.log("SIGNED OUT")
+                }).catch((error) => {
+                    // An error happened.
+                    console.log(error);
+                });
+            }
         })
         .catch(error => alert(error.message))
     }
