@@ -5,4 +5,3 @@ class EventPackage:
         self._event = event
         self._creator = creator
         return
-    
