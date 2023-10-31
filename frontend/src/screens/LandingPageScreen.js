@@ -3,9 +3,19 @@ import { Text, StyleSheet, View, TextInput, Button } from "react-native";
 import HeaderBar from "../components/HeaderBar";
 import { useSelector, useDispatch } from "react-redux";
 import { setUserData } from "../store/Action";
+import api from "../helpers/API";
+import axios from "axios";
 
 const LandingPageScreen = function () {
   const [text, setText] = useState("");
+
+  const fetchEvents = async () => {
+    const response = await api.getAllEvents();
+    console.log("response:", response);
+    if (response.result == "SUCCESSFUL") {
+      console.log("Set something\n");
+    }
+  };
 
   return (
     <View>
@@ -30,6 +40,7 @@ const LandingPageScreen = function () {
         }}
       />
       <Text style={{ padding: 20 }}>User Input: {text}</Text>
+      <Button title="Fetch" onPress={fetchEvents} />
     </View>
   );
 };

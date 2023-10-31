@@ -1,12 +1,14 @@
 import os
 
 from flask import Flask
+from flask_cors import CORS
 from flask_server.services.event_service import event_service
 from flask_server.services.search_service import search_service
 
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
+    CORS(app)  # TODO: setup origins=[<origin>, ...] for safety
     app.config.from_mapping(
         SECRET_KEY='dev',
     )
