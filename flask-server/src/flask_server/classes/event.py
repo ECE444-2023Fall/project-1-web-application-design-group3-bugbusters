@@ -15,8 +15,12 @@ EVENT_FIELDS = DataField([
 
 class Event:
     """Event class"""
+
+    required_keys = ['_event_id', '_creator_id', '_event_title', '_location', '_event_start_time', '_event_end_time']
+
     def __init__(self, event_id, creator_id):
         self._event_id = event_id
+        self._creator_id = creator_id
         self._event_title = ""
         self._description = ""
         self._location = ""
@@ -24,31 +28,27 @@ class Event:
         self._event_end_time = ""
         self._images = EventImages()
 
-        self._creator_id = creator_id
 
         # out of scope for the time being
         # self._tags = []
         # self._flagged = False
         # self._rsvp_email_list = []
-
+        # self._expiry_time = ""
         return
 
     @classmethod
     def from_json(cls, json):
-        if json is None:
-            return None
-        if '_event_id' not in json or '_creator_id' not in json: 
-            return None
-        
-        event_id = json['_event_id']
-        creator_id = json['_creator_id']
-        event_instance = cls(event_id, creator_id)
+        if not all(key in json for key in cls.required_keys):
+            # Error, bad input
+            raise KeyError("Bad Input")
+
+        event_instance = Event(json['_event_id'], json['_creator_id'])
 
         for key, value in json.items():
             factory_func = EVENT_FIELDS.factory_funcs(key)
             value = factory_func(value)
             setattr(event_instance, key, value)
-
+        
         return event_instance
 
     def to_json(self):
