@@ -1,4 +1,5 @@
 from flask import Blueprint, abort, request
+from flask_server.classes.user_profile import UserProfile
 from flask_server.global_config import db_client
 from google.cloud.firestore_v1.base_query import FieldFilter
 from werkzeug.exceptions import BadRequest, NotFound, Forbidden
@@ -31,9 +32,13 @@ def getUserProfile(user_id):
 def createUserProfile():
     data = request.json
 
-    # if no uid exists in body, error 400
-    if not (uid := data.get('uid')):
+    try:
+        user_profile = UserProfile.from_json(data)
+    except KeyError as key_error:
         abort(BadRequest.code)
+
+    # get uid for indexing
+    uid = data.get('uid')
 
     # get reference to user profiles collection
     user_profiles_doc_ref = db_client.user_profiles_collection
@@ -48,6 +53,9 @@ def createUserProfile():
     for _ in user_profiles:
         abort(Forbidden.code)
 
+    # Retrieve the json back from our obj
+    user_profile_data = user_profile.to_json()
+
     # Add the user profile data to the Firestore "UserProfiles" collection
-    _update_time, _profile_ref = user_profiles_doc_ref.add(data)
-    return data, 201
+    _update_time, _profile_ref = user_profiles_doc_ref.add(user_profile_data)
+    return user_profile_data, 201

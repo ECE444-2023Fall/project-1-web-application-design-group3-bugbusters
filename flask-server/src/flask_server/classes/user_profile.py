@@ -31,3 +31,14 @@ class UserProfile:
             setattr(profile_instance, key, value)
 
         return profile_instance
+
+    def to_json(self):
+        user_profile_json = {}
+
+        for field_name in USER_PROFILE_FIELDS:
+            event_value = eval(f"self.{field_name}")
+            if event_value is not None:
+                json_factory_func = USER_PROFILE_FIELDS.json_factory_funcs(field_name)
+                user_profile_json[field_name] = json_factory_func(event_value)
+
+        return user_profile_json
