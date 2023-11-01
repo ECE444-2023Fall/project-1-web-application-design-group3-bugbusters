@@ -12,7 +12,7 @@ def getUserProfile(user_id):
     '''Given an user_id, return the corresponding UserProfile to it'''
 
     # get reference to user profiles collection
-    user_profiles_doc_ref = db_client._user_profiles_collection
+    user_profiles_doc_ref = db_client.user_profiles_collection
 
     # get query reference
     user_profile_query = user_profiles_doc_ref.where(filter=FieldFilter("uid", "==", user_id))
