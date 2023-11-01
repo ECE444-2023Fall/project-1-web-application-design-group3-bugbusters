@@ -32,6 +32,7 @@ def getUserProfile(user_id):
 def createUserProfile():
     data = request.json
 
+    # check that all required fields exist and no extra fields exist
     try:
         user_profile = UserProfile.from_json(data)
     except TypeError as type_error:
