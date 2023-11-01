@@ -28,7 +28,21 @@ const AuthPageScreen = function () {
         setShowLogin(true);
     }
 
+    const validEmails = ["mail.utoronto.ca", "utoronto.ca"]
+
+    const endsWithAny = (string, suffixes) => {
+        return suffixes.some((suffix) => {
+            return string.endsWith(suffix);
+        });
+    }
+
     const handleSignUp = () => {
+        if (!endsWithAny(email, validEmails)) {
+            Alert.alert("Invalid Email",
+                        message="You must use an official University of Toronto email.")
+            console.log("INVALID SCHOOL")
+            return
+        }
         const auth = getAuth();
         createUserWithEmailAndPassword(auth, email, password)
         .then(userCredentials => {
