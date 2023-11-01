@@ -1,7 +1,7 @@
 from flask import Blueprint, abort, request
 from flask_server.global_config import db_client
 from google.cloud.firestore_v1.base_query import FieldFilter
-from werkzeug.exceptions import NotFound
+from werkzeug.exceptions import BadRequest, NotFound, Forbidden
 
 
 user_service = Blueprint('user_service', __name__, template_folder='templates',
@@ -31,6 +31,23 @@ def getUserProfile(user_id):
 def createUserProfile():
     data = request.json
 
-    # print data for now
-    print(f"JSON {data}")
-    return "JOE"
+    # if no uid exists in body, error 400
+    if not (uid := data.get('uid')):
+        abort(BadRequest.code)
+
+    # get reference to user profiles collection
+    user_profiles_doc_ref = db_client.user_profiles_collection
+
+    # get query reference
+    user_profile_query = user_profiles_doc_ref.where(filter=FieldFilter("uid", "==", uid))
+
+    # get stream of results
+    user_profiles = user_profile_query.stream()
+
+    # if user profile exists, error 403
+    for _ in user_profiles:
+        abort(Forbidden.code)
+
+    # Add the user profile data to the Firestore "UserProfiles" collection
+    _update_time, _profile_ref = user_profiles_doc_ref.add(data)
+    return data, 201

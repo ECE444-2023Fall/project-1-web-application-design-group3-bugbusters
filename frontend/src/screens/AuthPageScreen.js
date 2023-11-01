@@ -40,9 +40,14 @@ const AuthPageScreen = function () {
                 navigation.navigate("Authentication Page")
             })
             sendEmailVerification(user).then(() => {
+                Alert.alert("Email Verification",
+                            message="A verification receipt has been send to " +
+                                    "the email you used to register.")
                 console.log("EMAIL VERIFICATION SENT!")
             })
-            console.log(user);
+            api.createUserProfile(displayName, user.email, user.uid).then((result) => {
+                console.log(result)
+            })
         })
         .catch(error => alert(error.message))
     }
@@ -59,21 +64,18 @@ const AuthPageScreen = function () {
                     navigation.navigate("Authentication Page")
                     Alert.alert("Email is not verified!",
                                 message="Please check the email you used to register.")
-                    console.log("SIGNED OUT")
+                    console.log("NOT VERIFIED")
                 }).catch((error) => {
                     // An error happened.
                     console.log(error);
                 });
+            } else {
+                // user is verified, now get their UserProfile
+                api.getUserProfile(user.uid).then((userProfile) => {
+                    console.log(userProfile)
+                    dispatch({ type: SETUSERDATA, payload: userProfile })
+                })
             }
-            // user is verified, now get their UserProfile
-            // uid = user.uid
-            uid = 123
-            api.getUserProfile(uid).then((userProfile) => {
-                dispatch({ type: SETUSERDATA, payload: userProfile })
-            })
-            api.createUserProfile(user.displayName, user.email, user.uid).then((result) => {
-                console.log(result)
-            })
         })
         .catch(error => alert(error.message))
     }
