@@ -34,7 +34,7 @@ def createUserProfile():
 
     try:
         user_profile = UserProfile.from_json(data)
-    except KeyError as key_error:
+    except TypeError as type_error:
         abort(BadRequest.code)
 
     # get uid for indexing
