@@ -4,6 +4,7 @@ import {
     getAuth, createUserWithEmailAndPassword, sendEmailVerification,
     signInWithEmailAndPassword, signOut, updateProfile
 } from "firebase/auth";
+import HeaderBar from "../components/HeaderBar";
 import HorizontalTextBuffer from "../components/HorizontalTextBuffer";
 import api from "../helpers/API";
 import { useDispatch } from "react-redux";
@@ -100,87 +101,93 @@ const AuthPageScreen = function ({ navigation }) {
     }
 
     return (showLogin) ? (
-        <KeyboardAvoidingView
-            style={styles.container}
-            behavior="padding"
-        >
-            <View style={styles.inputContainer}>
-                <TextInput
-                    placeholder="E-MAIL"
-                    value={email}
-                    onChangeText={text => setEmail(text)}
-                    style={styles.input}
-                    ref={textEmailRef}
-                />
-                <TextInput
-                    placeholder="PASSWORD"
-                    value={password}
-                    onChangeText={text => setPassword(text)}
-                    style={styles.input}
-                    secureTextEntry
-                />
-            </View>
+        <View>
+            <HeaderBar title="Login" align="center"/>
+            <KeyboardAvoidingView
+                style={styles.container}
+                behavior="padding"
+            >
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        placeholder="E-MAIL"
+                        value={email}
+                        onChangeText={text => setEmail(text)}
+                        style={styles.input}
+                        ref={textEmailRef}
+                    />
+                    <TextInput
+                        placeholder="PASSWORD"
+                        value={password}
+                        onChangeText={text => setPassword(text)}
+                        style={styles.input}
+                        secureTextEntry
+                    />
+                </View>
 
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                    onPress={handleLogin}
-                    style={styles.button}
-                >
-                    <Text style={styles.buttonText}>LOGIN</Text>
-                </TouchableOpacity>
-                <HorizontalTextBuffer></HorizontalTextBuffer>
-                <TouchableOpacity
-                    onPress={navigateSignUp}
-                    style={[styles.button, styles.buttonOutline]}
-                >
-                    <Text style={styles.buttonOutlineText}>SIGN UP</Text>
-                </TouchableOpacity>
-            </View>
-        </KeyboardAvoidingView>
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                        onPress={handleLogin}
+                        style={styles.button}
+                    >
+                        <Text style={styles.buttonText}>LOGIN</Text>
+                    </TouchableOpacity>
+                    <HorizontalTextBuffer></HorizontalTextBuffer>
+                    <TouchableOpacity
+                        onPress={navigateSignUp}
+                        style={[styles.button, styles.buttonOutline]}
+                    >
+                        <Text style={styles.buttonOutlineText}>SIGN UP</Text>
+                    </TouchableOpacity>
+                </View>
+            </KeyboardAvoidingView>
+        </View>
     ) : (
-        <KeyboardAvoidingView
-            style={styles.container}
-            behavior="padding"
-        >
-            <View style={styles.inputContainer}>
-                <TextInput
-                    placeholder="USERNAME"
-                    value={displayName}
-                    onChangeText={text => setDisplayName(text)}
-                    style={styles.input}
-                    ref={textUsernameRef}
-                />
-                <TextInput
-                    placeholder="E-MAIL"
-                    value={email}
-                    onChangeText={text => setEmail(text)}
-                    style={styles.input}
-                />
-                <TextInput
-                    placeholder="PASSWORD"
-                    value={password}
-                    onChangeText={text => setPassword(text)}
-                    style={styles.input}
-                    secureTextEntry
-                />
-            </View>
+        <View>
+            <HeaderBar title="Sign Up" align="center"></HeaderBar>
+            <KeyboardAvoidingView
+                style={styles.container}
+                behavior="padding"
+            >
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        placeholder="USERNAME"
+                        value={displayName}
+                        onChangeText={text => setDisplayName(text)}
+                        style={styles.input}
+                        ref={textUsernameRef}
+                    />
+                    <TextInput
+                        placeholder="E-MAIL"
+                        value={email}
+                        onChangeText={text => setEmail(text)}
+                        style={styles.input}
+                    />
+                    <TextInput
+                        placeholder="PASSWORD"
+                        value={password}
+                        onChangeText={text => setPassword(text)}
+                        style={styles.input}
+                        secureTextEntry
+                    />
+                </View>
 
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                    onPress={handleSignUp}
-                    style={styles.button}
-                >
-                    <Text style={styles.buttonText}>SIGN UP</Text>
-                </TouchableOpacity>
-                <HorizontalTextBuffer></HorizontalTextBuffer>
-                <TouchableOpacity
-                    onPress={navigateLogIn}
-                    style={[styles.button, styles.buttonOutline]}
-                >
-                    <Text style={styles.buttonOutlineText}>LOG IN</Text>
-                </TouchableOpacity>
-            </View>
-        </KeyboardAvoidingView>
+                <View style={styles.buttonContainer}>
+                    <TouchableOpacity
+                        onPress={handleSignUp}
+                        style={styles.button}
+                    >
+                        <Text style={styles.buttonText}>SIGN UP</Text>
+                    </TouchableOpacity>
+                    <HorizontalTextBuffer></HorizontalTextBuffer>
+                    <TouchableOpacity
+                        onPress={navigateLogIn}
+                        style={[styles.button, styles.buttonOutline]}
+                    >
+                        <Text style={styles.buttonOutlineText}>LOG IN</Text>
+                    </TouchableOpacity>
+                </View>
+            </KeyboardAvoidingView>
+        </View>
     );
 };
 
@@ -192,6 +199,7 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         width: "80%",
+        marginTop: "10%"
     },
     input: {
         backgroundColor: "white",
