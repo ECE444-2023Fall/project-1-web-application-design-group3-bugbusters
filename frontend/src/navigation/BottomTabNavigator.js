@@ -11,6 +11,7 @@ import ProfilePageScreen from "../screens/ProfilePageScreen";
 const Tab = createBottomTabNavigator();
 
 export default function BottomTab({ navigation }) {
+export default function BottomTab({ navigation }) {
   const dispatchRedux = useDispatch();
   const primaryColor = useSelector((state) => state.main.primaryColor);
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
@@ -32,7 +33,7 @@ export default function BottomTab({ navigation }) {
 
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="Landing Page"
       screenOptions={(_, color, __) => {
         return {
           tabBarActiveTintColor: contrastColor,
@@ -56,6 +57,41 @@ export default function BottomTab({ navigation }) {
           tabBarIcon: ({ color, size }) => {
             return (
               <MaterialIcons name="event" size={size + 10} color={color} />
+            );
+          },
+          gestureEnabled: false,
+        }}
+      />
+      <Tab.Screen
+        name="Create Edit Event"
+        component={CreateEditEventScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => {
+            return (
+              <MaterialIcons name="add-box" size={size + 10} color={color} />
+            );
+          },
+          gestureEnabled: false,
+        }}
+        listeners={{
+          tabPress: (e) => {
+            // Prevent default action
+            e.preventDefault();
+            navigation.navigate("Create/Edit Event");
+          },
+        }}
+      />
+      <Tab.Screen
+        name="Authentication Page"
+        component={auth.currentUser ? ProfilePageScreen : AuthPageScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => {
+            return (
+              <MaterialIcons
+                name="account-circle"
+                size={size + 10}
+                color={color}
+              />
             );
           },
           gestureEnabled: false,
