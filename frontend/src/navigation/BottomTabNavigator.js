@@ -6,6 +6,7 @@ import LandingPageScreen from "../screens/LandingPageScreen";
 import AuthPageScreen from "../screens/AuthPageScreen";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import ProfilePageScreen from "../screens/ProfilePageScreen";
+import CreateEditEventScreen from "../screens/CreateEditEventScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -31,7 +32,7 @@ export default function BottomTab({ navigation }) {
 
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="Landing Page"
       screenOptions={(_, color, __) => {
         return {
           tabBarActiveTintColor: contrastColor,
@@ -56,7 +57,25 @@ export default function BottomTab({ navigation }) {
             );
           },
           gestureEnabled: false,
-          headerBackground: "blue",
+        }}
+      />
+      <Tab.Screen
+        name="Create Edit Event"
+        component={CreateEditEventScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => {
+            return (
+              <MaterialIcons name="add-box" size={size + 10} color={color} />
+            );
+          },
+          gestureEnabled: false,
+        }}
+        listeners={{
+          tabPress: (e) => {
+            // Prevent default action
+            e.preventDefault();
+            navigation.navigate("Create/Edit Event");
+          },
         }}
       />
       <Tab.Screen
