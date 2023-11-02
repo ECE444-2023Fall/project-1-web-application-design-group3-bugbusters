@@ -40,7 +40,6 @@ const AuthPageScreen = function () {
         if (!endsWithAny(email, validEmails)) {
             Alert.alert("Invalid Email",
                         message="You must use an official University of Toronto email.")
-            console.log("INVALID SCHOOL")
             return
         }
         const auth = getAuth();
@@ -57,10 +56,8 @@ const AuthPageScreen = function () {
                 Alert.alert("Email Verification",
                             message="A verification receipt has been send to " +
                                     "the email you used to register.")
-                console.log("EMAIL VERIFICATION SENT!")
             })
             api.createUserProfile({ display_name: displayName, email: user.email, uid: user.uid }).then((result) => {
-                console.log(result)
             })
         })
         .catch(error => alert(error.message))
@@ -71,22 +68,18 @@ const AuthPageScreen = function () {
         signInWithEmailAndPassword(auth, email, password)
         .then(userCredentials => {
             const user = userCredentials.user;
-            console.log(user)
             // user must be verified to log in
             if (!user.emailVerified) {
                 signOut(auth).then(() => {
                     navigation.navigate("Authentication Page")
                     Alert.alert("Email is not verified!",
                                 message="Please check the email you used to register.")
-                    console.log("NOT VERIFIED")
                 }).catch((error) => {
                     // An error happened.
-                    console.log(error);
                 });
             } else {
                 // user is verified, now get their UserProfile
                 api.getUserProfile(user.uid).then((userProfile) => {
-                    console.log(userProfile)
                     dispatch({ type: SETUSERDATA, payload: userProfile })
                 })
             }
