@@ -24,7 +24,7 @@ def getUserProfile(user_id):
         # error if no user profile exists
         abort(NotFound.code)
 
-    return user_profile
+    return user_profile, 200
 
 
 @user_service.route('/create-profile', methods=['POST'])
@@ -43,19 +43,13 @@ def createUserProfile():
     # get reference to user profiles collection
     user_profiles_collection_ref = db_client.user_profiles_collection
 
-    # get doc reference
-    user_profiles_doc_ref = user_profiles_collection_ref.document(uid)
-
-    # Get the data of the event document
-    user_profile = user_profiles_doc_ref.get().to_dict()
-
     # if user profile exists, error 403
-    if not user_profile:
+    if user_profiles_collection_ref.document(uid).get().exists:
         abort(Forbidden.code)
 
     # Retrieve the json back from our obj
     user_profile_data = user_profile.to_json()
 
     # Add the user profile data to the Firestore "UserProfiles" collection
-    _update_time, _profile_ref = user_profiles_doc_ref.add(user_profile_data)
+    user_profiles_collection_ref.document(uid).set(user_profile_data)
     return user_profile_data, 201
