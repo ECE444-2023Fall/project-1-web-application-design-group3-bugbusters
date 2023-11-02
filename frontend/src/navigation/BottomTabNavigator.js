@@ -1,5 +1,4 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useNavigation } from "@react-navigation/native";
 import { useEffect } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import LandingPageScreen from "../screens/LandingPageScreen";
@@ -9,9 +8,8 @@ import ProfilePageScreen from "../screens/ProfilePageScreen";
 
 const Tab = createBottomTabNavigator();
 
-export default function BottomTab() {
+export default function BottomTab({ navigation }) {
   const auth = getAuth();
-  const navigation = useNavigation();
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, user => {
       if (user) {
@@ -35,6 +33,7 @@ export default function BottomTab() {
           tabBarStyle: {
             position: "absolute",
             justifyContent: "center",
+            paddingTop: 16,
             backgroundColor: "#1E3765",
           },
           headerShown: false,
