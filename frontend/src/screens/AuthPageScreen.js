@@ -101,7 +101,7 @@ const AuthPageScreen = function ({ navigation }) {
     }
 
     return (showLogin) ? (
-        <View>
+        <View style={{flex: 1}}>
             <HeaderBar title="Login" align="center"/>
             <KeyboardAvoidingView
                 style={styles.container}
@@ -199,7 +199,6 @@ const styles = StyleSheet.create({
     },
     inputContainer: {
         width: "80%",
-        marginTop: "10%"
     },
     input: {
         backgroundColor: "white",
