@@ -26,7 +26,6 @@ const ProfilePageScreen = function () {
   const handleSignOut = () => {
     signOut(auth).then(() => {
       // Sign-out successful.
-      console.log("SIGNED OUT")
     }).catch((error) => {
       // An error happened.
       console.log(error);

@@ -76,6 +76,7 @@ const AuthPageScreen = function () {
                                 message="Please check the email you used to register.")
                 }).catch((error) => {
                     // An error happened.
+                    console.log(error)
                 });
             } else {
                 // user is verified, now get their UserProfile
