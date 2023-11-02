@@ -33,7 +33,7 @@ export default function BottomTab({ navigation }) {
           tabBarStyle: {
             position: "absolute",
             justifyContent: "center",
-            paddingTop: 16,
+            padding: 8,
             backgroundColor: "#1E3765",
           },
           headerShown: false,
