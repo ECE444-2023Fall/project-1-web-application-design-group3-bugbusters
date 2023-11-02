@@ -2,16 +2,16 @@ from contextlib import nullcontext as does_not_raise
 import pytest
 from flask_server.classes.user_profile import UserProfile, USER_PROFILE_FIELDS
 
-test_profile_json = {'displayName': 'Ben Goel', 'email': 'benjamin.goel@mail.utoronto.ca', 'uid': 'CwEtKo8TIoch7ThjSra5PRklFr63',
-                     'photoURL': 'http://testtesttest.jpg', 'isAdmin': False}
+test_profile_json = {'display_name': 'Ben Goel', 'email': 'benjamin.goel@mail.utoronto.ca', 'uid': 'CwEtKo8TIoch7ThjSra5PRklFr63',
+                     'photo_url': 'http://testtesttest.jpg', 'is_admin': False}
 
 @pytest.mark.parametrize('input_json, expectation',
                          [(test_profile_json, does_not_raise()),
-                          ({k: v for k, v in test_profile_json.items() if k != 'photoURL'}, does_not_raise()),
-                          ({k: v for k, v in test_profile_json.items() if k != 'isAdmin'}, does_not_raise()),
+                          ({k: v for k, v in test_profile_json.items() if k != 'photo_url'}, does_not_raise()),
+                          ({k: v for k, v in test_profile_json.items() if k != 'is_admin'}, does_not_raise()),
                           ({k: v for k, v in test_profile_json.items() if k != 'uid'}, pytest.raises(TypeError)),
                           ({k: v for k, v in test_profile_json.items() if k != 'email'}, pytest.raises(TypeError)),
-                          ({k: v for k, v in test_profile_json.items() if k != 'displayName'}, pytest.raises(TypeError)),
+                          ({k: v for k, v in test_profile_json.items() if k != 'display_name'}, pytest.raises(TypeError)),
                           ])
 def test_from_json(input_json, expectation):
     with expectation:

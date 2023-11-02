@@ -59,7 +59,7 @@ const AuthPageScreen = function () {
                                     "the email you used to register.")
                 console.log("EMAIL VERIFICATION SENT!")
             })
-            api.createUserProfile(displayName, user.email, user.uid).then((result) => {
+            api.createUserProfile({ display_name: displayName, email: user.email, uid: user.uid }).then((result) => {
                 console.log(result)
             })
         })

@@ -56,7 +56,7 @@ const ProfilePageScreen = function () {
         }}
       />
       <Text style={{ padding: 20, fontSize: 24 }}>USER INPUT: {text}</Text>
-      <Text style={{ padding: 20, fontSize: 24 }}>Username: {userProfileSelector.data?.displayName}</Text>
+      <Text style={{ padding: 20, fontSize: 24 }}>Username: {userProfileSelector.data?.display_name}</Text>
       <TouchableOpacity
           onPress={handleSignOut}
           style={styles.button}

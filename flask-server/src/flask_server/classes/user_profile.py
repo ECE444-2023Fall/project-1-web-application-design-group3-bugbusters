@@ -2,10 +2,10 @@ from flask_server.classes.common import ClassField, DataField
 
 
 USER_PROFILE_FIELDS = DataField([
-    ClassField("displayName"),
+    ClassField("display_name"),
     ClassField("email"),
-    ClassField("isAdmin"),
-    ClassField("photoURL"),
+    ClassField("is_admin"),
+    ClassField("photo_url"),
     ClassField("uid"),
 ])
 
@@ -13,12 +13,12 @@ USER_PROFILE_FIELDS = DataField([
 class UserProfile:
     """User Profile class"""
 
-    def __init__(self, displayName, email, uid, isAdmin=False, photoURL=""):
-        self.displayName: str = displayName
+    def __init__(self, display_name, email, uid, is_admin=False, photo_url=""):
+        self.display_name: str = display_name
         self.email: str = email
         self.uid: str = uid
-        self.isAdmin: bool = isAdmin
-        self.photoURL: str = photoURL
+        self.is_admin: bool = is_admin
+        self.photo_url: str = photo_url
 
     @classmethod
     def from_json(cls, json):
