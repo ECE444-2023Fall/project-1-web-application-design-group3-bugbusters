@@ -1,12 +1,13 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { MaterialIcons } from "@expo/vector-icons";
+import { MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 import LandingPageScreen from "../screens/LandingPageScreen";
+import CreateEditEventScreen from "../screens/CreateEditEventScreen";
 
 const Tab = createBottomTabNavigator();
 
-export default function BottomTab() {
+export default function BottomTab({ navigation }) {
   const dispatchRedux = useDispatch();
   const primaryColor = useSelector((state) => state.main.primaryColor);
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
@@ -14,7 +15,7 @@ export default function BottomTab() {
 
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="Landing Page"
       screenOptions={(_, color, __) => {
         return {
           tabBarActiveTintColor: contrastColor,
@@ -39,7 +40,25 @@ export default function BottomTab() {
             );
           },
           gestureEnabled: false,
-          headerBackground: "blue",
+        }}
+      />
+      <Tab.Screen
+        name="Create Edit Event"
+        component={CreateEditEventScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => {
+            return (
+              <MaterialIcons name="add-box" size={size + 10} color={color} />
+            );
+          },
+          gestureEnabled: false,
+        }}
+        listeners={{
+          tabPress: (e) => {
+            // Prevent default action
+            e.preventDefault();
+            navigation.navigate("Create/Edit Event");
+          },
         }}
       />
     </Tab.Navigator>
