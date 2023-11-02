@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import { Button, Text, StyleSheet, View, TextInput } from "react-native";
 import HeaderBar from "../components/HeaderBar";
 import api from "../helpers/API";
+import { useSelector, useDispatch } from "react-redux";
+import { setUserData } from "../store/Action";
+import EventCard from "../components/EventCard";
 
 const LandingPageScreen = function () {
-  const [text, setText] = useState("");
+  // const [text, setText] = useState("");
 
   const fetchEvents = async () => {
     const response = await api.getAllEvents();
@@ -15,10 +18,10 @@ const LandingPageScreen = function () {
   };
 
   return (
-    <View>
+    <View style={{ backgroundColor: "white", flex: 1 }}>
       <HeaderBar title="Landing Page" align="center" />
-      <Text style={{ padding: 20 }}>Hellooo Welcome</Text>
-      <Text style={{ padding: 20, paddingTop: 0 }}> What's your name?</Text>
+      <EventCard />
+      {/* <Text style={{ padding: 20, paddingTop: 0 }}> What's your name?</Text>
       <TextInput
         label="Email"
         placeholder="Your input here..."
@@ -35,9 +38,8 @@ const LandingPageScreen = function () {
         onChangeText={(text) => {
           setText(text);
         }}
-      />
-      <Text style={{ padding: 20 }}>User Input: {text}</Text>
-      <Button title="Fetch" onPress={fetchEvents} />
+      /> */}
+      {/* <Text style={{ padding: 20 }}>User Input: {text}</Text> */}
     </View>
   );
 };
