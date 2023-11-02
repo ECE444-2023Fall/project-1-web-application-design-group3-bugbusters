@@ -72,7 +72,6 @@ export default function BottomTab({ navigation }) {
         }}
         listeners={{
           tabPress: (e) => {
-            // Prevent default action
             e.preventDefault();
             navigation.navigate("Create/Edit Event");
           },
