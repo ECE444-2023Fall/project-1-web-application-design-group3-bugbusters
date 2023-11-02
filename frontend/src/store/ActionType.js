@@ -1,3 +1,3 @@
-export const SETUSERDATA = "SETUSERDATA";
+export const SETUSERPROFILEDATA = "SETUSERPROFILEDATA";
 
 export const RESET = "RESET";

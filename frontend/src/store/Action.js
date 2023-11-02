@@ -1,7 +1,7 @@
 // ProfileData
-import { SETUSERDATA } from "./ActionType";
+import { SETUSERPROFILEDATA } from "./ActionType";
 export const setUserProfileData = (value) => ({
-  type: SETUSERDATA,
+  type: SETUSERPROFILEDATA,
   payload: value,
 });
 

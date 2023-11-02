@@ -7,7 +7,7 @@ import {
 import HorizontalTextBuffer from "../components/HorizontalTextBuffer";
 import api from "../helpers/API";
 import { useDispatch } from "react-redux";
-import { SETUSERDATA } from "../store/ActionType";
+import { SETUSERPROFILEDATA } from "../store/ActionType";
 
 const AuthPageScreen = function ({ navigation }) {
     const [displayName, setDisplayName] = useState("");
@@ -92,7 +92,7 @@ const AuthPageScreen = function ({ navigation }) {
             } else {
                 // user is verified, now get their UserProfile
                 api.getUserProfile(user.uid).then((userProfile) => {
-                    dispatch({ type: SETUSERDATA, payload: userProfile })
+                    dispatch({ type: SETUSERPROFILEDATA, payload: userProfile })
                 })
             }
         })
