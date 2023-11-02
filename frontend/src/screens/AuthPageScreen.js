@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
 import { Alert, StyleSheet, KeyboardAvoidingView, Text, TextInput, View, TouchableOpacity } from "react-native";
 import { 
     getAuth, createUserWithEmailAndPassword, sendEmailVerification,
@@ -10,7 +9,7 @@ import api from "../helpers/API";
 import { useDispatch } from "react-redux";
 import { SETUSERDATA } from "../store/ActionType";
 
-const AuthPageScreen = function () {
+const AuthPageScreen = function ({ navigation }) {
     const [displayName, setDisplayName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -18,14 +17,16 @@ const AuthPageScreen = function () {
     // redux for user profile data
     const dispatch = useDispatch()
 
-    const navigation = useNavigation();
+    const textInputRef = React.useRef();
 
     const navigateSignUp = () => {
         setShowLogin(false);
+        textInputRef.current?.focus()
     }
 
     const navigateLogIn = () => {
         setShowLogin(true);
+        textInputRef.current?.focus()
     }
 
     const validEmails = ["mail.utoronto.ca", "utoronto.ca"]
@@ -35,6 +36,15 @@ const AuthPageScreen = function () {
             return string.endsWith(suffix);
         });
     }
+
+    React.useEffect(() => {
+        if(textInputRef.current){
+            const unsubscribe = navigation.addListener('focus', () => {
+            textInputRef.current?.focus()
+            });
+        return unsubscribe;
+        }
+    }, [navigation, textInputRef.current]);
 
     const handleSignUp = () => {
         if (!endsWithAny(email, validEmails)) {
@@ -99,6 +109,7 @@ const AuthPageScreen = function () {
                     value={email}
                     onChangeText={text => setEmail(text)}
                     style={styles.input}
+                    ref={textInputRef}
                 />
                 <TextInput
                     placeholder="PASSWORD"
@@ -136,6 +147,7 @@ const AuthPageScreen = function () {
                     value={displayName}
                     onChangeText={text => setDisplayName(text)}
                     style={styles.input}
+                    ref={textInputRef}
                 />
                 <TextInput
                     placeholder="E-MAIL"

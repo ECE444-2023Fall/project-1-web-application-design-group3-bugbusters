@@ -1,27 +1,17 @@
 import React, { useState } from "react";
 import { Text, StyleSheet, View, TextInput, TouchableOpacity } from "react-native";
 import HeaderBar from "../components/HeaderBar";
-import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
+import { getAuth, signOut } from "firebase/auth";
 import { useSelector } from "react-redux";
 
 const ProfilePageScreen = function () {
   const [text, setText] = useState("");
-  const [displayName, setDisplayName] = useState("");
   // read from redux store
   const userProfileSelector = useSelector((state) => {
     return state.main.userData
   })
 
   const auth = getAuth();
-  onAuthStateChanged(auth, (user) => {
-    if (user) {
-      // User is signed in, see docs for a list of available properties
-      // https://firebase.google.com/docs/reference/js/firebase.User
-      setDisplayName(user.displayName)
-    } else {
-      setDisplayName("")
-    }
-  });
 
   const handleSignOut = () => {
     signOut(auth).then(() => {
