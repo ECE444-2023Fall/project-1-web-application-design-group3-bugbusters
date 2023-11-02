@@ -17,16 +17,17 @@ const AuthPageScreen = function ({ navigation }) {
     // redux for user profile data
     const dispatch = useDispatch()
 
-    const textInputRef = React.useRef();
+    const textEmailRef = React.useRef();
+    const textUsernameRef = React.useRef();
 
     const navigateSignUp = () => {
         setShowLogin(false);
-        textInputRef.current?.focus()
+        textEmailRef.current?.focus()
     }
 
     const navigateLogIn = () => {
         setShowLogin(true);
-        textInputRef.current?.focus()
+        textUsernameRef.current?.focus()
     }
 
     const validEmails = ["mail.utoronto.ca", "utoronto.ca"]
@@ -38,13 +39,13 @@ const AuthPageScreen = function ({ navigation }) {
     }
 
     React.useEffect(() => {
-        if(textInputRef.current){
+        if(textEmailRef.current){
             const unsubscribe = navigation.addListener('focus', () => {
-            textInputRef.current?.focus()
+            textEmailRef.current?.focus()
             });
         return unsubscribe;
         }
-    }, [navigation, textInputRef.current]);
+    }, [navigation, textEmailRef.current]);
 
     const handleSignUp = () => {
         if (!endsWithAny(email, validEmails)) {
@@ -109,7 +110,7 @@ const AuthPageScreen = function ({ navigation }) {
                     value={email}
                     onChangeText={text => setEmail(text)}
                     style={styles.input}
-                    ref={textInputRef}
+                    ref={textEmailRef}
                 />
                 <TextInput
                     placeholder="PASSWORD"
@@ -147,7 +148,7 @@ const AuthPageScreen = function ({ navigation }) {
                     value={displayName}
                     onChangeText={text => setDisplayName(text)}
                     style={styles.input}
-                    ref={textInputRef}
+                    ref={textUsernameRef}
                 />
                 <TextInput
                     placeholder="E-MAIL"
