@@ -1,7 +1,6 @@
 from flask import Blueprint, abort, request
 from flask_server.classes.user_profile import UserProfile
 from flask_server.global_config import db_client
-from google.cloud.firestore_v1.base_query import FieldFilter
 from werkzeug.exceptions import BadRequest, NotFound, Forbidden
 
 
@@ -13,20 +12,20 @@ def getUserProfile(user_id):
     '''Given an user_id, return the corresponding UserProfile to it'''
 
     # get reference to user profiles collection
-    user_profiles_doc_ref = db_client.user_profiles_collection
+    user_profiles_collection_ref = db_client.user_profiles_collection
 
-    # get query reference
-    user_profile_query = user_profiles_doc_ref.where(filter=FieldFilter("uid", "==", user_id))
+    # get doc reference
+    user_profiles_doc_ref = user_profiles_collection_ref.document(user_id)
 
-    # get stream of results
-    user_profiles = user_profile_query.stream()
+    # Get the data of the event document
+    user_profile = user_profiles_doc_ref.get().to_dict()
 
-    for user_profile in user_profiles:
-        user_profile = user_profile.to_dict()
-        return user_profile
+    if not user_profile:
+        # error if no user profile exists
+        abort(NotFound.code)
 
-    # error if no user profile exists
-    abort(NotFound.code)
+    return user_profile
+
 
 @user_service.route('/create-profile', methods=['POST'])
 def createUserProfile():
@@ -42,16 +41,16 @@ def createUserProfile():
     uid = data.get('uid')
 
     # get reference to user profiles collection
-    user_profiles_doc_ref = db_client.user_profiles_collection
+    user_profiles_collection_ref = db_client.user_profiles_collection
 
-    # get query reference
-    user_profile_query = user_profiles_doc_ref.where(filter=FieldFilter("uid", "==", uid))
+    # get doc reference
+    user_profiles_doc_ref = user_profiles_collection_ref.document(uid)
 
-    # get stream of results
-    user_profiles = user_profile_query.stream()
+    # Get the data of the event document
+    user_profile = user_profiles_doc_ref.get().to_dict()
 
     # if user profile exists, error 403
-    for _ in user_profiles:
+    if not user_profile:
         abort(Forbidden.code)
 
     # Retrieve the json back from our obj
