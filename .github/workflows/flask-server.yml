@@ -16,6 +16,7 @@ on:
 env:
   ALGOLIA_API_KEY: ${{secrets.ALGOLIA_API_KEY}}
 
+
 permissions:
   contents: read
 
