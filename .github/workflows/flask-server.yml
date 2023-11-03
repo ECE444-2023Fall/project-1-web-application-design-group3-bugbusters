@@ -6,7 +6,7 @@ name: Flask-Server CI
 defaults:
   run:
     shell: bash
-    working-directory: ./flask-server
+    # working-directory: ./flask-server
 
 on:
   push:
