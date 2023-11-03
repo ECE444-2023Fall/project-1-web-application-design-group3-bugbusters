@@ -57,3 +57,23 @@ def createEvent():
     event_ref.set(event_data)
 
     return jsonify({'message': 'Event created successfully!', 'event_id': event_id}), 201
+
+@event_service.route('/edit-event/<event_id>', methods=['PUT'])
+def editEvent(event_id):
+    data = request.json
+
+    data['_event_id'] = event_id
+
+    try:
+        event_obj = Event.from_json(data)
+    except KeyError as key_error:
+        return jsonify({'message': 'Error, bad input!'}), 400
+
+    # Retrieve the json back from our obj
+    event_data = event_obj.to_json()
+
+    # Add the event data to the Firestore "Events" collection
+    event_ref = db_client.events_collection.document(event_id)
+    event_ref.set(event_data)
+
+    return jsonify({'message': 'Event edited successfully!', 'event_id': event_id}), 200

@@ -1,6 +1,7 @@
 from flask_server.classes.event import Event, EVENT_FIELDS
 from flask_server.global_config import db_client
 from flask_server import create_app
+import random
 import pytest
 import json
 
@@ -67,5 +68,22 @@ def test_create_event(test_client):
     data = {key: "TEST" for key in required_keys}
     response = test_client.post('/event-service/create-event', json=data)
     assert response.status_code == 201
+    
+    return
+
+def test_edit_event(test_client):
+    # Create what the modified obj should look like
+    required_keys = Event.required_keys
+    data = {key: "TEST" for key in required_keys}
+    randomDescription = random.choice(["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"])
+    data['_description'] = randomDescription
+
+    # Modify the event object
+    response = test_client.put('/event-service/edit-event/fc48bf4d-6445-47ec-bbb6-67cc29397295', json=data)
+    
+    # Confirm the obj has been modified correctly
+    assert response.status_code == 200
+    modifiedEventObj = db_client.events_collection.document("fc48bf4d-6445-47ec-bbb6-67cc29397295").get().to_dict()
+    assert modifiedEventObj['_description'] == randomDescription
     
     return
