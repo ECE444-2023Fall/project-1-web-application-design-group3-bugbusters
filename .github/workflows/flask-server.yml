@@ -11,9 +11,6 @@ defaults:
 on:
   push:
     branches: [ "develop" ]
-    # REMOVE THIS
-  pull_request:
-    branches: [ "develop" ]
   workflow_dispatch:
 
 permissions:
