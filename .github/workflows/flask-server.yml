@@ -13,6 +13,10 @@ on:
     branches: [ "develop" ]
   workflow_dispatch:
 
+env:
+  ALGOLIA_API_KEY: ${{secrets.ALGOLIA_API_KEY}}
+
+
 permissions:
   contents: read
 
@@ -22,12 +26,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - uses: actions/checkout@v3
     - name: Create Firebase Admin SDK JSON
-      run: |
-          echo $FIREBASE_ADMIN_SDK &gt;&gt; ece444bulletin-firebase-adminsdk.json
       env:
         FIREBASE_ADMIN_SDK : ${{secrets.FIREBASE_ADMIN_SDK}}
-    - uses: actions/checkout@v3
+      run: |
+          echo $FIREBASE_ADMIN_SDK >> ece444bulletin-firebase-adminsdk.json
     - name: Set up Python 3.9
       uses: actions/setup-python@v3
       with:
