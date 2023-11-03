@@ -27,7 +27,7 @@ jobs:
       env:
         FIREBASE_ADMIN_SDK : ${{secrets.FIREBASE_ADMIN_SDK}}
       run: |
-          echo $FIREBASE_ADMIN_SDK &gt;&gt; ece444bulletin-firebase-adminsdk.json
+          echo $FIREBASE_ADMIN_SDK >> ece444bulletin-firebase-adminsdk.json
     - name: Set up Python 3.9
       uses: actions/setup-python@v3
       with:
