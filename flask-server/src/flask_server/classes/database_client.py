@@ -21,8 +21,8 @@ class DataBaseClient:
             return self._db.collection("Events")
     
     @property
-    def users_collection(self):
+    def user_profiles_collection(self):
         if self._testing:
-            return self._db.collection("TestUsers")
+            return self._db.collection("TestUserProfiles")
         else:
-            return self._db.collection("Users")
+            return self._db.collection("UserProfiles")

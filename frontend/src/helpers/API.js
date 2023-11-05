@@ -35,6 +35,14 @@ export class Api {
   async getAllEvents(data = null) {
     return this.makeRequest("event-service/", data, "GET");
   }
+
+  async getUserProfile(uid) {
+    return this.makeRequest(`user-service/${uid}`, null, "GET");
+  }
+
+  async createUserProfile(data) {
+    return this.makeRequest(`user-service/create-profile`, data, "POST");
+  }
 }
 
 const api = new Api("apiKey");

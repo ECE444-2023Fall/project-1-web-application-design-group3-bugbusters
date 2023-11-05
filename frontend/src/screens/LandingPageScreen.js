@@ -1,10 +1,7 @@
-import React, { useState, useContext } from "react";
-import { Text, StyleSheet, View, TextInput, Button } from "react-native";
+import React, { useState } from "react";
+import { Button, Text, StyleSheet, View, TextInput } from "react-native";
 import HeaderBar from "../components/HeaderBar";
-import { useSelector, useDispatch } from "react-redux";
-import { setUserData } from "../store/Action";
 import api from "../helpers/API";
-import axios from "axios";
 
 const LandingPageScreen = function () {
   const [text, setText] = useState("");

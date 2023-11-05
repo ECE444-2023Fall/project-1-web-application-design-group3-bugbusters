@@ -1,4 +1,4 @@
-import { SETUSERDATA, RESET } from "./ActionType";
+import { SETUSERPROFILEDATA, RESET } from "./ActionType";
 
 const initialState = {
   userData: {},
@@ -6,7 +6,7 @@ const initialState = {
 
 export const mainReducer = (state = initialState, action) => {
   switch (action.type) {
-    case SETUSERDATA:
+    case SETUSERPROFILEDATA:
       return {
         ...state,
         userData: { ...state.userData, ...action.payload },
