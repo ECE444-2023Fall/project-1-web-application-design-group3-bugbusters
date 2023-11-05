@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   Text,
   StyleSheet,
@@ -19,13 +19,21 @@ const LandingPageScreen = function ({ navigation }) {
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
   const contrastColor = useSelector((state) => state.main.contrastColor);
 
+  const [events, setEvents] = useState([]);
+
   const fetchEvents = async () => {
     const response = await api.getAllEvents();
-    console.log("response:", response);
+    // console.log("response:", response);
     if (response.result == "SUCCESSFUL") {
-      console.log("Set something\n");
+      // console.log("Events successfully obtained\n");
+    } else {
+      console.error("Events cannot be obtained!!\n");
     }
   };
+
+  useEffect(() => {
+    fetchEvents();
+  }, []);
 
   return (
     <View style={{ backgroundColor: "white", flex: 1 }}>
@@ -33,12 +41,23 @@ const LandingPageScreen = function ({ navigation }) {
       <TouchableOpacity
         onPress={() =>
           navigation.navigate("Event Details", {
-            title: "Event Details",
+            event_id: "Event Details",
           })
         }
       >
         <EventCard title="Event Title" owner="Event Owner" />
       </TouchableOpacity>
+      {events.map((event) => {
+        <TouchableOpacity
+          onPress={() =>
+            navigation.navigate("Event Details", {
+              event_id: event._event_id,
+            })
+          }
+        >
+          <EventCard title="Event Title" owner="Event Owner" />
+        </TouchableOpacity>;
+      })}
     </View>
   );
 };
