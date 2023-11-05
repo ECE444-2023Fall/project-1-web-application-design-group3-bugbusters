@@ -1,6 +1,7 @@
 from flask import Blueprint, abort, request, jsonify
 from flask_server.global_config import db_client
 from flask_server.classes.event import Event
+from flask_server.global_config import search_client
 from google.cloud import firestore
 import uuid
 
@@ -45,6 +46,35 @@ def createEvent():
         event_id = str(uuid.uuid4())
 
     # Insert the generated event_id into the input json / data
+    data['_event_id'] = event_id
+
+    # Add the object to the search index
+    # Need to fetch friendly creator name here
+    search_client.add_to_index(data['_event_id'], data)
+
+    # Add the object to the search index
+    # Need to fetch friendly creator name here
+    search_client.add_to_index(data['_event_id'], data)
+
+    try:
+        event_obj = Event.from_json(data)
+    except KeyError as key_error:
+        return {'message': 'Error, bad input!'}, 400
+
+    # Retrieve the json back from our obj
+    event_data = event_obj.to_json()
+    event_data['TIMESTAMP'] = firestore.SERVER_TIMESTAMP
+
+    # Add the event data to the Firestore "Events" collection
+    event_ref = db_client.events_collection.document(event_id)
+    event_ref.set(event_data)
+
+    return {'message': 'Event created successfully!', 'event_id': event_id}, 201
+
+@event_service.route('/edit-event/<event_id>', methods=['PUT'])
+def editEvent(event_id):
+    data = request.json
+
     data['_event_id'] = event_id
 
     try:
