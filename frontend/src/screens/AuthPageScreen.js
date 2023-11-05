@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Alert,
   StyleSheet,
@@ -26,8 +26,8 @@ const AuthPageScreen = function ({ navigation }) {
   const [password, setPassword] = useState("");
   const [showLogin, setShowLogin] = useState(true);
 
-  const textEmailRef = React.useRef();
-  const textUsernameRef = React.useRef();
+  const textEmailRef = useRef();
+  const textUsernameRef = useRef();
 
   const navigateSignUp = () => {
     setShowLogin(false);
@@ -47,7 +47,7 @@ const AuthPageScreen = function ({ navigation }) {
     });
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (textEmailRef.current) {
       const unsubscribe = navigation.addListener("focus", () => {
         textEmailRef.current?.focus();

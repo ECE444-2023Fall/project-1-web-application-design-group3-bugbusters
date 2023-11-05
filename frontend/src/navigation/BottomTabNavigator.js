@@ -7,14 +7,14 @@ import { getAuth, onAuthStateChanged } from "firebase/auth";
 import ProfilePageScreen from "../screens/ProfilePageScreen";
 import api from "../helpers/API";
 import { useDispatch } from "react-redux";
-import { SETUSERPROFILEDATA, RESET } from "../store/ActionType";
+import { setUserProfileData, reset } from "../store/Action";
 
 const Tab = createBottomTabNavigator();
 
 export default function BottomTab({ navigation }) {
   const auth = getAuth();
   // redux for user profile data
-  const dispatch = useDispatch();
+  const dispatchRedux = useDispatch();
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -22,13 +22,13 @@ export default function BottomTab({ navigation }) {
         // user is signed in
         // get UserProfile and store in redux
         api.getUserProfile(user.uid).then((userProfile) => {
-          dispatch({ type: SETUSERPROFILEDATA, payload: userProfile });
+          dispatchRedux(setUserProfileData(userProfile));
         });
         navigation.navigate("Landing Page");
       } else {
         // user is signed out
         // reset store
-        dispatch({ type: RESET });
+        dispatchRedux(reset());
         navigation.navigate("Landing Page");
       }
     });
