@@ -155,7 +155,7 @@ const AuthPageScreen = function ({ navigation }) {
       </KeyboardAvoidingView>
     </View>
   ) : (
-    <View>
+    <View style={{ flex: 1 }}>
       <HeaderBar title="Sign Up" align="center"></HeaderBar>
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <View style={styles.inputContainer}>
