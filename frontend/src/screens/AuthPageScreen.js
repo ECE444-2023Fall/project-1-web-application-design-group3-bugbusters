@@ -19,16 +19,12 @@ import {
 import HeaderBar from "../components/HeaderBar";
 import HorizontalTextBuffer from "../components/HorizontalTextBuffer";
 import api from "../helpers/API";
-import { useDispatch } from "react-redux";
-import { SETUSERPROFILEDATA } from "../store/ActionType";
 
 const AuthPageScreen = function ({ navigation }) {
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showLogin, setShowLogin] = useState(true);
-  // redux for user profile data
-  const dispatch = useDispatch();
 
   const textEmailRef = React.useRef();
   const textUsernameRef = React.useRef();
@@ -117,10 +113,7 @@ const AuthPageScreen = function ({ navigation }) {
               console.log(error);
             });
         } else {
-          // user is verified, now get their UserProfile
-          api.getUserProfile(user.uid).then((userProfile) => {
-            dispatch({ type: SETUSERPROFILEDATA, payload: userProfile });
-          });
+          // user is verified
         }
       })
       .catch((error) => alert(error.message));
