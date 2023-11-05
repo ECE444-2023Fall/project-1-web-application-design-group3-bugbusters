@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Alert,
   StyleSheet,
@@ -20,7 +20,7 @@ import HeaderBar from "../components/HeaderBar";
 import HorizontalTextBuffer from "../components/HorizontalTextBuffer";
 import api from "../helpers/API";
 import { useDispatch } from "react-redux";
-import { SETUSERPROFILEDATA } from "../store/ActionType";
+import { setUserProfileData } from "../store/Action";
 
 const AuthPageScreen = function ({ navigation }) {
   const [displayName, setDisplayName] = useState("");
@@ -28,10 +28,10 @@ const AuthPageScreen = function ({ navigation }) {
   const [password, setPassword] = useState("");
   const [showLogin, setShowLogin] = useState(true);
   // redux for user profile data
-  const dispatch = useDispatch();
+  const dispatchRedux = useDispatch();
 
-  const textEmailRef = React.useRef();
-  const textUsernameRef = React.useRef();
+  const textEmailRef = useRef();
+  const textUsernameRef = useRef();
 
   const navigateSignUp = () => {
     setShowLogin(false);
@@ -51,7 +51,7 @@ const AuthPageScreen = function ({ navigation }) {
     });
   };
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (textEmailRef.current) {
       const unsubscribe = navigation.addListener("focus", () => {
         textEmailRef.current?.focus();
@@ -119,7 +119,7 @@ const AuthPageScreen = function ({ navigation }) {
         } else {
           // user is verified, now get their UserProfile
           api.getUserProfile(user.uid).then((userProfile) => {
-            dispatch({ type: SETUSERPROFILEDATA, payload: userProfile });
+            dispatchRedux(setUserProfileData(userProfile));
           });
         }
       })
