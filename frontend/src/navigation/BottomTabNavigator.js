@@ -11,17 +11,17 @@ const Tab = createBottomTabNavigator();
 export default function BottomTab({ navigation }) {
   const auth = getAuth();
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, user => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
       if (user) {
         // user is signed in
-        navigation.navigate("Landing Page")
+        navigation.navigate("Landing Page");
       } else {
         // user is signed out
-        navigation.navigate("Landing Page")
+        navigation.navigate("Landing Page");
       }
-    })
+    });
     return unsubscribe;
-  }, [])
+  }, []);
 
   return (
     <Tab.Navigator
@@ -60,14 +60,17 @@ export default function BottomTab({ navigation }) {
         options={{
           tabBarIcon: ({ color, size }) => {
             return (
-              <MaterialIcons name="account-circle" size={size + 10} color={color} />
+              <MaterialIcons
+                name="account-circle"
+                size={size + 10}
+                color={color}
+              />
             );
           },
           gestureEnabled: false,
           headerBackground: "blue",
         }}
       />
-
     </Tab.Navigator>
   );
 }

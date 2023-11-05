@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { Text, StyleSheet, View, TextInput, TouchableOpacity } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  View,
+  TextInput,
+  TouchableOpacity,
+} from "react-native";
 import HeaderBar from "../components/HeaderBar";
 import { getAuth, signOut } from "firebase/auth";
 import { useSelector } from "react-redux";
@@ -8,19 +14,21 @@ const ProfilePageScreen = function () {
   const [text, setText] = useState("");
   // read from redux store
   const userProfileSelector = useSelector((state) => {
-    return state.main.userData
-  })
+    return state.main.userData;
+  });
 
   const auth = getAuth();
 
   const handleSignOut = () => {
-    signOut(auth).then(() => {
-      // Sign-out successful.
-    }).catch((error) => {
-      // An error happened.
-      console.log(error);
-    });
-  }
+    signOut(auth)
+      .then(() => {
+        // Sign-out successful.
+      })
+      .catch((error) => {
+        // An error happened.
+        console.log(error);
+      });
+  };
 
   return (
     <View>
@@ -45,12 +53,11 @@ const ProfilePageScreen = function () {
         }}
       />
       <Text style={{ padding: 20, fontSize: 24 }}>USER INPUT: {text}</Text>
-      <Text style={{ padding: 20, fontSize: 24 }}>Username: {userProfileSelector.data?.display_name}</Text>
-      <TouchableOpacity
-          onPress={handleSignOut}
-          style={styles.button}
-      >
-          <Text style={styles.buttonText}>SIGN OUT</Text>
+      <Text style={{ padding: 20, fontSize: 24 }}>
+        Username: {userProfileSelector.data?.display_name}
+      </Text>
+      <TouchableOpacity onPress={handleSignOut} style={styles.button}>
+        <Text style={styles.buttonText}>SIGN OUT</Text>
       </TouchableOpacity>
     </View>
   );
