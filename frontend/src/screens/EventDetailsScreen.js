@@ -10,18 +10,32 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import ProfilePicture from "../components/ProfilePicture";
 import PopUp from "../components/PopUp";
+import api from "../helpers/API";
 
 const EventDetailsScreen = function ({ route, navigation }) {
-  const { title } = route.params;
+  const { event_id } = route.params;
   const dispatchRedux = useDispatch();
   const primaryColor = useSelector((state) => state.main.primaryColor);
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
   const contrastColor = useSelector((state) => state.main.contrastColor);
 
-  const currentEventRedux = useSelector((state) => state.currentEventData);
+  // const currentEventRedux = useSelector((state) => state.currentEventData);
+  const userProfileRedux = useSelector((state) => state.userProfileData);
 
-  const [isOwner, setOwner] = useState(false);
+  const [isOwner, setOwner] = useState(
+    userProfileRedux.id == currentEvent._creator_id
+  );
   const [rsvpPopup, setRsvpPopup] = useState(false);
+  const [currentEvent, setCurrentEvent] = useState({});
+
+  async function retrieveEvent(id) {
+    const response = await api.getEvent(id);
+    if (response.result == "SUCCESSFUL") {
+      setCurrentEvent(response.data);
+    }
+  }
+
+  retrieveEvent(event_id);
 
   return (
     <View>
@@ -76,40 +90,38 @@ const EventDetailsScreen = function ({ route, navigation }) {
         <View style={{ flexDirection: "row" }}>
           <Text style={{ fontWeight: "bold" }}>Creator: </Text>
           <Text>
-            {currentEventRedux?.creator
-              ? currentEventRedux?.creator
+            {currentEvent?._creator_id
+              ? currentEvent?._creator_id
               : "No creator name"}
           </Text>
         </View>
         <View style={{ flexDirection: "row" }}>
           <Text style={{ fontWeight: "bold" }}>Start time: </Text>
           <Text>
-            {currentEventRedux?.starttime
-              ? currentEventRedux?.starttime
+            {currentEvent?._event_start_time
+              ? currentEvent?._event_start_time
               : "No start time"}
           </Text>
         </View>
         <View style={{ flexDirection: "row" }}>
           <Text style={{ fontWeight: "bold" }}>End time: </Text>
           <Text>
-            {currentEventRedux?.endtime
-              ? currentEventRedux?.endtime
+            {currentEvent?._event_end_time
+              ? currentEvent?._event_end_time
               : "No start end"}
           </Text>
         </View>
         <View style={{ flexDirection: "row" }}>
           <Text style={{ fontWeight: "bold" }}>Location: </Text>
           <Text>
-            {currentEventRedux?.location
-              ? currentEventRedux?.location
-              : "No location"}
+            {currentEvent?._location ? currentEvent?._location : "No location"}
           </Text>
         </View>
         <View style={{ flexDirection: "row" }}>
           <Text style={{ fontWeight: "bold" }}>Description: </Text>
           <Text>
-            {currentEventRedux?.description
-              ? currentEventRedux?.description
+            {currentEvent?._description
+              ? currentEvent?._description
               : "No description"}
           </Text>
         </View>
