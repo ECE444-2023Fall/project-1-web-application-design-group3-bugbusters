@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import {
+  Image,
   Text,
   StyleSheet,
-  View,
   TextInput,
   TouchableOpacity,
+  KeyboardAvoidingView,
+  View,
 } from "react-native";
 import HeaderBar from "../components/HeaderBar";
 import { getAuth, signOut } from "firebase/auth";
@@ -31,10 +33,27 @@ const ProfilePageScreen = function () {
   };
 
   return (
-    <View>
+    <KeyboardAvoidingView style={styles.container}>
       <HeaderBar title="Profile Page" align="center" />
-      <Text style={{ padding: 20 }}>Hellooo Welcome</Text>
-      <Text style={{ padding: 20, paddingTop: 0 }}> What's your name?</Text>
+      <View style={styles.profile_picture_container}>
+        <Image
+          style={styles.profile_picture}
+          source={
+            userProfileSelector.data?.photo_url
+              ? {
+                  uri: "https://reactnative.dev/img/tiny_logo.png",
+                }
+              : {
+                  uri: "https://media.istockphoto.com/id/1451587807/vector/user-profile-icon-vector-avatar-or-person-icon-profile-picture-portrait-symbol-vector.jpg?s=612x612&w=0&k=20&c=yDJ4ITX1cHMh25Lt1vI1zBn2cAKKAlByHBvPJ8gEiIg=",
+                }
+          }
+        ></Image>
+      </View>
+      <View style={styles.display_name_container}>
+        <Text style={styles.display_name_text}>
+          {userProfileSelector.data?.display_name}
+        </Text>
+      </View>
       <TextInput
         label="Email"
         placeholder="Your input here..."
@@ -59,10 +78,33 @@ const ProfilePageScreen = function () {
       <TouchableOpacity onPress={handleSignOut} style={styles.button}>
         <Text style={styles.buttonText}>SIGN OUT</Text>
       </TouchableOpacity>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    alignItems: "center",
+  },
+  profile_picture_container: {
+    paddingTop: 16,
+    paddingBottom: 8,
+  },
+  profile_picture: {
+    width: 120,
+    height: 120,
+    resizeMode: "stretch",
+    borderColor: "#1E3765",
+    borderWidth: 3,
+    borderRadius: 20,
+  },
+  display_name_container: {
+    paddingBottom: 16,
+  },
+  display_name_text: {
+    fontWeight: 700,
+    fontSize: 24,
+  },
+});
 
 export default ProfilePageScreen;
