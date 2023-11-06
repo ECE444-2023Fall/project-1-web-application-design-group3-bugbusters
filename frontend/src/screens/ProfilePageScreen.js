@@ -12,7 +12,6 @@ import {
 import HeaderBar from "../components/HeaderBar";
 import { getAuth, signOut } from "firebase/auth";
 import api from "../helpers/API";
-import HorizontalTextBuffer from "../components/HorizontalTextBuffer";
 
 const ProfilePageScreen = function ({ userProfile }) {
   const [event_data, setEventData] = useState([]);
@@ -44,30 +43,21 @@ const ProfilePageScreen = function ({ userProfile }) {
   };
 
   const Item = ({ event_title }) => (
-    <View style={{ marginVertical: 42 }}>
-      <Text style={{ fontSize: 24 }}>{event_title}</Text>
+    <View style={styles.list_item_container}>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => {
+          console.log("PRESSED");
+        }}
+      >
+        <Text style={styles.list_item_text}>{event_title}</Text>
+      </TouchableOpacity>
     </View>
   );
 
   const ListHeaderComponent = ({ item_types }) => (
-    <View
-      style={{
-        backgroundColor: "white",
-        paddingLeft: 20,
-        paddingVertical: 8,
-        borderTopColor: "#1E3765",
-        borderBottomColor: "#1E3765",
-        borderTopWidth: 2,
-        borderBottomWidth: 2,
-      }}
-    >
-      <Text
-        style={{
-          fontSize: 20,
-        }}
-      >
-        {item_types}
-      </Text>
+    <View style={styles.list_header_component_container}>
+      <Text style={styles.list_header_component_text}>{item_types}</Text>
     </View>
   );
 
@@ -107,7 +97,7 @@ const ProfilePageScreen = function ({ userProfile }) {
             }, 2000);
           }}
           refreshing={refreshing}
-          ListHeaderComponent={<ListHeaderComponent item_types={"EVENTS"} />}
+          ListHeaderComponent={<ListHeaderComponent item_types={"Events"} />}
           stickyHeaderIndices={[0]}
         />
       </View>
@@ -142,6 +132,37 @@ const styles = StyleSheet.create({
   display_name_text: {
     fontWeight: 700,
     fontSize: 24,
+  },
+  list_header_component_container: {
+    backgroundColor: "white",
+    paddingLeft: 20,
+    paddingVertical: 8,
+    borderTopColor: "#1E3765",
+    borderBottomColor: "#1E3765",
+    borderTopWidth: 2,
+    borderBottomWidth: 2,
+  },
+  list_header_component_text: {
+    fontSize: 20,
+    fontWeight: "bold",
+  },
+  list_item_container: {
+    marginTop: 42,
+    marginHorizontal: 32,
+    backgroundColor: "white",
+    alignItems: "center",
+    borderRadius: 24,
+  },
+  list_item_text: {
+    fontSize: 24,
+  },
+  button: {
+    backgroundColor: "white",
+    width: "100%",
+    height: "100%",
+    justifyContent: "center",
+    alignItems: "center",
+    borderRadius: 24,
   },
 });
 
