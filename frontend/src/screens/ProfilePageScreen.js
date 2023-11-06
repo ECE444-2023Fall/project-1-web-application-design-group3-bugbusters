@@ -160,6 +160,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
   },
   button: {
+    width: "100%",
     backgroundColor: "white",
     justifyContent: "center",
     alignItems: "center",
