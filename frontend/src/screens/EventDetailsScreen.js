@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Image, Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import HeaderBar from "../components/HeaderBar";
 import {
   Ionicons,
@@ -25,17 +25,21 @@ const EventDetailsScreen = function ({ route, navigation }) {
   const [isOwner, setOwner] = useState(
     userProfileRedux.id == currentEvent?._creator_id
   );
+  const [imageUrl, setImageUrl] = useState();
+
   const [rsvpPopup, setRsvpPopup] = useState(false);
   const [currentEvent, setCurrentEvent] = useState({});
 
-  async function retrieveEvent(id) {
-    const response = await api.getEvent(id);
-    if (response.result == "SUCCESSFUL") {
-      setCurrentEvent(response.data);
+  useEffect(() => {
+    async function retrieveEvent(id) {
+      const response = await api.getEvent(id);
+      if (response.result == "SUCCESSFUL") {
+        setCurrentEvent(response.data);
+        setImageUrl(response.data._images._header_image);
+      }
     }
-  }
-
-  retrieveEvent(event_id);
+    retrieveEvent(event_id);
+  }, []);
 
   return (
     <View>
@@ -58,10 +62,19 @@ const EventDetailsScreen = function ({ route, navigation }) {
           backgroundColor: "grey",
           height: 300,
           justifyContent: "center",
-          alignItems: "center",
         }}
       >
-        <Text>Placeholder for Image</Text>
+        {imageUrl ? (
+          <Image
+            style={{ height: "100%", resizeMode: "contain" }}
+            source={imageUrl}
+            onError={(error) => {
+              setImageUrl(null);
+            }}
+          ></Image>
+        ) : (
+          <Text style={{ alignSelf: "center" }}>Placeholder for image</Text>
+        )}
       </View>
 
       {/* Bar below the image */}
