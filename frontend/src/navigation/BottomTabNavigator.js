@@ -9,11 +9,26 @@ import ProfilePageScreen from "../screens/ProfilePageScreen";
 
 const Tab = createBottomTabNavigator();
 
-export default function BottomTab() {
+export default function BottomTab({navigation}) {
   const dispatchRedux = useDispatch();
   const primaryColor = useSelector((state) => state.main.primaryColor);
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
   const contrastColor = useSelector((state) => state.main.contrastColor);
+
+  const auth = getAuth();
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // user is signed in
+        navigation.navigate("Landing Page");
+      } else {
+        // user is signed out
+        navigation.navigate("Landing Page");
+      }
+    });
+    return unsubscribe;
+  }, []);
+
 
   return (
     <Tab.Navigator

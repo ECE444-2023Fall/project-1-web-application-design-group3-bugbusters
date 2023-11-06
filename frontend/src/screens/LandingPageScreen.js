@@ -6,6 +6,8 @@ import {
   TextInput,
   Button,
   TouchableOpacity,
+  ScrollView,
+  RefreshControl,
 } from "react-native";
 import HeaderBar from "../components/HeaderBar";
 import api from "../helpers/API";
@@ -27,8 +29,9 @@ const LandingPageScreen = function ({ navigation }) {
     // console.log("response:", response);
     if (response.result == "SUCCESSFUL") {
       // console.log("Events successfully obtained\n");
-      console.log(response);
+      // console.log("Successful response: ", response.data);
       setEvents(response.data);
+      // console.log(events);
     } else {
       // Display error modal
       console.error("Events cannot be obtained!!\n");
@@ -42,7 +45,7 @@ const LandingPageScreen = function ({ navigation }) {
   return (
     <View style={{ backgroundColor: "white", flex: 1 }}>
       <HeaderBar title="Landing Page" align="center" />
-      <TouchableOpacity
+      {/* <TouchableOpacity
         onPress={() =>
           navigation.navigate("Event Details", {
             event_id: "Event Details",
@@ -50,18 +53,20 @@ const LandingPageScreen = function ({ navigation }) {
         }
       >
         <EventCard title="Event Title" owner="Event Owner" />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
+      <ScrollView refreshControl={<RefreshControl onRefresh={() => fetchEvents()} />}>
       {events.map((event) => {
         <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("Event Details", {
-              event_id: event._event_id,
-            })
-          }
+        onPress={() =>
+          navigation.navigate("Event Details", {
+            event_id: event?._event_id,
+          })
+        }
         >
-          <EventCard title="Event Title" owner="Event Owner" />
+          <EventCard title="Hello?" owner="Event Owner" />
         </TouchableOpacity>;
       })}
+      </ScrollView>
     </View>
   );
 };
