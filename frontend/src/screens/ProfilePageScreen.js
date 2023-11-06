@@ -102,7 +102,10 @@ const ProfilePageScreen = function ({ userProfile }) {
         />
       </View>
       {/*TODO: PLACE SIGN OUT BUTTON IN <Modal/>*/}
-      <TouchableOpacity onPress={handleSignOut} style={{ flex: 0.25 }}>
+      <TouchableOpacity
+        onPress={handleSignOut}
+        style={{ marginTop: 12, flex: 0.25 }}
+      >
         <Text style={styles.buttonText}>SIGN OUT</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
@@ -158,11 +161,10 @@ const styles = StyleSheet.create({
   },
   button: {
     backgroundColor: "white",
-    width: "100%",
-    height: "100%",
     justifyContent: "center",
     alignItems: "center",
     borderRadius: 24,
+    paddingVertical: 80,
   },
 });
 
