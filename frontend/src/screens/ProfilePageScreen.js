@@ -3,17 +3,17 @@ import {
   Image,
   Text,
   StyleSheet,
-  TextInput,
   TouchableOpacity,
   KeyboardAvoidingView,
   View,
   FlatList,
 } from "react-native";
 import HeaderBar from "../components/HeaderBar";
+import EventCard from "../components/EventCard";
 import { getAuth, signOut } from "firebase/auth";
 import api from "../helpers/API";
 
-const ProfilePageScreen = function ({ userProfile }) {
+const ProfilePageScreen = function ({ navigation, userProfile }) {
   const [event_data, setEventData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
   const auth = getAuth();
@@ -23,7 +23,6 @@ const ProfilePageScreen = function ({ userProfile }) {
       const response = await api.getAllEvents();
       if (response.result == "SUCCESSFUL") {
         setEventData(response.data);
-        setEventData([]);
       } else {
         alert("FAILED TO GET ALL EVENTS");
       }
@@ -43,15 +42,24 @@ const ProfilePageScreen = function ({ userProfile }) {
       });
   };
 
-  const Item = ({ event_title }) => (
-    <View style={styles.list_item_container}>
+  const Item = ({ event }) => {
+    return (
       <TouchableOpacity
-        style={styles.button}
-        onPress={() => {
-          console.log("PRESSED");
-        }}
+        onPress={() =>
+          navigation.navigate("Event Details", {
+            event_id: event._event_id,
+          })
+        }
       >
-        <Text style={styles.list_item_text}>{event_title}</Text>
+        <EventCard title={event._event_title} owner={event._creator_id} />
+      </TouchableOpacity>
+    );
+  };
+
+  const EmptyItem = () => (
+    <View style={styles.list_item_container}>
+      <TouchableOpacity style={styles.button}>
+        <Text style={styles.list_item_text}>No events</Text>
       </TouchableOpacity>
     </View>
   );
@@ -87,7 +95,7 @@ const ProfilePageScreen = function ({ userProfile }) {
       <View style={{ width: "100%", flex: 1 }}>
         <FlatList
           data={event_data}
-          renderItem={({ item }) => <Item event_title={item._event_title} />}
+          renderItem={({ item }) => <Item event={item} />}
           keyExtractor={(item) => item._event_id}
           onRefresh={() => {
             // simulate fetching more events
@@ -99,7 +107,7 @@ const ProfilePageScreen = function ({ userProfile }) {
           }}
           refreshing={refreshing}
           ListHeaderComponent={<ListHeaderComponent item_types={"Events"} />}
-          ListEmptyComponent={<Item event_title={"This user has no events"} />}
+          ListEmptyComponent={<EmptyItem />}
           stickyHeaderIndices={[0]}
         />
       </View>

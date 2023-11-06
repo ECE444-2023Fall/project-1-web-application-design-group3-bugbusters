@@ -77,7 +77,12 @@ export default function BottomTab({ navigation }) {
         name="Authentication Page"
         component={
           auth.currentUser
-            ? () => <ProfilePageScreen userProfile={userProfileSelector.data} />
+            ? () => (
+                <ProfilePageScreen
+                  navigation={navigation}
+                  userProfile={userProfileSelector.data}
+                />
+              )
             : AuthPageScreen
         }
         options={{
