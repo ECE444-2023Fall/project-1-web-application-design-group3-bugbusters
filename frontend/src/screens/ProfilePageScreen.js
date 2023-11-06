@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Image,
   Text,
@@ -7,19 +7,28 @@ import {
   TouchableOpacity,
   KeyboardAvoidingView,
   View,
+  FlatList,
 } from "react-native";
 import HeaderBar from "../components/HeaderBar";
 import { getAuth, signOut } from "firebase/auth";
-import { useSelector } from "react-redux";
+import api from "../helpers/API";
 
-const ProfilePageScreen = function () {
-  const [text, setText] = useState("");
-  // read from redux store
-  const userProfileSelector = useSelector((state) => {
-    return state.main.userData;
-  });
-
+const ProfilePageScreen = function ({ userProfile }) {
+  const [event_data, setEventData] = useState([]);
   const auth = getAuth();
+
+  useEffect(() => {
+    callGetAllEvents = async () => {
+      const response = await api.getAllEvents();
+      if (response.result == "SUCCESSFUL") {
+        setEventData(response.data);
+      } else {
+        alert("FAILED TO GET ALL EVENTS");
+      }
+    };
+
+    callGetAllEvents();
+  }, []);
 
   const handleSignOut = () => {
     signOut(auth)
@@ -32,6 +41,12 @@ const ProfilePageScreen = function () {
       });
   };
 
+  const Item = ({ _event_title }) => (
+    <View>
+      <Text style={{ fontSize: 24 }}>{_event_title}</Text>
+    </View>
+  );
+
   return (
     <KeyboardAvoidingView style={styles.container}>
       <HeaderBar title="Profile Page" align="center" />
@@ -39,7 +54,7 @@ const ProfilePageScreen = function () {
         <Image
           style={styles.profile_picture}
           source={
-            userProfileSelector.data?.photo_url
+            userProfile.photo_url
               ? {
                   uri: "https://reactnative.dev/img/tiny_logo.png",
                 }
@@ -50,31 +65,13 @@ const ProfilePageScreen = function () {
         ></Image>
       </View>
       <View style={styles.display_name_container}>
-        <Text style={styles.display_name_text}>
-          {userProfileSelector.data?.display_name}
-        </Text>
+        <Text style={styles.display_name_text}>{userProfile.display_name}</Text>
       </View>
-      <TextInput
-        label="Email"
-        placeholder="Your input here..."
-        placeholderTextColor="white"
-        style={{
-          marginHorizontal: 40,
-          paddingLeft: 14,
-          fontSize: 20,
-          backgroundColor: "grey",
-          color: "white",
-          borderRadius: 20,
-        }}
-        value={text}
-        onChangeText={(text) => {
-          setText(text);
-        }}
+      <FlatList
+        data={event_data}
+        renderItem={({ item }) => <Item _event_title={item._event_title} />}
+        keyExtractor={(item) => item._event_id}
       />
-      <Text style={{ padding: 20, fontSize: 24 }}>USER INPUT: {text}</Text>
-      <Text style={{ padding: 20, fontSize: 24 }}>
-        Username: {userProfileSelector.data?.display_name}
-      </Text>
       <TouchableOpacity onPress={handleSignOut} style={styles.button}>
         <Text style={styles.buttonText}>SIGN OUT</Text>
       </TouchableOpacity>
@@ -91,8 +88,8 @@ const styles = StyleSheet.create({
     paddingBottom: 8,
   },
   profile_picture: {
-    width: 120,
-    height: 120,
+    width: 80,
+    height: 80,
     resizeMode: "stretch",
     borderColor: "#1E3765",
     borderWidth: 3,

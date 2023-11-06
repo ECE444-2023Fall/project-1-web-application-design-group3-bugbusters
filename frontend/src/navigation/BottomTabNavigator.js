@@ -6,7 +6,7 @@ import AuthPageScreen from "../screens/AuthPageScreen";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import ProfilePageScreen from "../screens/ProfilePageScreen";
 import api from "../helpers/API";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setUserProfileData, reset } from "../store/Action";
 
 const Tab = createBottomTabNavigator();
@@ -15,6 +15,10 @@ export default function BottomTab({ navigation }) {
   const auth = getAuth();
   // redux for user profile data
   const dispatchRedux = useDispatch();
+  // read current user profile from redux store
+  const userProfileSelector = useSelector((state) => {
+    return state.main.userData;
+  });
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -68,7 +72,11 @@ export default function BottomTab({ navigation }) {
       />
       <Tab.Screen
         name="Authentication Page"
-        component={auth.currentUser ? ProfilePageScreen : AuthPageScreen}
+        component={
+          auth.currentUser
+            ? () => <ProfilePageScreen userProfile={userProfileSelector.data} />
+            : AuthPageScreen
+        }
         options={{
           tabBarIcon: ({ color, size }) => {
             return (
