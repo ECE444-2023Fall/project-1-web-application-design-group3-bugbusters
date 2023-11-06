@@ -20,10 +20,10 @@ const EventDetailsScreen = function ({ route, navigation }) {
   const contrastColor = useSelector((state) => state.main.contrastColor);
 
   // const currentEventRedux = useSelector((state) => state.currentEventData);
-  const userProfileRedux = useSelector((state) => state.userProfileData);
+  const userProfileRedux = useSelector((state) => state.main.userData);
 
   const [isOwner, setOwner] = useState(
-    userProfileRedux.id == currentEvent._creator_id
+    userProfileRedux.id == currentEvent?._creator_id
   );
   const [rsvpPopup, setRsvpPopup] = useState(false);
   const [currentEvent, setCurrentEvent] = useState({});
@@ -40,7 +40,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
   return (
     <View>
       <HeaderBar
-        title={title}
+        title={currentEvent._event_title}
         childrenLeft={
           <TouchableOpacity
             style={styles.backButton}

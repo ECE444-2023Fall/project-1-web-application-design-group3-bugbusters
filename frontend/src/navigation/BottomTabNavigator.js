@@ -1,7 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useEffect } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
-import { useSelector, useDispatch } from "react-redux";
 import LandingPageScreen from "../screens/LandingPageScreen";
 import AuthPageScreen from "../screens/AuthPageScreen";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
