@@ -12,9 +12,11 @@ import {
 import HeaderBar from "../components/HeaderBar";
 import { getAuth, signOut } from "firebase/auth";
 import api from "../helpers/API";
+import HorizontalTextBuffer from "../components/HorizontalTextBuffer";
 
 const ProfilePageScreen = function ({ userProfile }) {
   const [event_data, setEventData] = useState([]);
+  const [refreshing, setRefreshing] = useState(false);
   const auth = getAuth();
 
   useEffect(() => {
@@ -41,9 +43,31 @@ const ProfilePageScreen = function ({ userProfile }) {
       });
   };
 
-  const Item = ({ _event_title }) => (
-    <View>
-      <Text style={{ fontSize: 24 }}>{_event_title}</Text>
+  const Item = ({ event_title }) => (
+    <View style={{ marginVertical: 42 }}>
+      <Text style={{ fontSize: 24 }}>{event_title}</Text>
+    </View>
+  );
+
+  const ListHeaderComponent = ({ item_types }) => (
+    <View
+      style={{
+        backgroundColor: "white",
+        paddingLeft: 20,
+        paddingVertical: 8,
+        borderTopColor: "#1E3765",
+        borderBottomColor: "#1E3765",
+        borderTopWidth: 2,
+        borderBottomWidth: 2,
+      }}
+    >
+      <Text
+        style={{
+          fontSize: 20,
+        }}
+      >
+        {item_types}
+      </Text>
     </View>
   );
 
@@ -54,7 +78,7 @@ const ProfilePageScreen = function ({ userProfile }) {
         <Image
           style={styles.profile_picture}
           source={
-            userProfile.photo_url
+            userProfile?.photo_url
               ? {
                   uri: "https://reactnative.dev/img/tiny_logo.png",
                 }
@@ -65,14 +89,30 @@ const ProfilePageScreen = function ({ userProfile }) {
         ></Image>
       </View>
       <View style={styles.display_name_container}>
-        <Text style={styles.display_name_text}>{userProfile.display_name}</Text>
+        <Text style={styles.display_name_text}>
+          {userProfile?.display_name}
+        </Text>
       </View>
-      <FlatList
-        data={event_data}
-        renderItem={({ item }) => <Item _event_title={item._event_title} />}
-        keyExtractor={(item) => item._event_id}
-      />
-      <TouchableOpacity onPress={handleSignOut} style={styles.button}>
+      <View style={{ width: "100%", flex: 1 }}>
+        <FlatList
+          data={event_data}
+          renderItem={({ item }) => <Item event_title={item._event_title} />}
+          keyExtractor={(item) => item._event_id}
+          onRefresh={() => {
+            // simulate fetching more events
+            setRefreshing(true);
+            setTimeout(() => {
+              // call getEvent(event_id) here
+              setRefreshing(false);
+            }, 2000);
+          }}
+          refreshing={refreshing}
+          ListHeaderComponent={<ListHeaderComponent item_types={"EVENTS"} />}
+          stickyHeaderIndices={[0]}
+        />
+      </View>
+      {/*TODO: PLACE SIGN OUT BUTTON IN <Modal/>*/}
+      <TouchableOpacity onPress={handleSignOut} style={{ flex: 0.25 }}>
         <Text style={styles.buttonText}>SIGN OUT</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
@@ -81,6 +121,7 @@ const ProfilePageScreen = function ({ userProfile }) {
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     alignItems: "center",
   },
   profile_picture_container: {
