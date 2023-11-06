@@ -23,7 +23,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
   const userProfileRedux = useSelector((state) => state.userProfileData);
 
   const [isOwner, setOwner] = useState(
-    userProfileRedux.id == currentEvent._creator_id
+    userProfileRedux?.id == currentEvent?._creator_id
   );
   const [rsvpPopup, setRsvpPopup] = useState(false);
   const [currentEvent, setCurrentEvent] = useState({});

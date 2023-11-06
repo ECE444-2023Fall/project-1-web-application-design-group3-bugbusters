@@ -27,7 +27,10 @@ const LandingPageScreen = function ({ navigation }) {
     // console.log("response:", response);
     if (response.result == "SUCCESSFUL") {
       // console.log("Events successfully obtained\n");
+      console.log(response);
+      setEvents(response.data);
     } else {
+      // Display error modal
       console.error("Events cannot be obtained!!\n");
     }
   };
