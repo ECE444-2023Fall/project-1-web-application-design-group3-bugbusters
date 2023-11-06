@@ -51,7 +51,11 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
           })
         }
       >
-        <EventCard title={event._event_title} owner={event._creator_id} />
+        <EventCard
+          title={event._event_title}
+          owner={event._creator_id}
+          image={event._images._header_image}
+        />
       </TouchableOpacity>
     );
   };
