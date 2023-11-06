@@ -29,6 +29,7 @@ const LandingPageScreen = function ({ navigation }) {
     const response = await api.getAllEvents();
     if (response.result == "SUCCESSFUL") {
       setEvents(response.data);
+      // console.log(events);
     } else {
       // TODO: Display error modal
       console.error("Events cannot be obtained!!\n");
