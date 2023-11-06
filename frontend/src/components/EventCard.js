@@ -61,6 +61,7 @@ const styles = StyleSheet.create({
     margin: 20,
     borderRadius: 10,
     height: 220,
+    backgroundColor: "grey",
     overflow: "hidden",
   },
   cardBar: {
