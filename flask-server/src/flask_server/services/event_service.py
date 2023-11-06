@@ -89,4 +89,75 @@ def editEvent(event_id):
     event_ref = db_client.events_collection.document(event_id)
     event_ref.set(event_data)
 
+<<<<<<< HEAD
     return {'message': 'Event edited successfully!', 'event_id': event_id}, 200
+=======
+    return jsonify({'message': 'Event created successfully!', 'event_id': event_id}), 201
+
+@event_service.route('/rsvp', methods=['POST'])
+def rsvpSignup():
+    data = request.json
+
+    event_id = data["_event_id"]
+    email = data["_email"]
+
+    if event_id is None or email is None:
+        return jsonify({'message': 'Error, bad input!'}), 400
+
+    acceptable_email_types = ["@mail.utoronto.ca", "@cs.utoronto.ca", "@ece.utoronto.ca"]
+
+    try:
+        emailinfo = validate_email(email, check_deliverability=False)
+        email = emailinfo.normalized
+
+    except EmailNotValidError:
+        return jsonify({'message': 'Error, bad email!'}), 400
+    
+    valid_suffix = False
+    for email_substring in acceptable_email_types:
+        if email_substring in email:
+            valid_suffix = True
+            break
+
+    if not valid_suffix:
+        return jsonify({'message': 'Error, email!'}), 400
+
+    event_data = getEvent(event_id)
+    event_obj = Event.from_json(event_data)
+
+    if email in event_obj._rsvp_email_list:
+        return jsonify({'message': 'Error, email!'}), 400
+
+    event_obj._rsvp_email_list.append(email)
+
+    #editEvent(event_obj)
+
+    return jsonify({'message': 'RSVP successful!'}), 201
+
+      
+
+    # # Generate a unique event ID TODO: Is this an efficient way of checking the uuid doesn't exist?
+    # event_id = str(uuid.uuid4())
+    # while db_client.events_collection.document(event_id).get().exists:
+    #     event_id = str(uuid.uuid4())
+
+    # # Insert the generated event_id into the input json / data
+    # data['_event_id'] = event_id
+
+    # try:
+    #     event_obj = Event.from_json(data)
+    # except KeyError as key_error:
+    #     return jsonify({'message': 'Error, bad input!'}), 400
+
+    # # Retrieve the json back from our obj
+    # event_data = event_obj.to_json()
+
+    # # Add the event data to the Firestore "Events" collection
+    # event_ref = db_client.events_collection.document(event_id)
+    # event_ref.set(event_data)
+
+    # # "status_code”: Options 200-signed up for rsvp, 400-error, 409-email already signed up
+
+    # return jsonify({'message': 'Event created successfully!', 'event_id': event_id}), 201
+
+>>>>>>> 8478f41 (Set up basic structure for RSVP endpoint, fixed broken test, added rsvp members to event class)
