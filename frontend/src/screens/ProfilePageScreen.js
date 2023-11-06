@@ -8,15 +8,21 @@ import {
   View,
   FlatList,
 } from "react-native";
+import { Ionicons, Octicons } from "@expo/vector-icons";
 import HeaderBar from "../components/HeaderBar";
 import EventCard from "../components/EventCard";
+import PopUp from "../components/PopUp";
 import { getAuth, signOut } from "firebase/auth";
+import { useSelector } from "react-redux";
 import api from "../helpers/API";
 
 const ProfilePageScreen = function ({ navigation, userProfile }) {
   const [event_data, setEventData] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
+  const [menuPopup, setMenuPopup] = useState(false);
   const auth = getAuth();
+
+  const primaryColor = useSelector((state) => state.main.primaryColor);
 
   useEffect(() => {
     callGetAllEvents = async () => {
@@ -77,6 +83,7 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
   return (
     <KeyboardAvoidingView style={styles.container}>
       <HeaderBar title="Profile Page" align="center" />
+      {/* Profile picture container */}
       <View style={styles.profile_picture_container}>
         <Image
           style={styles.profile_picture}
@@ -90,12 +97,29 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
                 }
           }
         ></Image>
+        {/* Menu button */}
+        <TouchableOpacity
+          style={styles.menu_button}
+          onPress={() => {
+            setMenuPopup(true);
+          }}
+        >
+          <Ionicons name="ellipsis-horizontal" size={28} color={primaryColor} />
+        </TouchableOpacity>
+        <PopUp visible={menuPopup} setVisible={setMenuPopup}>
+          <TouchableOpacity onPress={handleSignOut} style={styles.menu_item}>
+            <Octicons name="sign-out" size={20} color={primaryColor} />
+            <Text style={{ color: primaryColor }}>SIGN OUT</Text>
+          </TouchableOpacity>
+        </PopUp>
       </View>
+      {/* Display name container */}
       <View style={styles.display_name_container}>
         <Text style={styles.display_name_text}>
           {userProfile?.display_name}
         </Text>
       </View>
+      {/* EventCard list */}
       <View style={{ width: "100%", flex: 1 }}>
         <FlatList
           data={event_data}
@@ -115,13 +139,6 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
           stickyHeaderIndices={[0]}
         />
       </View>
-      {/*TODO: PLACE SIGN OUT BUTTON IN <Modal/>*/}
-      <TouchableOpacity
-        onPress={handleSignOut}
-        style={{ marginTop: 12, flex: 0.25 }}
-      >
-        <Text style={styles.buttonText}>SIGN OUT</Text>
-      </TouchableOpacity>
     </KeyboardAvoidingView>
   );
 };
@@ -132,8 +149,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   profile_picture_container: {
+    width: "100%",
     paddingTop: 16,
     paddingBottom: 8,
+    alignItems: "center",
   },
   profile_picture: {
     width: 80,
@@ -142,6 +161,10 @@ const styles = StyleSheet.create({
     borderColor: "#1E3765",
     borderWidth: 3,
     borderRadius: 20,
+  },
+  menu_button: {
+    position: "absolute",
+    start: "90%",
   },
   display_name_container: {
     paddingBottom: 16,
@@ -180,6 +203,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     borderRadius: 24,
     paddingVertical: 80,
+  },
+  menu_item: {
+    width: "100%",
+    justifyContent: "flex-start",
+    alignItems: "center",
+    flexDirection: "row",
+    paddingLeft: 24,
+    paddingVertical: 12,
+    gap: 24,
   },
 });
 
