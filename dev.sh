@@ -15,6 +15,13 @@ else
   export REACT_PORT="${REACT_PORT}"
 fi
 
+# initialize HOSTNAME var
+if [[ -z "${HOSTNAME}" ]]; then
+  export HOSTNAME="localhost"
+else
+  export HOSTNAME="${HOSTNAME}"
+fi
+
 if [[ $2 = "flask-server" ]]; then
     SERVICE="flask-server"
 elif [[ $2 = "react-app" ]]; then
