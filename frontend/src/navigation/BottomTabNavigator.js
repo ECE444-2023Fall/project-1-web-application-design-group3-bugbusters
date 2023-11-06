@@ -1,6 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useEffect } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
+import { useSelector, useDispatch } from "react-redux";
 import LandingPageScreen from "../screens/LandingPageScreen";
 import AuthPageScreen from "../screens/AuthPageScreen";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -19,6 +20,9 @@ export default function BottomTab({ navigation }) {
   const userProfileSelector = useSelector((state) => {
     return state.main.userData;
   });
+  const primaryColor = useSelector((state) => state.main.primaryColor);
+  const secondaryColor = useSelector((state) => state.main.secondaryColor);
+  const contrastColor = useSelector((state) => state.main.contrastColor);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -44,13 +48,13 @@ export default function BottomTab({ navigation }) {
       initialRouteName="Home"
       screenOptions={(_, color, __) => {
         return {
-          tabBarActiveTintColor: "white",
+          tabBarActiveTintColor: contrastColor,
           tabBarInactiveTintColor: color,
           tabBarStyle: {
             position: "absolute",
             justifyContent: "center",
             padding: 8,
-            backgroundColor: "#1E3765",
+            backgroundColor: primaryColor,
           },
           headerShown: false,
           tabBarShowLabel: false,

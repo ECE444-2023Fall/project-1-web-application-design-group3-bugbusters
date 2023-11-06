@@ -23,6 +23,7 @@ const ProfilePageScreen = function ({ userProfile }) {
       const response = await api.getAllEvents();
       if (response.result == "SUCCESSFUL") {
         setEventData(response.data);
+        setEventData([]);
       } else {
         alert("FAILED TO GET ALL EVENTS");
       }
@@ -98,6 +99,7 @@ const ProfilePageScreen = function ({ userProfile }) {
           }}
           refreshing={refreshing}
           ListHeaderComponent={<ListHeaderComponent item_types={"Events"} />}
+          ListEmptyComponent={<Item event_title={"This user has no events"} />}
           stickyHeaderIndices={[0]}
         />
       </View>
