@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect, useRef } from "react";
 import {
   Text,
   StyleSheet,
@@ -8,13 +8,14 @@ import {
   TouchableOpacity,
   ScrollView,
   RefreshControl,
+  Pressable,
 } from "react-native";
 import HeaderBar from "../components/HeaderBar";
 import api from "../helpers/API";
 import { useSelector, useDispatch } from "react-redux";
 import { setUserData } from "../store/Action";
 import EventCard from "../components/EventCard";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign, Ionicons } from "@expo/vector-icons";
 
 const LandingPageScreen = function ({ navigation }) {
   // const [text, setText] = useState("");
@@ -24,7 +25,11 @@ const LandingPageScreen = function ({ navigation }) {
   const contrastColor = useSelector((state) => state.main.contrastColor);
 
   const [events, setEvents] = useState([]);
+  const [displaySearchBar, setDisplaySearchBar] = useState(false);
+  const [searchText, setSearchText] = useState("");
+  const refInput = useRef();
 
+  // Land or refresh case
   const fetchEvents = async () => {
     const response = await api.getAllEvents();
     if (response.result == "SUCCESSFUL") {
@@ -32,7 +37,18 @@ const LandingPageScreen = function ({ navigation }) {
       // console.log(events);
     } else {
       // TODO: Display error modal
-      console.error("Events cannot be obtained!!\n");
+      // console.error("Events cannot be obtained!!\n");
+    }
+  };
+
+  // Search case (this will be combined with the above function once getAllEvents endpoint is obsolete)
+  const searchEvents = async () => {
+    const response = await api.search({ query: searchText, filter: [] });
+    if (response.result == "SUCCESSFUL") {
+      setEvents(response.data.results);
+    } else {
+      // TODO: Display error modal
+      // console.error("Events cannot be obtained!!\n");
     }
   };
 
@@ -41,8 +57,22 @@ const LandingPageScreen = function ({ navigation }) {
   }, []);
 
   return (
-    <View style={{ flex: 1 }}>
-      <HeaderBar title="Landing Page" align="center" />
+    <View style={{ flex: 1, backgroundColor: contrastColor }}>
+      <HeaderBar
+        title="Landing Page"
+        childrenLeft={<View style={{ width: 26 }} />}
+        childrenRight={
+          <TouchableOpacity
+            onPress={() => {
+              setDisplaySearchBar(true);
+
+              refInput.current?.focus();
+            }}
+          >
+            <Ionicons name="search" size={26} color={contrastColor} />
+          </TouchableOpacity>
+        }
+      />
       <ScrollView
         refreshControl={<RefreshControl onRefresh={() => fetchEvents()} />}
       >
@@ -65,10 +95,57 @@ const LandingPageScreen = function ({ navigation }) {
           );
         })}
       </ScrollView>
+
+      {/* Search bar placed here due to React Native view display */}
+      <View
+        style={{
+          ...styles.searchBar,
+          display: displaySearchBar ? null : "none",
+        }}
+      >
+        <TextInput
+          ref={refInput}
+          selectTextOnFocus={true}
+          placeholder="Search"
+          style={styles.searchInput}
+          autoCorrect={false}
+          value={searchText}
+          returnKeyType="search"
+          clearButtonMode="while-editing"
+          onChangeText={(text) => {
+            console.log(text);
+            setSearchText(text);
+          }}
+          onSubmitEditing={() => {
+            // TODO: Fire search api
+            setDisplaySearchBar(false);
+          }}
+          onBlur={() => setDisplaySearchBar(false)}
+        />
+      </View>
     </View>
   );
 };
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  searchBar: {
+    backgroundColor: "#D9D9D9",
+    borderBottomLeftRadius: 16,
+    borderBottomRightRadius: 16,
+    width: "100%",
+    position: "absolute",
+    top: 86,
+  },
+  searchInput: {
+    borderWidth: 1,
+    marginHorizontal: 20,
+    marginVertical: 14,
+    fontSize: 16,
+    borderRadius: 8,
+    paddingLeft: 6,
+    paddingVertical: 4,
+    backgroundColor: "white",
+  },
+});
 
 export default LandingPageScreen;

@@ -46,7 +46,11 @@ export class Api {
   }
 
   async createUserProfile(data) {
-    return this.makeRequest(`user-service/create-profile`, data, "POST");
+    return this.makeRequest("user-service/create-profile", data, "POST");
+  }
+
+  async search(data) {
+    return this.makeRequest("search-service/search", data, "POST");
   }
 }
 
