@@ -2,7 +2,6 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useEffect } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
-import { useSelector, useDispatch } from "react-redux";
 import LandingPageScreen from "../screens/LandingPageScreen";
 import AuthPageScreen from "../screens/AuthPageScreen";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
@@ -11,7 +10,6 @@ import CreateEditEventScreen from "../screens/CreateEditEventScreen";
 
 const Tab = createBottomTabNavigator();
 
-export default function BottomTab({ navigation }) {
 export default function BottomTab({ navigation }) {
   const dispatchRedux = useDispatch();
   const primaryColor = useSelector((state) => state.main.primaryColor);
