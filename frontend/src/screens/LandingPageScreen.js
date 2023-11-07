@@ -41,7 +41,7 @@ const LandingPageScreen = function ({ navigation }) {
   }, []);
 
   return (
-    <View style={{ backgroundColor: "white", flex: 1 }}>
+    <View style={{ flex: 1 }}>
       <HeaderBar title="Landing Page" align="center" />
       <ScrollView
         refreshControl={<RefreshControl onRefresh={() => fetchEvents()} />}
