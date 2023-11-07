@@ -4,20 +4,29 @@ from flask_server.classes.event import Event
 from flask_server.global_config import search_client
 from flask_server.services.user_service import getUserProfile
 from google.cloud import firestore
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+from datetime import datetime
 import uuid
 
 event_service = Blueprint('event_service', __name__, template_folder='templates',
                           url_prefix='/event-service')
 
-@event_service.route('/<event_id>')
-def getEvent(event_id):
-    '''Given an event_id, return the corresponding event to it'''
-
+def getEventHelper(event_id):
     event_doc_ref = db_client.events_collection.document(event_id)
     # Get the data of the event document
     event_data = event_doc_ref.get().to_dict()
 
-    if not event_data:
+    return event_data
+
+@event_service.route('/<event_id>')
+def getEvent(event_id):
+    '''Given an event_id, return the corresponding event to it'''
+
+    event_data = getEventHelper(event_id)
+
+    if event_data is None:
         print(f"No event found with ID: {event_id}")
         abort(404, None)
 
@@ -89,10 +98,8 @@ def editEvent(event_id):
     event_ref = db_client.events_collection.document(event_id)
     event_ref.set(event_data)
 
-<<<<<<< HEAD
+
     return {'message': 'Event edited successfully!', 'event_id': event_id}, 200
-=======
-    return jsonify({'message': 'Event created successfully!', 'event_id': event_id}), 201
 
 @event_service.route('/rsvp', methods=['POST'])
 def rsvpSignup():
@@ -104,60 +111,128 @@ def rsvpSignup():
     if event_id is None or email is None:
         return jsonify({'message': 'Error, bad input!'}), 400
 
-    acceptable_email_types = ["@mail.utoronto.ca", "@cs.utoronto.ca", "@ece.utoronto.ca"]
+    # acceptable_email_types = ["@mail.utoronto.ca", "@utoronto.ca","@cs.utoronto.ca", "@ece.utoronto.ca"]
 
-    try:
-        emailinfo = validate_email(email, check_deliverability=False)
-        email = emailinfo.normalized
+    # try:
+    #     emailinfo = validate_email(email, check_deliverability=False)
+    #     email = emailinfo.normalized
 
-    except EmailNotValidError:
-        return jsonify({'message': 'Error, bad email!'}), 400
+    # except EmailNotValidError:
+    #     return jsonify({'message': 'Error, bad email!'}), 400
     
-    valid_suffix = False
-    for email_substring in acceptable_email_types:
-        if email_substring in email:
-            valid_suffix = True
-            break
+    # valid_suffix = False
+    # for email_substring in acceptable_email_types:
+    #     if email_substring in email:
+    #         valid_suffix = True
+    #         break
 
-    if not valid_suffix:
-        return jsonify({'message': 'Error, email!'}), 400
+    # if not valid_suffix:
+    #     return jsonify({'message': 'Error, email!'}), 400
 
-    event_data = getEvent(event_id)
+    [event_data, status_code] = getEvent(event_id)
+    print(event_data)
     event_obj = Event.from_json(event_data)
+
+    if status_code != 200:
+        print("AAAA")
 
     if email in event_obj._rsvp_email_list:
         return jsonify({'message': 'Error, email!'}), 400
 
     event_obj._rsvp_email_list.append(email)
 
+    # UPDATE LIST
     #editEvent(event_obj)
 
     return jsonify({'message': 'RSVP successful!'}), 201
 
-      
 
-    # # Generate a unique event ID TODO: Is this an efficient way of checking the uuid doesn't exist?
-    # event_id = str(uuid.uuid4())
-    # while db_client.events_collection.document(event_id).get().exists:
-    #     event_id = str(uuid.uuid4())
+@event_service.route('/rsvp-send/<event_id>', methods=['GET'])
+def rsvpSend(event_id):
+    #data = request.json
 
-    # # Insert the generated event_id into the input json / data
-    # data['_event_id'] = event_id
+    # event_id = data["_event_id"]
 
-    # try:
-    #     event_obj = Event.from_json(data)
-    # except KeyError as key_error:
-    #     return jsonify({'message': 'Error, bad input!'}), 400
+    if event_id is None:
+        return jsonify({'message': 'Error, bad event id!'}), 400
 
-    # # Retrieve the json back from our obj
-    # event_data = event_obj.to_json()
+    event_data = getEventHelper(event_id)
 
-    # # Add the event data to the Firestore "Events" collection
-    # event_ref = db_client.events_collection.document(event_id)
-    # event_ref.set(event_data)
+    if event_data is None:
+       return jsonify({'message': 'Error, no event!'}), 400
 
-    # # "status_code”: Options 200-signed up for rsvp, 400-error, 409-email already signed up
+    event_obj = Event.from_json(event_data)
 
-    # return jsonify({'message': 'Event created successfully!', 'event_id': event_id}), 201
+    # Check that an RSVP email has not been sent out already
+    if event_obj._rsvp_sent is True:
+        return jsonify({'message': 'RSVP alread sent'}), 409
+    
+    # Check there are emails on the RSVP  list
+    if event_obj._rsvp_email_list is []:
+        return jsonify({'message': 'RSVP list empty'}), 400
 
->>>>>>> 8478f41 (Set up basic structure for RSVP endpoint, fixed broken test, added rsvp members to event class)
+    # Email configuration
+    sender_email = "clubhub444@gmail.com"
+    # sender_password = "BugBusters"
+
+    #######THIS COULD BE A POSSIBLE SECURITY BREACH##############
+    # 2FA passcode for gmail account
+    sender_password = "yhoj pynp vlvr bhaq"
+
+    subject = "ClubHub: Friendly Event Reminder for " + event_obj._event_title
+
+    # Your template string
+    message = """
+Dear ClubHub user,
+
+We hope this message finds you well. We're excited to remind you about your upcoming event!
+
+Event Details:
+    Title: [Event Name]
+    Date: [Event Date]
+    Time: [Event Time]
+    Location: [Event Venue]
+    """
+
+    # Parse the string into a datetime object
+    parsed_datetime = datetime.strptime(event_obj._event_start_time, "%Y-%m-%d %H:%M:%S.%f")
+
+    formatted_time = parsed_datetime.strftime('%I:%M %p')  # %I for 12-hour, %p for AM/PM
+    formatted_date = parsed_datetime.strftime('%Y-%m-%d')
+
+    # Replace placeholders with actual variable values
+    message = message.replace("[Event Name]", event_obj._event_title)
+    message = message.replace("[Event Date]", formatted_date)
+    message = message.replace("[Event Time]", formatted_time)
+    message = message.replace("[Event Venue]", event_obj._location)
+
+    # Connect to the SMTP server (in this case, Gmail's SMTP server)
+    try:
+        with smtplib.SMTP('smtp.gmail.com', 587) as server:
+            server.ehlo()
+            server.starttls()
+            server.login(sender_email, sender_password)
+
+            for receiver_email in event_obj._rsvp_email_list:
+
+                # Create a message
+                msg = MIMEMultipart()
+                msg['From'] = sender_email
+                msg['To'] = receiver_email
+                msg['Subject'] = subject
+
+                msg.attach(MIMEText(message, 'plain'))
+
+                # Send the email
+                text = msg.as_string()
+                server.sendmail(sender_email, receiver_email, text)
+            server.quit()
+
+    except Exception:
+        return jsonify({'message': 'RSVP email could not send!'}), 400
+
+
+    # REMEMBER TO SET RSVP SENT AS True
+    #editEvent(event_obj)
+
+    return jsonify({'message': 'RSVP successful!'}), 200
