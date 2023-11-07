@@ -1,5 +1,12 @@
 import React, { useEffect, useState } from "react";
-import { Text, StyleSheet, View, TouchableOpacity, Image } from "react-native";
+import {
+  Text,
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Image,
+  TextInput,
+} from "react-native";
 import HeaderBar from "../components/HeaderBar";
 import {
   Ionicons,
@@ -40,6 +47,22 @@ const EventDetailsScreen = function ({ route, navigation }) {
       userProfileRedux?.uid == currentEvent?._creator_id,
   );
   const [rsvpPopup, setRsvpPopup] = useState(false);
+  const [rsvped, setRsvped] = useState(false); // TODO: If user is logged in, logic should be to check if user email is in the rsvp list
+  const [rsvpTextInput, setRsvpTextInput] = useState("");
+
+  async function rsvp(event_id, email) {
+    const response = await api.rsvp({ event_id, email });
+    if (response.result == "SUCCESSFUL") {
+      setRsvped(true);
+    }
+  }
+
+  async function sendRsvp(event_id) {
+    const response = await api.sendRsvp(event_id);
+    if (response.result == "ERROR") {
+      console.error("Couldn't send rsvp info");
+    }
+  }
 
   return (
     <View>
@@ -81,7 +104,13 @@ const EventDetailsScreen = function ({ route, navigation }) {
           }}
         />
         {isOwner ? (
-          <TouchableOpacity onPress={() => setRsvpPopup(true)}>
+          <TouchableOpacity
+            onPress={() => {
+              // send rsvp info to attendees
+              sendRsvp(currentEvent?._event_id);
+              setRsvpPopup(true);
+            }}
+          >
             <MaterialCommunityIcons
               name="email-outline"
               size={34}
@@ -89,7 +118,12 @@ const EventDetailsScreen = function ({ route, navigation }) {
             />
           </TouchableOpacity>
         ) : (
-          <TouchableOpacity onPress={() => setRsvpPopup(true)}>
+          <TouchableOpacity
+            onPress={() => {
+              // rsvp to event
+              setRsvpPopup(true);
+            }}
+          >
             <AntDesign name="adduser" color={contrastColor} size={30} />
           </TouchableOpacity>
         )}
@@ -144,7 +178,15 @@ const EventDetailsScreen = function ({ route, navigation }) {
         {isOwner ? (
           <Text>Render rsvp info here</Text>
         ) : (
-          <Text>Render event registry status here</Text>
+          <View>
+            <Text>Render event registry status here</Text>
+            <TextInput onChangeText={setRsvpTextInput} />
+            <TouchableOpacity
+              onPress={() => rsvp(currentEvent?._event_id, rsvpTextInput)}
+            >
+              <Text>Send</Text>
+            </TouchableOpacity>
+          </View>
         )}
       </PopUp>
     </View>
