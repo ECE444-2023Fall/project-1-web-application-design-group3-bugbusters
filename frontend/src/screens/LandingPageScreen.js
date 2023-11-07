@@ -43,7 +43,7 @@ const LandingPageScreen = function ({ navigation }) {
 
   // Search case (this will be combined with the above function once getAllEvents endpoint is obsolete)
   const searchEvents = async () => {
-    const response = await api.search({ query: searchText, filter: [] });
+    const response = await api.search({ query: searchText, filters: [] });
     if (response.result == "SUCCESSFUL") {
       setEvents(response.data.results);
     } else {
@@ -76,6 +76,14 @@ const LandingPageScreen = function ({ navigation }) {
       <ScrollView
         refreshControl={<RefreshControl onRefresh={() => fetchEvents()} />}
       >
+        {/* Sample event, TODO: Remove when done testing */}
+        <TouchableOpacity onPress={() => navigation.navigate("Event Details")}>
+          <EventCard
+            title="Test event"
+            owner="Me"
+            image="https://picsum.photos/200"
+          />
+        </TouchableOpacity>
         {events.map((event) => {
           return (
             <TouchableOpacity
@@ -89,7 +97,11 @@ const LandingPageScreen = function ({ navigation }) {
               <EventCard
                 title={event?._event_title}
                 owner={event?._creator_id}
-                image={event?._images?._header_image}
+                image={
+                  event?._images?._header_image
+                    ? event?._images?._header_image
+                    : "https://picsum.photos/200"
+                }
               />
             </TouchableOpacity>
           );
@@ -113,11 +125,10 @@ const LandingPageScreen = function ({ navigation }) {
           returnKeyType="search"
           clearButtonMode="while-editing"
           onChangeText={(text) => {
-            console.log(text);
             setSearchText(text);
           }}
           onSubmitEditing={() => {
-            // TODO: Fire search api
+            searchEvents();
             setDisplaySearchBar(false);
           }}
           onBlur={() => setDisplaySearchBar(false)}
@@ -137,7 +148,6 @@ const styles = StyleSheet.create({
     top: 86,
   },
   searchInput: {
-    borderWidth: 1,
     marginHorizontal: 20,
     marginVertical: 14,
     fontSize: 16,

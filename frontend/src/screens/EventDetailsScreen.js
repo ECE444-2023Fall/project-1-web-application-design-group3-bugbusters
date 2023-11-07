@@ -13,7 +13,7 @@ import PopUp from "../components/PopUp";
 import api from "../helpers/API";
 
 const EventDetailsScreen = function ({ route, navigation }) {
-  const { event_id } = route.params;
+  const event_id = route?.params?.event_id;
   const dispatchRedux = useDispatch();
   const primaryColor = useSelector((state) => state.main.primaryColor);
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
@@ -22,12 +22,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
   // const currentEventRedux = useSelector((state) => state.currentEventData);
   const userProfileRedux = useSelector((state) => state.userProfileData);
 
-  const [isOwner, setOwner] = useState(
-    userProfileRedux?.id == currentEvent?._creator_id,
-  );
-  const [rsvpPopup, setRsvpPopup] = useState(false);
   const [currentEvent, setCurrentEvent] = useState({});
-
   async function retrieveEvent(id) {
     const response = await api.getEvent(id);
     if (response.result == "SUCCESSFUL") {
@@ -37,7 +32,14 @@ const EventDetailsScreen = function ({ route, navigation }) {
 
   useEffect(() => {
     retrieveEvent(event_id);
-  }, []);
+  }, [event_id]);
+
+  const [isOwner, setOwner] = useState(
+    userProfileRedux?.uid &&
+      currentEvent?._creator_id &&
+      userProfileRedux?.uid == currentEvent?._creator_id,
+  );
+  const [rsvpPopup, setRsvpPopup] = useState(false);
 
   return (
     <View>
@@ -62,13 +64,21 @@ const EventDetailsScreen = function ({ route, navigation }) {
           justifyContent: "center",
           alignItems: "center",
         }}
-        source={{ uri: currentEvent?._images?._header_image }}
+        source={{
+          uri: currentEvent?._images?._header_image
+            ? currentEvent?._images?._header_image
+            : "https://picsum.photos/200/300",
+        }}
       />
 
       {/* Bar below the image */}
       <View style={{ ...styles.imageBar, backgroundColor: primaryColor }}>
         <ProfilePicture
-          source={{ uri: currentEvent?._images?._profile_image }}
+          source={{
+            uri: currentEvent?._images?._profile_image
+              ? currentEvent?._images?._profile_image
+              : "https://picsum.photos/200",
+          }}
         />
         {isOwner ? (
           <TouchableOpacity onPress={() => setRsvpPopup(true)}>

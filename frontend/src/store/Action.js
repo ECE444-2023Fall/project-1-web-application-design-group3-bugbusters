@@ -7,7 +7,6 @@ export const setUserProfileData = (value) => ({
 
 // Reset
 import { RESET } from "./ActionType";
-export const reset = (value) => ({
+export const reset = () => ({
   type: RESET,
-  payload: value,
 });

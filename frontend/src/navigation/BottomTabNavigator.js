@@ -7,6 +7,7 @@ import AuthPageScreen from "../screens/AuthPageScreen";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import ProfilePageScreen from "../screens/ProfilePageScreen";
 import CreateEditEventScreen from "../screens/CreateEditEventScreen";
+import { reset, setUserProfileData } from "../store/Action";
 
 const Tab = createBottomTabNavigator();
 
@@ -18,16 +19,25 @@ export default function BottomTab({ navigation }) {
 
   const auth = getAuth();
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    // const unsubscribe =
+    onAuthStateChanged(auth, (user) => {
       if (user) {
         // user is signed in
-        navigation.navigate("Landing Page");
+        dispatchRedux(
+          setUserProfileData({
+            uid: user.uid,
+            email: user.email,
+            emailVerified: user.emailVerified,
+            username: user.displayName,
+            // tenantId: user.tenantId,
+          }),
+        );
       } else {
         // user is signed out
-        navigation.navigate("Landing Page");
+        dispatchRedux(reset());
       }
     });
-    return unsubscribe;
+    // return unsubscribe;
   }, []);
 
   return (
