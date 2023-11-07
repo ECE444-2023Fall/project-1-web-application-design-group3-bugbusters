@@ -2,15 +2,14 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useEffect } from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
-import { useSelector, useDispatch } from "react-redux";
 import LandingPageScreen from "../screens/LandingPageScreen";
 import AuthPageScreen from "../screens/AuthPageScreen";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import ProfilePageScreen from "../screens/ProfilePageScreen";
+import CreateEditEventScreen from "../screens/CreateEditEventScreen";
 
 const Tab = createBottomTabNavigator();
 
-export default function BottomTab({ navigation }) {
 export default function BottomTab({ navigation }) {
   const dispatchRedux = useDispatch();
   const primaryColor = useSelector((state) => state.main.primaryColor);
@@ -78,23 +77,6 @@ export default function BottomTab({ navigation }) {
             e.preventDefault();
             navigation.navigate("Create/Edit Event");
           },
-        }}
-      />
-      <Tab.Screen
-        name="Authentication Page"
-        component={auth.currentUser ? ProfilePageScreen : AuthPageScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => {
-            return (
-              <MaterialIcons
-                name="account-circle"
-                size={size + 10}
-                color={color}
-              />
-            );
-          },
-          gestureEnabled: false,
-          headerBackground: "blue",
         }}
       />
       <Tab.Screen
