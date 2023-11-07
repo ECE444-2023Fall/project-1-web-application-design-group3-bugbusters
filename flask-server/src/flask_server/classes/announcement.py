@@ -1,10 +1,13 @@
+import datetime
 from dateutil.parser import parse as DateParser
 from flask_server.classes.common import ClassField, DataField
 
 
 def _verify_timestamp(timestamp):
-    DateParser(timestamp)
-    return timestamp
+    if isinstance(timestamp, datetime.datetime):
+        return timestamp
+    elif DateParser(timestamp):
+        return timestamp
 
 
 ANNOUNCEMENT_FIELDS = DataField([
@@ -15,7 +18,7 @@ ANNOUNCEMENT_FIELDS = DataField([
 
 class Announcement:
     """Announcement class"""
-    def __init__(self, description, timestamp):
+    def __init__(self, description, timestamp=None):
         self.description = description
         self.timestamp = timestamp
 

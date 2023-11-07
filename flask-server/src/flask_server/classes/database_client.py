@@ -30,6 +30,6 @@ class DataBaseClient:
     @property
     def announcements_collection(self):
         if self._testing:
-            return self._db.collection("Announcements")
-        else:
             return self._db.collection("TestAnnouncements")
+        else:
+            return self._db.collection("Announcements")

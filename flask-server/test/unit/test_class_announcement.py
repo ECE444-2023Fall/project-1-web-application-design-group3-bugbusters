@@ -8,8 +8,10 @@ test_announcement_json = {'description': 'This is a test announcement!', 'timest
 
 @pytest.mark.parametrize('input_json, expectation',
                          [(test_announcement_json, does_not_raise()),
-                          # missing required key
-                          ({k: v for k, v in test_announcement_json.items() if k != 'timestamp'}, pytest.raises(TypeError)),
+                          # do not supply required key
+                          ({k: v for k, v in test_announcement_json.items() if k != 'description'}, pytest.raises(TypeError)),
+                          # do not supply optional key
+                          ({k: v for k, v in test_announcement_json.items() if k != 'timestamp'}, does_not_raise()),
                           # timestamp is missing Z
                           ({k: v if k != 'timestamp' else v[:-1] for k, v in test_announcement_json.items()}, does_not_raise()),
                           # timestamp is missing Z and digit
@@ -35,6 +37,7 @@ def test_from_json(input_json, expectation):
 
 @pytest.mark.parametrize('input_announcement, expectation',
                          [(Announcement(**test_announcement_json), does_not_raise()),
+                          (Announcement(**{k: v for k, v in test_announcement_json.items() if k != 'timestamp'}), does_not_raise()),
                           ])
 def test_to_json(input_announcement, expectation):
     with expectation:
