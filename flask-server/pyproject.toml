@@ -10,7 +10,8 @@ dependencies = [
     "firebase_admin",
     "algoliasearch",
     "python-dotenv",
-    "flask-cors"
+    "flask-cors",
+    "python-dateutil"
 ]
 
 [project.optional-dependencies]
