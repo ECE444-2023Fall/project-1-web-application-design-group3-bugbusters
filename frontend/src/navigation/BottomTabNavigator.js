@@ -23,18 +23,8 @@ export default function BottomTab({ navigation }) {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         // user is signed in
-        dispatchRedux(
-          setUserProfileData({
-            uid: user.uid,
-            email: user.email,
-            emailVerified: user.emailVerified,
-            username: user.displayName,
-            // tenantId: user.tenantId,
-          }),
-        );
       } else {
         // user is signed out
-        dispatchRedux(reset());
       }
     });
     // return unsubscribe;
