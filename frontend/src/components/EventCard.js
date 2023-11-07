@@ -12,7 +12,8 @@ const EventCard = function ({ navigation, image, title, owner }) {
   return (
     <View style={styles.cardContainer}>
       {/* <Image source={}/> */}
-      <View
+      <Image style={{ height: 140 }} source={{ uri: image }} />
+      {/* <View
         style={{
           backgroundColor: "grey",
           height: 140,
@@ -26,7 +27,7 @@ const EventCard = function ({ navigation, image, title, owner }) {
         >
           Placeholder for image
         </Text>
-      </View>
+      </View> */}
       <View style={styles.cardBar}>
         <View style={{ width: 50 }}></View>
         <View>

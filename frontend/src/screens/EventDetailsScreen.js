@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Text, StyleSheet, View, TouchableOpacity, Image } from "react-native";
 import HeaderBar from "../components/HeaderBar";
 import {
   Ionicons,
@@ -23,7 +23,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
   const userProfileRedux = useSelector((state) => state.userProfileData);
 
   const [isOwner, setOwner] = useState(
-    userProfileRedux?.id == currentEvent?._creator_id
+    userProfileRedux?.id == currentEvent?._creator_id,
   );
   const [rsvpPopup, setRsvpPopup] = useState(false);
   const [currentEvent, setCurrentEvent] = useState({});
@@ -35,12 +35,14 @@ const EventDetailsScreen = function ({ route, navigation }) {
     }
   }
 
-  retrieveEvent(event_id);
+  useEffect(() => {
+    retrieveEvent(event_id);
+  }, []);
 
   return (
     <View>
       <HeaderBar
-        title={title}
+        title="Event Details Screen"
         childrenLeft={
           <TouchableOpacity
             style={styles.backButton}
@@ -53,20 +55,21 @@ const EventDetailsScreen = function ({ route, navigation }) {
       />
 
       {/* Image gallery (Swipeable) */}
-      <View
+      <Image
         style={{
-          backgroundColor: "grey",
           height: 300,
+          resizeMode: "contain",
           justifyContent: "center",
           alignItems: "center",
         }}
-      >
-        <Text>Placeholder for Image</Text>
-      </View>
+        source={{ uri: currentEvent?._images?._header_image }}
+      />
 
       {/* Bar below the image */}
       <View style={{ ...styles.imageBar, backgroundColor: primaryColor }}>
-        <ProfilePicture source={require("../../assets/favicon.png")} />
+        <ProfilePicture
+          source={{ uri: currentEvent?._images?._profile_image }}
+        />
         {isOwner ? (
           <TouchableOpacity onPress={() => setRsvpPopup(true)}>
             <MaterialCommunityIcons
