@@ -9,6 +9,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime
 import uuid
+import os
 
 event_service = Blueprint('event_service', __name__, template_folder='templates',
                           url_prefix='/event-service')
@@ -172,12 +173,10 @@ def rsvpSend(event_id):
         return jsonify({'message': 'RSVP list empty'}), 400
 
     # Email configuration
-    sender_email = "clubhub444@gmail.com"
-    # sender_password = "BugBusters"
+    sender_email = os.getenv('CLUBHUBEMAIL_USER')
 
-    #######THIS COULD BE A POSSIBLE SECURITY BREACH##############
     # 2FA passcode for gmail account
-    sender_password = "yhoj pynp vlvr bhaq"
+    sender_password = os.getenv('CLUBHUBEMAIL_PASSWORD')
 
     subject = "ClubHub: Friendly Event Reminder for " + event_obj._event_title
 
