@@ -26,3 +26,10 @@ class DataBaseClient:
             return self._db.collection("TestUserProfiles")
         else:
             return self._db.collection("UserProfiles")
+
+    @property
+    def announcements_collection(self):
+        if self._testing:
+            return self._db.collection("Announcements")
+        else:
+            return self._db.collection("TestAnnouncements")
