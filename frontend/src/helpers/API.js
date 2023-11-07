@@ -17,6 +17,10 @@ export class Api {
       method: method,
       url: `${this.url}/${endpoint}`,
       data: data,
+      // headers: {
+      //   Authorization: `Bearer ${userToken}`,
+      //   tenantId: this.tenantId,
+      // },
     }).catch((err) => ({ err }));
 
     if (!response || response.err) {
@@ -51,6 +55,14 @@ export class Api {
 
   async search(data) {
     return this.makeRequest("search-service/search", data, "POST");
+  }
+
+  async rsvp(data) {
+    return this.makeRequest("event-service/rsvp", data, "PUT");
+  }
+
+  async sendRsvp(data) {
+    return this.makeRequest("event-service/send-rsvp", data, "PUT");
   }
 }
 
