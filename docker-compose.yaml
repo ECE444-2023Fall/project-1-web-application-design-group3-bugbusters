@@ -25,7 +25,7 @@ services:
       - /app/node_modules
     environment:
       - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
-      - REACT_NATIVE_PACKAGER_HOSTNAME=127.0.0.1
-      - EXPO_PUBLIC_BASE_API_URL=http://localhost:${FLASK_PORT}
+      - REACT_NATIVE_PACKAGER_HOSTNAME=${HOSTNAME}
+      - EXPO_PUBLIC_BASE_API_URL=http://${HOSTNAME}:${FLASK_PORT}
     stdin_open: true
     tty: true
