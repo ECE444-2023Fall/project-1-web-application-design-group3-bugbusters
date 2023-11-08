@@ -11,7 +11,7 @@ announcement_service = Blueprint('announcement_service', __name__, template_fold
                           url_prefix='/announcement-service')
 
 
-@announcement_service.route('', methods=['GET', 'POST', 'PUT'])
+@announcement_service.route('', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def _announcement_service():
     '''Perform CRUD operations on the Announcements collection in database'''
     # get announcements reference
@@ -60,6 +60,18 @@ def _announcement_service():
             doc_ref.update({'description': description})
         except FirestoreNotFound:
             abort(NotFound.code)
+
+        # status 204 means No Content, the request has succeeded
+        # but the client doesn't need to navigate away from it's
+        # current view
+        return '', 204
+    elif request.method == 'DELETE':
+        # abort 400 if no id is passed in query
+        if (id := request.args.get('id')) is None:
+            abort(BadRequest.code)
+
+        # delete document
+        doc_ref = announcements_ref.document(id).delete()
 
         # status 204 means No Content, the request has succeeded
         # but the client doesn't need to navigate away from it's
