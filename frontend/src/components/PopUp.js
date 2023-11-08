@@ -10,11 +10,14 @@ import {
   TouchableWithoutFeedback,
 } from "react-native";
 
-const PopUp = function ({ children, visible, setVisible }) {
+const PopUp = function ({ children, visible, setVisible, onClose }) {
   return (
     <Modal
       visible={visible}
-      onRequestClose={() => setVisible(false)}
+      onRequestClose={() => {
+        setVisible(false);
+        onClose();
+      }}
       animationType="fade"
       transparent={true}
     >
