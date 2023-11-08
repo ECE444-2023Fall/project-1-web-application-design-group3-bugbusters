@@ -11,7 +11,8 @@ dependencies = [
     "algoliasearch",
     "python-dotenv",
     "flask-cors",
-    "python-dateutil"
+    "python-dateutil",
+    "pytz",
 ]
 
 [project.optional-dependencies]
