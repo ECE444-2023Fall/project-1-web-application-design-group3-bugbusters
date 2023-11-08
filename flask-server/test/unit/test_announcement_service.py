@@ -36,13 +36,15 @@ def test_valid_create_announcement(test_client):
     # parse the JSON response
     data = json.loads(response.data)
 
-    # Check if the description key in the JSON response matches the expected value
+    # check if the description key in the JSON response matches the expected value
     assert data.get('description') == description
 
-    # Delete user profile
-    docs = db_client.announcements_collection.where('description', '==', description).limit(1).stream()
-    for doc in docs:
-        doc.delete()
+    # get doc id
+    id = data.get('id')
+    assert id is not None
 
-    # Check that user profile was deleted
-    assert not db_client.announcements_collection.where('description', '==', description).get()
+    # delete user profile
+    db_client.announcements_collection.document(id).delete()
+
+    # check that user profile was deleted
+    assert not db_client.announcements_collection.document(id).get().exists

@@ -26,6 +26,10 @@ def _announcement_service():
         # create new announcement with timestamp
         data = request.json
 
+        # create new doc ref and add doc id to data
+        announcement_ref = announcements_ref.document()
+        data['id'] = announcement_ref.id
+
         # check that all required fields exist and no extra fields exist
         try:
             announcement = Announcement.from_json(data)
@@ -33,10 +37,9 @@ def _announcement_service():
         except (TypeError, ParserError) as error:
             abort(BadRequest.code)
 
-        # create new announcement
-        update_time, announcement_ref = announcements_ref.add(announcement_data)
         # set creation timestamp
-        announcement_ref.update({"timestamp": firestore.SERVER_TIMESTAMP})
+        data['timestamp'] = firestore.SERVER_TIMESTAMP
+        announcement_ref.set(data)
         announcement_data = announcement_ref.get().to_dict()
 
         return announcement_data, 201

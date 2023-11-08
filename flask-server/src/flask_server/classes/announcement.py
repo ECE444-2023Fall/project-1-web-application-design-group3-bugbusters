@@ -12,14 +12,16 @@ def _verify_timestamp(timestamp):
 
 ANNOUNCEMENT_FIELDS = DataField([
     ClassField("description"),
+    ClassField("id"),
     ClassField("timestamp", factory_func=_verify_timestamp),
 ])
 
 
 class Announcement:
     """Announcement class"""
-    def __init__(self, description, timestamp=None):
+    def __init__(self, description, id, timestamp=None):
         self.description = description
+        self.id = id
         self.timestamp = timestamp
 
     @classmethod

@@ -4,12 +4,15 @@ import pytest
 from flask_server.classes.announcement import Announcement, ANNOUNCEMENT_FIELDS
 
 
-test_announcement_json = {'description': 'This is a test announcement!', 'timestamp': '20220509T000000Z'}
+test_announcement_json = {'description': 'This is a test announcement!', 'id': 'UNgBPV6Xp5sZqqNcWHZ7',
+                          'timestamp': '20220509T000000Z'}
 
 @pytest.mark.parametrize('input_json, expectation',
                          [(test_announcement_json, does_not_raise()),
                           # do not supply required key
                           ({k: v for k, v in test_announcement_json.items() if k != 'description'}, pytest.raises(TypeError)),
+                          # do not supply required key
+                          ({k: v for k, v in test_announcement_json.items() if k != 'id'}, pytest.raises(TypeError)),
                           # do not supply optional key
                           ({k: v for k, v in test_announcement_json.items() if k != 'timestamp'}, does_not_raise()),
                           # timestamp is missing Z
