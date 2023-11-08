@@ -4,6 +4,11 @@ import pytest
 import json
 
 
+description = 'This is a test announcement!'
+updated_description = 'This is an updated announcement'
+test_announcement_json = {'description': updated_description}
+query = {'id': '30x68LnKICDyaQMnZgzT'}
+
 # Pytest fixture
 @pytest.fixture
 def test_client():
@@ -24,9 +29,6 @@ def test_get_announcements(test_client):
 
 
 def test_valid_create_announcement(test_client):
-    description = 'This is a test announcement!'
-    test_announcement_json = {'description': description}
-
     # call /announcement-service endpoint with test announcement
     response = test_client.post('/announcement-service', json=test_announcement_json)
 
@@ -48,3 +50,21 @@ def test_valid_create_announcement(test_client):
 
     # check that user profile was deleted
     assert not db_client.announcements_collection.document(id).get().exists
+
+
+@pytest.mark.parametrize('input_json, query_string, expected_code',
+                         [(test_announcement_json, query, 204),
+                          (test_announcement_json, {}, 400),
+                          ({}, query, 400),
+                          (test_announcement_json, {'id': '123'}, 404)])
+def test_valid_edit_announcement(test_client, input_json, query_string, expected_code):
+    # call /announcement-service endpoint with PUT request to edit
+    response = test_client.put('/announcement-service', json=input_json,
+                               query_string=query_string)
+
+    # ensure the response status code is 204 (announcement edited created)
+    assert response.status_code == expected_code
+
+    # reset description if edit was successful
+    if response.status_code == 204:
+        db_client.announcements_collection.document(query_string['id']).update({'description': description})
