@@ -1,6 +1,7 @@
 from flask import Blueprint, abort, request, jsonify
 from flask_server.global_config import db_client
 from flask_server.classes.event import Event
+from google.cloud import firestore
 import uuid
 
 event_service = Blueprint('event_service', __name__, template_folder='templates',
@@ -18,7 +19,7 @@ def getEvent(event_id):
         print(f"No event found with ID: {event_id}")
         abort(404, None)
 
-    return jsonify(event_data), 200
+    return event_data, 200
 
 @event_service.route('/')
 def getAllEvents():
@@ -29,8 +30,10 @@ def getAllEvents():
 
     # Get the data of each event document
     event_data_list = [event_doc.to_dict() for event_doc in event_ref.stream()]
+    for event_data in event_data_list:
+        event_data['_event_expiry_time'] = event_data['_event_expiry_time'].isoformat()
 
-    return jsonify(event_data_list), 200
+    return event_data_list, 200
 
 @event_service.route('/create-event', methods=['POST'])
 def createEvent():
@@ -47,16 +50,17 @@ def createEvent():
     try:
         event_obj = Event.from_json(data)
     except KeyError as key_error:
-        return jsonify({'message': 'Error, bad input!'}), 400
+        return {'message': 'Error, bad input!'}, 400
 
     # Retrieve the json back from our obj
     event_data = event_obj.to_json()
+    event_data['TIMESTAMP'] = firestore.SERVER_TIMESTAMP
 
     # Add the event data to the Firestore "Events" collection
     event_ref = db_client.events_collection.document(event_id)
     event_ref.set(event_data)
 
-    return jsonify({'message': 'Event created successfully!', 'event_id': event_id}), 201
+    return {'message': 'Event created successfully!', 'event_id': event_id}, 201
 
 @event_service.route('/edit-event/<event_id>', methods=['PUT'])
 def editEvent(event_id):
@@ -67,7 +71,7 @@ def editEvent(event_id):
     try:
         event_obj = Event.from_json(data)
     except KeyError as key_error:
-        return jsonify({'message': 'Error, bad input!'}), 400
+        return {'message': 'Error, bad input!'}, 400
 
     # Retrieve the json back from our obj
     event_data = event_obj.to_json()
@@ -76,4 +80,4 @@ def editEvent(event_id):
     event_ref = db_client.events_collection.document(event_id)
     event_ref.set(event_data)
 
-    return jsonify({'message': 'Event edited successfully!', 'event_id': event_id}), 200
+    return {'message': 'Event edited successfully!', 'event_id': event_id}, 200
