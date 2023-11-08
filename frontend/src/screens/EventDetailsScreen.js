@@ -13,6 +13,7 @@ import {
   MaterialIcons,
   MaterialCommunityIcons,
   AntDesign,
+  FontAwesome,
 } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 import ProfilePicture from "../components/ProfilePicture";
@@ -39,6 +40,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
 
   useEffect(() => {
     retrieveEvent(event_id);
+    // TODO: retrieve user profile
   }, [event_id]);
 
   const [isOwner, setOwner] = useState(
@@ -47,19 +49,38 @@ const EventDetailsScreen = function ({ route, navigation }) {
       userProfileRedux?.uid == currentEvent?._creator_id,
   );
   const [rsvpPopup, setRsvpPopup] = useState(false);
-  const [rsvped, setRsvped] = useState(false); // TODO: If user is logged in, logic should be to check if user email is in the rsvp list
+  const [rsvped, setRsvped] = useState(
+    currentEvent?._rsvp_email_list?.includes(userProfileRedux?.email),
+  );
+  const [rsvpInfoSent, setRsvpInfoSent] = useState(currentEvent?._rsvp_sent);
   const [rsvpTextInput, setRsvpTextInput] = useState("");
+  const [emailNotValid, setEmailNotValid] = useState(false);
+
+  const validEmails = ["mail.utoronto.ca", "utoronto.ca"];
+
+  const endsWithAny = (string, suffixes) => {
+    return suffixes.some((suffix) => {
+      return string.endsWith(suffix);
+    });
+  };
 
   async function rsvp(event_id, email) {
     const response = await api.rsvp({ event_id, email });
+    // TODO: consider the case when already rsvped (response 409)
     if (response.result == "SUCCESSFUL") {
       setRsvped(true);
+      setRsvpTextInput("");
+    } else {
+      console.log("Could not rsvp");
     }
   }
 
   async function sendRsvp(event_id) {
     const response = await api.sendRsvp(event_id);
-    if (response.result == "ERROR") {
+    // TODO: consider case when already sent (response 409)
+    if (response.result == "SUCCESSFUL") {
+      setRsvpInfoSent(true);
+    } else {
       console.error("Couldn't send rsvp info");
     }
   }
@@ -103,30 +124,22 @@ const EventDetailsScreen = function ({ route, navigation }) {
               : "https://picsum.photos/200",
           }}
         />
-        {isOwner ? (
-          <TouchableOpacity
-            onPress={() => {
-              // send rsvp info to attendees
-              sendRsvp(currentEvent?._event_id);
-              setRsvpPopup(true);
-            }}
-          >
+        <TouchableOpacity
+          onPress={() => {
+            setRsvpPopup(true);
+          }}
+        >
+          {isOwner ? (
             <MaterialCommunityIcons
               name="email-outline"
               size={34}
               color={contrastColor}
             />
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity
-            onPress={() => {
-              // rsvp to event
-              setRsvpPopup(true);
-            }}
-          >
+          ) : (
             <AntDesign name="adduser" color={contrastColor} size={30} />
-          </TouchableOpacity>
-        )}
+          )}
+        </TouchableOpacity>
+
         <TouchableOpacity /* Add reporting functionality */>
           <MaterialIcons name="report" size={40} color={contrastColor} />
         </TouchableOpacity>
@@ -174,17 +187,61 @@ const EventDetailsScreen = function ({ route, navigation }) {
         </View>
       </View>
 
+      {/* RSVP pop up */}
       <PopUp visible={rsvpPopup} setVisible={setRsvpPopup}>
         {isOwner ? (
-          <Text>Render rsvp info here</Text>
+          // Owner of displayed event
+          rsvpInfoSent ? (
+            <Text style={styles.textStyle}>RSVP information sent!</Text>
+          ) : (
+            <View style={{ alignItems: "center" }}>
+              <Text style={styles.titleStyle}>Send RSVP Info?</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  sendRsvp();
+                }}
+                style={styles.sendButtonStyle}
+              >
+                <FontAwesome name="send" size={30} color={primaryColor} />
+              </TouchableOpacity>
+            </View>
+          )
+        ) : rsvped ? (
+          <Text style={styles.textStyle}>RSVP sent!</Text>
         ) : (
-          <View>
-            <Text>Render event registry status here</Text>
-            <TextInput onChangeText={setRsvpTextInput} />
-            <TouchableOpacity
-              onPress={() => rsvp(currentEvent?._event_id, rsvpTextInput)}
+          <View style={{ alignItems: "center" }}>
+            <Text style={styles.titleStyle}>RSVP</Text>
+            <TextInput
+              onChangeText={setRsvpTextInput}
+              placeholder="Enter your email..."
+              style={styles.textInputStyle}
+              placeholderTextColor="white"
+              selectTextOnFocus={true}
+              autoCorrect={false}
+              value={rsvpTextInput}
+              returnKeyType="done"
+              clearButtonMode="while-editing"
+            />
+            <Text
+              style={{
+                ...styles.errorTextStyle,
+                display: emailNotValid ? null : "none",
+              }}
             >
-              <Text>Send</Text>
+              Input is not a valid email address
+            </Text>
+            <TouchableOpacity
+              onPress={() => {
+                if (!endsWithAny(rsvpTextInput, validEmails)) {
+                  setEmailNotValid(true);
+                } else {
+                  setEmailNotValid(false);
+                  rsvp(currentEvent?._event_id, rsvpTextInput);
+                }
+              }}
+              style={styles.sendButtonStyle}
+            >
+              <FontAwesome name="send" size={30} color={primaryColor} />
             </TouchableOpacity>
           </View>
         )}
@@ -205,8 +262,33 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
   },
   eventInfo: {
-    paddingTop: 20,
-    paddingHorizontal: 20,
+    paddingTop: 36,
+    paddingHorizontal: 36,
+  },
+  titleStyle: {
+    fontWeight: "bold",
+    fontSize: 22,
+  },
+  textInputStyle: {
+    backgroundColor: "#D9D9D9",
+    fontSize: 16,
+    width: 260,
+    paddingLeft: 10,
+    paddingVertical: 4,
+    borderRadius: 14,
+    marginTop: 18,
+  },
+  sendButtonStyle: {
+    marginTop: 20,
+    paddingHorizontal: 60,
+  },
+  textStyle: {
+    fontSize: 16,
+  },
+  errorTextStyle: {
+    marginTop: 4,
+    fontSize: 12,
+    color: "red",
   },
 });
 

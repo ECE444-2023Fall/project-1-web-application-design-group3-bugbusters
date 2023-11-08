@@ -10,5 +10,8 @@
     "_profile_image": "https://picsum.photos/200",
     "_image_gallery": ["https://picsum.photos/200", "https://picsum.photos/200"]
   },
-  "_creator_id": "rgLV0SQuAa0QPAXH9wl7"
+  "_creator_id": "rgLV0SQuAa0QPAXH9wl7",
+  "_event_expiry_time": "",
+  "_rsvp_email_list": ["str", "str"],
+  "_rsvp_sent": true
 }
