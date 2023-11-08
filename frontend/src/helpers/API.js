@@ -31,9 +31,14 @@ export class Api {
 
     return result;
   }
+  s;
 
-  async getAllEvents(data = null) {
-    return this.makeRequest("event-service/", data, "GET");
+  async getAllEvents() {
+    return this.makeRequest("event-service/", null, "GET");
+  }
+
+  async getEvent(id) {
+    return this.makeRequest(`event-service/${id}`, null, "GET");
   }
 
   async getUserProfile(uid) {
