@@ -30,8 +30,6 @@ def getAllEvents():
 
     # Get the data of each event document
     event_data_list = [event_doc.to_dict() for event_doc in event_ref.stream()]
-    for event_data in event_data_list:
-        event_data['_event_expiry_time'] = event_data['_event_expiry_time'].isoformat()
 
     return event_data_list, 200
 
