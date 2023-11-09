@@ -95,3 +95,39 @@ def test_edit_event(test_client):
     response = test_client.put('/event-service/edit-event/fc48bf4d-6445-47ec-bbb6-67cc29397295', json=data)
     
     return
+
+def test_event_rsvp(test_client):
+    # required_keys = Event.required_keys
+    # data = {key: "TEST" for key in required_keys}
+    # data['_event_start_time'] = "2023-11-07T14:00:00-05:00"
+    # data['_event_end_time'] = "2023-11-08T14:00:00-05:00"
+    data = {}
+
+    event_id = 'fc48bf4d-6445-47ec-bbb6-67cc29397295'
+    email = 'some_email@mail.utoronto.ca'
+    data["_event_id"] = event_id
+    data["_email"] = email
+    
+    response = test_client.post('/event-service/edit-event/rsvp', json=data)
+
+    assert response.status_code == 200
+
+    modifiedEventDict = db_client.events_collection.document(event_id).get().to_dict()
+
+    assert modifiedEventDict['_rsvp_email_list'].contains(email)
+
+    # modifiedEventObj = Event.from_json(modifiedEventDict)
+
+    # modifiedEventObj._rsvp_email_list = []
+
+    # modifiedEventObj
+
+    modifiedEventDict['_rsvp_email_list'] = []
+
+    response = test_client.put('/event-service/edit-event/' + event_id, json=modifiedEventDict)
+
+    assert response == 200
+
+
+
+
