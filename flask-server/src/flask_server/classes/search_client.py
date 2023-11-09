@@ -6,6 +6,17 @@ class AlgoliaSearchClient:
     def __init__(self, app_id, api_key, index_name):
         self.client = SearchClient.create(app_id, api_key)
         self.index = self.client.init_index(index_name)
+        self.fields = {
+        "_event_title": "event_title",
+        "_description": "description",
+        "_location": "location",
+        "_event_start_time": "event_start_time",
+        "_event_end_time": "event_end_time",
+        "_tags": "tags",
+        "_header_image": "header_image_URL",
+        "_friendly_creator_name": "friendly_creator_name",
+        "_reported": "reported"
+    }
 
     def add_to_index(self, event_id, data):
         """
@@ -64,45 +75,15 @@ class AlgoliaSearchClient:
         """
         Partially update an object in the index.
         """
-        content = {}
-        content["objectID"] = event_id
-
-        event_title = data.get("_event_title", None)
-        if event_title:
-            content["event_title"] = event_title
-
-        description = data.get("_description", None)
-        if description:
-            content["description"] = description
-
-        location = data.get("_location", None)
-        if location:
-            content["location"] = location
-
-        start_time = data.get("_event_start_time", None)
-        if start_time:
-            content["event_start_time"] = start_time
-
-        end_time = data.get("_event_end_time", None)
-        if end_time:
-            content["event_end_time"] = end_time
-
-        tags = data.get("_tags", None)
-        if tags:
-            content["_tags"] = tags
-
-        header_image_url = data.get("_header_image", None)
-        if header_image_url:
-            content["header_image_URL"] = header_image_url
-
-        friendly_creator_name = data.get("_friendly_creator_name", None)
-        if friendly_creator_name:
-            content["friendly_creator_name"] = friendly_creator_name
-
-        reported = data.get("_reported", None)
-        if reported != None:
-            content["reported"] = reported
-
+        content = {"objectID": event_id}
+        
+        # Iterate over the fields and update content if data is present
+        for data_key, content_key in self.fields.items():
+            value = data.get(data_key)
+            if value is not None:  # This ensures that only non-None values are added
+                content[content_key] = value
+        
+        # Send the partial update to the index
         self.index.partial_update_object(content)
 
     def delete_from_index(self, event_id):
