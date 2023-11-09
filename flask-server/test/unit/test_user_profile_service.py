@@ -8,7 +8,6 @@ import json
 # Pytest fixture
 @pytest.fixture
 def test_client():
-    # Here event_service is the flask app itself, imported from event_service.py
     app = create_app()
     app.config["TESTING"] = True
     client = app.test_client()
