@@ -76,6 +76,9 @@ def editEvent(event_id):
 
     data['_event_id'] = event_id
 
+    # edit event in search index
+    search_client.update_index(data['_event_id'], data)
+
     try:
         event_obj = Event.from_json(data)
     except KeyError as key_error:
