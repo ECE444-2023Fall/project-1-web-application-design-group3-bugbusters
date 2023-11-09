@@ -6,10 +6,14 @@ from flask_server.services.event_service import event_service
 from flask_server.services.search_service import search_service
 from flask_server.services.user_service import user_service
 from flask_server.services.reporting_service import report_service
+from flask_server.services.announcement_service import announcement_service
+from flask_server.utilties.json import CustomJSONProvider
 
 def create_app(test_config=None):
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
+    # register custom JSONEncoder
+    app.json = CustomJSONProvider(app)
     CORS(app)  # TODO: setup origins=[<origin>, ...] for safety
     app.config.from_mapping(
         SECRET_KEY='dev',
@@ -44,5 +48,8 @@ def create_app(test_config=None):
 
     # Report service
     app.register_blueprint(report_service)
+
+    # Register announcement service
+    app.register_blueprint(announcement_service)
 
     return app
