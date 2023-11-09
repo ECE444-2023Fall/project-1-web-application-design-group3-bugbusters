@@ -19,7 +19,7 @@ def test_client():
 # Lab 5 - Ben Goel Unit Test 
 def test_valid_get_event(test_client):
     # call /event-service/<event_id> endpoint with test event ID
-    response = test_client.get("/event-service/15f226d1-c413-4ff0-9a86-d9dc23d09dc8")
+    response = test_client.get("/event-service/761bb946-1445-4f61-a1fd-d61411e0a336")
     
     # ensure the response status code is 200 (OK)
     assert response.status_code == 200
@@ -28,7 +28,7 @@ def test_valid_get_event(test_client):
     data = json.loads(response.data)
 
     # Check if the 'event_id' key in the JSON response matches the expected value
-    assert data.get('_event_id') == "15f226d1-c413-4ff0-9a86-d9dc23d09dc8"
+    assert data.get('_event_id') == "761bb946-1445-4f61-a1fd-d61411e0a336"
 
 # Lab 5 - Ata Unit Test 
 def test_invalid_get_event(test_client):
