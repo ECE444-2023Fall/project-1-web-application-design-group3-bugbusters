@@ -5,6 +5,7 @@ from flask_cors import CORS
 from flask_server.services.event_service import event_service
 from flask_server.services.search_service import search_service
 from flask_server.services.user_service import user_service
+from flask_server.services.reporting_service import report_service
 
 def create_app(test_config=None):
     # create and configure the app
@@ -40,5 +41,8 @@ def create_app(test_config=None):
 
     # Register user service
     app.register_blueprint(user_service)
+
+    # Report service
+    app.register_blueprint(report_service)
 
     return app
