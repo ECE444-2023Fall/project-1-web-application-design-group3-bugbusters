@@ -116,6 +116,7 @@ def editEvent(event_id):
 
     return {'message': 'Event editing failed!', 'event_id': event_id}, 400
 
+
 @event_service.route('/rsvp', methods=['POST'])
 def rsvpSignup():
     data = request.json
@@ -131,6 +132,8 @@ def rsvpSignup():
     if event_data is None:
        return jsonify({'message': 'Error, no event!'}), 400
 
+    print("RSVP SING UP")
+    print(event_data)
     event_obj = Event.from_json(event_data)
 
     if email in event_obj._rsvp_email_list:
@@ -159,6 +162,8 @@ def rsvpSend(event_id):
        return jsonify({'message': 'Error, no event!'}), 400
 
     event_obj = Event.from_json(event_data)
+
+    print(event_obj._event_expiry_time)
 
     # Check that an RSVP email has not been sent out already
     if event_obj._rsvp_sent is True:
