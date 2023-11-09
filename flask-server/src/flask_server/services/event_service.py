@@ -1,6 +1,8 @@
 from flask import Blueprint, abort, request, jsonify
 from flask_server.global_config import db_client
 from flask_server.classes.event import Event
+from flask_server.global_config import search_client
+from flask_server.services.user_service import getUserProfile
 from google.cloud import firestore
 import uuid
 
@@ -45,6 +47,12 @@ def createEvent():
     # Insert the generated event_id into the input json / data
     data['_event_id'] = event_id
 
+    # Fetch friendly creator name and add the object to the search index
+    friendly_name = getUserProfile(data['_creator_id'])[0]['display_name']
+    search_data = data.copy()
+    search_data['_friendly_creator_name'] = friendly_name
+    search_client.add_to_index(search_data['_event_id'], search_data)
+
     try:
         event_obj = Event.from_json(data)
     except KeyError as key_error:
@@ -65,6 +73,9 @@ def editEvent(event_id):
     data = request.json
 
     data['_event_id'] = event_id
+
+    # edit event in search index
+    search_client.update_index(data['_event_id'], data)
 
     try:
         event_obj = Event.from_json(data)
