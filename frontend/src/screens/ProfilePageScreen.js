@@ -12,13 +12,13 @@ import { Ionicons, Octicons } from "@expo/vector-icons";
 import HeaderBar from "../components/HeaderBar";
 import EventCard from "../components/EventCard";
 import PopUp from "../components/PopUp";
+import ProfileList from "../components/ProfileList";
 import { getAuth, signOut } from "firebase/auth";
 import { useSelector } from "react-redux";
 import api from "../helpers/API";
 
 const ProfilePageScreen = function ({ navigation, userProfile }) {
   const [event_data, setEventData] = useState([]);
-  const [refreshing, setRefreshing] = useState(false);
   const [menuPopup, setMenuPopup] = useState(false);
   const auth = getAuth();
 
@@ -48,37 +48,23 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
       });
   };
 
-  const Item = ({ event }) => {
+  const Item = ({ item }) => {
     return (
       <TouchableOpacity
         onPress={() =>
           navigation.navigate("Event Details", {
-            event_id: event._event_id,
+            event_id: item._event_id,
           })
         }
       >
         <EventCard
-          title={event._event_title}
-          owner={event._creator_id}
-          image={event._images._header_image}
+          title={item._event_title}
+          owner={item._creator_id}
+          image={item._images._header_image}
         />
       </TouchableOpacity>
     );
   };
-
-  const EmptyItem = () => (
-    <View style={styles.list_item_container}>
-      <TouchableOpacity style={styles.button}>
-        <Text style={styles.list_item_text}>No events</Text>
-      </TouchableOpacity>
-    </View>
-  );
-
-  const ListHeaderComponent = ({ item_types }) => (
-    <View style={styles.list_header_component_container}>
-      <Text style={styles.list_header_component_text}>{item_types}</Text>
-    </View>
-  );
 
   return (
     <KeyboardAvoidingView style={styles.container}>
@@ -119,26 +105,12 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
           {userProfile?.display_name}
         </Text>
       </View>
-      {/* EventCard list */}
-      <View style={{ width: "100%", flex: 1 }}>
-        <FlatList
-          data={event_data}
-          renderItem={({ item }) => <Item event={item} />}
-          keyExtractor={(item) => item._event_id}
-          onRefresh={() => {
-            // simulate fetching more events
-            setRefreshing(true);
-            setTimeout(() => {
-              // call getEvent(event_id) here
-              setRefreshing(false);
-            }, 2000);
-          }}
-          refreshing={refreshing}
-          ListHeaderComponent={<ListHeaderComponent item_types={"Events"} />}
-          ListEmptyComponent={<EmptyItem />}
-          stickyHeaderIndices={[0]}
-        />
-      </View>
+      {/* Profile list */}
+      <ProfileList
+        data={event_data}
+        RenderItem={Item}
+        keyExtractor={(item) => item._event_id}
+      />
     </KeyboardAvoidingView>
   );
 };
@@ -171,29 +143,6 @@ const styles = StyleSheet.create({
   },
   display_name_text: {
     fontWeight: 700,
-    fontSize: 24,
-  },
-  list_header_component_container: {
-    backgroundColor: "white",
-    paddingLeft: 20,
-    paddingVertical: 8,
-    borderTopColor: "#1E3765",
-    borderBottomColor: "#1E3765",
-    borderTopWidth: 2,
-    borderBottomWidth: 2,
-  },
-  list_header_component_text: {
-    fontSize: 20,
-    fontWeight: "bold",
-  },
-  list_item_container: {
-    marginTop: 42,
-    marginHorizontal: 32,
-    backgroundColor: "white",
-    alignItems: "center",
-    borderRadius: 24,
-  },
-  list_item_text: {
     fontSize: 24,
   },
   button: {
