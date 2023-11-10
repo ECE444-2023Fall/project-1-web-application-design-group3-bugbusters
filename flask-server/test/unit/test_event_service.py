@@ -120,7 +120,7 @@ def test_event_rsvp(test_client):
     data = {}
     data["_event_id"] = event_id
 
-    response = test_client.post('/event-service/rsvp-send', json=data)
+    response = test_client.put('/event-service/rsvp-send', json=data)
     assert response.status_code == 200
 
     # Find this event document and ensure that the email has been signed up

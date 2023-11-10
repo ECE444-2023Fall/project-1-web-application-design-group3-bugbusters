@@ -119,8 +119,8 @@ def editEvent(event_id):
 def rsvpSignup():
     data = request.json
 
-    event_id = data["_event_id"]
-    email = data["_email"]
+    event_id = data.get("_event_id")
+    email = data.get("_email")
 
     if event_id is None or email is None:
         return jsonify({'message': 'Error, no email or event id provided!'}), 400
@@ -143,11 +143,11 @@ def rsvpSignup():
     return jsonify({'message': 'RSVP successful!'}), 200
 
 
-@event_service.route('/rsvp-send', methods=['POST'])
+@event_service.route('/rsvp-send', methods=['PUT'])
 def rsvpSend():
     data = request.json
 
-    event_id = data["_event_id"]
+    event_id = data.get("_event_id")
 
     if event_id is None:
         return jsonify({'message': 'Error, bad event id!'}), 400
