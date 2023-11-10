@@ -7,17 +7,11 @@ import AuthPageScreen from "../screens/AuthPageScreen";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import ProfilePageScreen from "../screens/ProfilePageScreen";
 import api from "../helpers/API";
-import { useDispatch, useSelector } from "react-redux";
 import { setUserProfileData, reset } from "../store/Action";
 
 const Tab = createBottomTabNavigator();
 
 export default function BottomTab({ navigation }) {
-  const dispatchRedux = useDispatch();
-  const primaryColor = useSelector((state) => state.main.primaryColor);
-  const secondaryColor = useSelector((state) => state.main.secondaryColor);
-  const contrastColor = useSelector((state) => state.main.contrastColor);
-
   const auth = getAuth();
   // redux for user profile data
   const dispatchRedux = useDispatch();
@@ -57,7 +51,7 @@ export default function BottomTab({ navigation }) {
           tabBarInactiveTintColor: color,
           tabBarStyle: {
             position: "absolute",
-            paddingTop: 8,
+            justifyContent: "center",
             backgroundColor: primaryColor,
           },
           headerShown: false,
