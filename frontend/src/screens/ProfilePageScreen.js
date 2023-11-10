@@ -10,7 +10,7 @@ import HeaderBar from "../components/HeaderBar";
 import { getAuth, signOut } from "firebase/auth";
 import { useSelector } from "react-redux";
 
-const ProfilePageScreen = function () {
+const ProfilePageScreen = function ({ navigation }) {
   const [text, setText] = useState("");
   // read from redux store
   const userProfileSelector = useSelector((state) => {
@@ -23,6 +23,7 @@ const ProfilePageScreen = function () {
     signOut(auth)
       .then(() => {
         // Sign-out successful.
+        navigation.navigate("Landing Page");
       })
       .catch((error) => {
         // An error happened.
