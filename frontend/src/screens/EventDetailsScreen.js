@@ -31,23 +31,35 @@ const EventDetailsScreen = function ({ route, navigation }) {
   const userProfileRedux = useSelector((state) => state.userProfileData);
 
   const [currentEvent, setCurrentEvent] = useState({});
-  async function retrieveEvent(id) {
-    const response = await api.getEvent(id);
-    if (response.result == "SUCCESSFUL") {
-      setCurrentEvent(response.data);
-    }
-  }
-
-  useEffect(() => {
-    retrieveEvent(event_id);
-    // TODO: retrieve user profile
-  }, [event_id]);
-
+  const [currentEventUser, setCurrentEventUser] = useState({});
   const [isOwner, setOwner] = useState(
     userProfileRedux?.uid &&
       currentEvent?._creator_id &&
       userProfileRedux?.uid == currentEvent?._creator_id,
   );
+
+  useEffect(() => {
+    async function retrieveEvent(id) {
+      const response = await api.getEvent(id);
+      if (response.result == "SUCCESSFUL") {
+        setCurrentEvent(response.data);
+      }
+    }
+    async function retrieveEventUser(uid) {
+      const response = await api.getUserProfile(uid);
+      if (response.result == "SUCCESSFUL") {
+        setCurrentEventUser(response.data);
+      }
+    }
+    retrieveEvent(event_id);
+
+    if (isOwner) {
+      setCurrentEventUser(userProfileRedux);
+    } else {
+      retrieveEventUser(currentEvent?._creator_id);
+    }
+  }, [event_id]);
+
   const [rsvpPopup, setRsvpPopup] = useState(false);
   const [rsvped, setRsvped] = useState(
     currentEvent?._rsvp_email_list?.includes(userProfileRedux?.email),
@@ -97,7 +109,11 @@ const EventDetailsScreen = function ({ route, navigation }) {
   return (
     <View>
       <HeaderBar
-        title="Event Details Screen"
+        title={
+          currentEvent?._event_title
+            ? currentEvent?._event_title
+            : "Event Doesn't Have Title"
+        }
         childrenLeft={
           <TouchableOpacity
             style={styles.backButton}
@@ -159,8 +175,8 @@ const EventDetailsScreen = function ({ route, navigation }) {
         <View style={{ flexDirection: "row" }}>
           <Text style={{ fontWeight: "bold" }}>Creator: </Text>
           <Text>
-            {currentEvent?._creator_id
-              ? currentEvent?._creator_id
+            {currentEventUser
+              ? currentEventUser?.display_name
               : "No creator name"}
           </Text>
         </View>
@@ -226,6 +242,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
               style={styles.textInputStyle}
               placeholderTextColor="white"
               selectTextOnFocus={true}
+              autoFocus
               autoCorrect={false}
               value={rsvpTextInput}
               returnKeyType="done"

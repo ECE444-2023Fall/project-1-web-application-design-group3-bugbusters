@@ -121,6 +121,7 @@ const AuthPageScreen = function ({ navigation }) {
           api.getUserProfile(user.uid).then((userProfile) => {
             dispatchRedux(setUserProfileData(userProfile));
           });
+          navigation.navigate("Landing Page");
         }
       })
       .catch((error) => alert(error.message));
