@@ -114,6 +114,7 @@ const AuthPageScreen = function ({ navigation }) {
             });
         } else {
           // user is verified
+          navigation.navigate("Landing Page");
         }
       })
       .catch((error) => alert(error.message));

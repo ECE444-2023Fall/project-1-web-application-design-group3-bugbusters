@@ -18,7 +18,7 @@ export default function BottomTab({ navigation }) {
   const dispatchRedux = useDispatch();
   // read current user profile from redux store
   const userProfileSelector = useSelector((state) => {
-    return state.main.userData;
+    return state.main.userProfileData;
   });
   const primaryColor = useSelector((state) => state.main.primaryColor);
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
