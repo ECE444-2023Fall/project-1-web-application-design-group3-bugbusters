@@ -75,7 +75,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
         setRsvped(true);
         setRsvpTextInput("");
       } else {
-        console.log("Could not rsvp");
+        console.error("Could not rsvp");
       }
     }
   }
