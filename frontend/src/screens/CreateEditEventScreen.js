@@ -10,20 +10,6 @@ const CreateEditEventScreen = function ({ navigation }) {
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
   const contrastColor = useSelector((state) => state.main.contrastColor);
 
-  React.useEffect(() => {
-    const unsubscribe = navigation.addListener("tabPress", (e) => {
-      // Prevent default behavior
-      e.preventDefault();
-      navigation.navigate("Create/Edit Event");
-
-      // alert("Default behavior prevented");
-      // Do something manually
-      // ...
-    });
-
-    return unsubscribe;
-  }, [navigation]);
-
   return (
     <View>
       <HeaderBar

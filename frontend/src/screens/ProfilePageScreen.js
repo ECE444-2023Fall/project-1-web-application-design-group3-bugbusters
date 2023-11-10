@@ -14,7 +14,7 @@ const ProfilePageScreen = function () {
   const [text, setText] = useState("");
   // read from redux store
   const userProfileSelector = useSelector((state) => {
-    return state.main.userData;
+    return state.main.userProfileData;
   });
 
   const auth = getAuth();

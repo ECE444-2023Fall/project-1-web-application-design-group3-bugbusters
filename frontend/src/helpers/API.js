@@ -17,10 +17,6 @@ export class Api {
       method: method,
       url: `${this.url}/${endpoint}`,
       data: data,
-      // headers: {
-      //   Authorization: `Bearer ${userToken}`,
-      //   tenantId: this.tenantId,
-      // },
     }).catch((err) => ({ err }));
 
     if (!response || response.err) {

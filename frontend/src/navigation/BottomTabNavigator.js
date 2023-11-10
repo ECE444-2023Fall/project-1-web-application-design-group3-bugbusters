@@ -18,17 +18,6 @@ export default function BottomTab({ navigation }) {
   const contrastColor = useSelector((state) => state.main.contrastColor);
 
   const auth = getAuth();
-  useEffect(() => {
-    // const unsubscribe =
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // user is signed in
-      } else {
-        // user is signed out
-      }
-    });
-    // return unsubscribe;
-  }, []);
 
   return (
     <Tab.Navigator
