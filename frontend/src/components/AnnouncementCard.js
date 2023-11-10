@@ -61,19 +61,25 @@ const AnnouncementCard = function ({ announcement_data, deleter }) {
             <TouchableOpacity
               style={styles.done_editing_button}
               onPress={() => {
-                api
-                  .editAnnouncement(editText, announcement_data?.id)
-                  .then((response) => {
-                    if (response.result == "SUCCESSFUL") {
-                      setDescription(editText);
-                      setEditPopup(false);
-                    } else {
-                      // show UI that it didn't work
-                    }
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  });
+                // only edit description if text has changed
+                if (editText != description) {
+                  api
+                    .editAnnouncement(editText, announcement_data?.id)
+                    .then((response) => {
+                      if (response.result == "SUCCESSFUL") {
+                        setDescription(editText);
+                        setEditPopup(false);
+                      } else {
+                        // show UI that it didn't work
+                      }
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
+                } else {
+                  console.log("NO CHANGE");
+                  setEditPopup(false);
+                }
               }}
             >
               <Text style={styles.done_editing_text}>DONE</Text>
