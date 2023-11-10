@@ -140,12 +140,12 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
       </View>
       {/* Profile list */}
       <ProfileList
-        data={userProfile.is_admin ? announcement_data : event_data}
-        RenderItem={userProfile.is_admin ? AnnouncementItem : EventItem}
+        data={userProfile?.is_admin ? announcement_data : event_data}
+        RenderItem={userProfile?.is_admin ? AnnouncementItem : EventItem}
         keyExtractor={(item) =>
-          userProfile.is_admin ? item.id : item._event_id
+          userProfile?.is_admin ? item.id : item._event_id
         }
-        deleter={userProfile.is_admin ? deleteAnnouncementById : () => {}}
+        deleter={userProfile?.is_admin ? deleteAnnouncementById : () => {}}
       />
     </KeyboardAvoidingView>
   );

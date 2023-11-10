@@ -63,6 +63,14 @@ export class Api {
       query_params
     );
   }
+
+  editAnnouncement(description, id) {
+    data = { description: description };
+    query_params = {
+      id: id,
+    };
+    return this.makeRequest(`announcement-service`, data, "PUT", query_params);
+  }
 }
 
 const api = new Api("apiKey");

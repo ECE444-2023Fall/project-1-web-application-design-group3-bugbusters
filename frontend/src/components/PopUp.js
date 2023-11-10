@@ -18,7 +18,7 @@ const PopUp = function ({ children, visible, setVisible }) {
       animationType="fade"
       transparent={true}
     >
-      <TouchableWithoutFeedback onPress={() => setVisible(false)}>
+      <TouchableWithoutFeedback onPress={() => setVisible(true)}>
         <View style={styles.popUpBkgndStyle}>
           <View style={styles.popUpStyle}>{children ? children : null}</View>
         </View>
