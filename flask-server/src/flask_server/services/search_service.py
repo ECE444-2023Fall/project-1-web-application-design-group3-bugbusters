@@ -66,7 +66,5 @@ def delete_from_index():
     if not object_id:
         return jsonify({"error": "objectID query parameter is required"}), 400
 
-    print("made it here?")
     search_client.delete_from_index(object_id)
-    print("MAde it here")
     return jsonify({"message": "Deleted from index successfully, or was never in index to begin with."}), 200

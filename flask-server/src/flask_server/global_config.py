@@ -7,9 +7,9 @@ from flask_server.classes.database_client import DataBaseClient
 load_dotenv()
 
 # Instantiate the AlgoliaSearchClient
-search_client = AlgoliaSearchClient('GS4ISHV4RC', os.getenv('ALGOLIA_API_KEY'), testing=True)
+search_client = AlgoliaSearchClient('GS4ISHV4RC', os.getenv('ALGOLIA_API_KEY'))
 
 # Instantiate the DB
 # Authenticate credentials so we can access our firebase project
 json_path = "ece444bulletin-firebase-adminsdk.json"
-db_client = DataBaseClient(json_path, testing=True)
+db_client = DataBaseClient(json_path)
