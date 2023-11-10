@@ -3,9 +3,9 @@ from datetime import datetime
 
 class AlgoliaSearchClient:
     
-    def __init__(self, app_id, api_key, index_name):
+    def __init__(self, app_id, api_key, testing=False):
+        self._testing = testing
         self.client = SearchClient.create(app_id, api_key)
-        self.index = self.client.init_index(index_name)
         self.fields = {
         "_event_title": "event_title",
         "_description": "description",
@@ -17,7 +17,21 @@ class AlgoliaSearchClient:
         "_friendly_creator_name": "friendly_creator_name",
         "_reported": "reported"
     }
+        if self._testing == False:
+            self.index_name = 'ClubHubSearchIndex'
+        else:
+            self.index_name = 'test_ClubHubSearchIndex'
 
+        self.index = self.client.init_index(self.index_name)
+
+    def set_testing(self, is_testing):
+        if is_testing == True:
+            self.index_name = 'test_ClubHubSearchIndex'
+        else:
+            self.index_name = 'ClubHubSearchIndex'
+        self.index = self.client.init_index(self.index_name)
+
+    
     def add_to_index(self, event_id, data):
         """
         Add or replace an object in the index.
@@ -53,8 +67,8 @@ class AlgoliaSearchClient:
         return_result = {}
         return_result['results'] = []
         for result in search_result['hits']:
-            event_start_time = datetime.strptime(result['event_start_time'], "%Y-%m-%dT%H:%M:%S.%f").timestamp()
-            event_end_time = datetime.strptime(result['event_end_time'], "%Y-%m-%dT%H:%M:%S.%f").timestamp()
+            event_start_time = self.parse_search_datetime(result['event_start_time'])
+            event_end_time = self.parse_search_datetime(result['event_end_time'])
             if start_time > event_start_time or end_time < event_end_time:
                 continue
 
@@ -91,3 +105,12 @@ class AlgoliaSearchClient:
         Delete an object from the index by its objectID.
         """
         self.index.delete_object(event_id)
+
+    @staticmethod
+    def parse_search_datetime(datetime_str):
+        try:
+            # Try to parse with timezone information
+            return datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M:%S%z').timestamp()
+        except ValueError:
+            # If it fails, try to parse without timezone information
+            return datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M:%S.%f').timestamp()

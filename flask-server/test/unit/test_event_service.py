@@ -1,5 +1,6 @@
 from flask_server.classes.event import Event, EVENT_FIELDS
 from flask_server.global_config import db_client
+from flask_server.global_config import search_client
 from flask_server import create_app
 import random
 import pytest
@@ -13,6 +14,7 @@ def test_client():
     app.config["TESTING"] = True
     client = app.test_client()
     db_client._testing = True
+    search_client.set_testing(True)
     yield client
     db_client._testing = False
 
@@ -43,10 +45,6 @@ def test_get_all_events(test_client):
     event_size = len(list(db_client.events_collection.stream()))
     event_json_response = test_client.get('/event-service/')
     events = []
-    # print("response")
-    # print(event_json_response.status_code)
-    # print("data")
-    # print(json.loads(event_json_response.data))
 
     for event_json in json.loads(event_json_response.data):
         event = Event.from_json(event_json)
