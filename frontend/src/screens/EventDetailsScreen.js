@@ -229,6 +229,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
               style={styles.textInputStyle}
               placeholderTextColor="white"
               selectTextOnFocus={true}
+              autoFocus
               autoCorrect={false}
               value={rsvpTextInput}
               returnKeyType="done"
