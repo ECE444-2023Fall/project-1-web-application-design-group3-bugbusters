@@ -6,40 +6,31 @@ import LandingPageScreen from "../screens/LandingPageScreen";
 import AuthPageScreen from "../screens/AuthPageScreen";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import ProfilePageScreen from "../screens/ProfilePageScreen";
+import CreateEditEventScreen from "../screens/CreateEditEventScreen";
+import { reset, setUserProfileData } from "../store/Action";
 
 const Tab = createBottomTabNavigator();
 
-export default function BottomTab({navigation}) {
+export default function BottomTab({ navigation }) {
   const dispatchRedux = useDispatch();
   const primaryColor = useSelector((state) => state.main.primaryColor);
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
   const contrastColor = useSelector((state) => state.main.contrastColor);
 
   const auth = getAuth();
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // user is signed in
-        navigation.navigate("Landing Page");
-      } else {
-        // user is signed out
-        navigation.navigate("Landing Page");
-      }
-    });
-    return unsubscribe;
-  }, []);
-
 
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="Landing Page"
       screenOptions={(_, color, __) => {
         return {
+          tabBarActiveTintColor: contrastColor,
           tabBarActiveTintColor: contrastColor,
           tabBarInactiveTintColor: color,
           tabBarStyle: {
             position: "absolute",
             paddingTop: 8,
+            backgroundColor: primaryColor,
             backgroundColor: primaryColor,
           },
           headerShown: false,
@@ -57,7 +48,24 @@ export default function BottomTab({navigation}) {
             );
           },
           gestureEnabled: false,
-          headerBackground: "blue",
+        }}
+      />
+      <Tab.Screen
+        name="Create Edit Event"
+        component={CreateEditEventScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => {
+            return (
+              <MaterialIcons name="add-box" size={size + 10} color={color} />
+            );
+          },
+          gestureEnabled: false,
+        }}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            navigation.navigate("Create/Edit Event");
+          },
         }}
       />
       <Tab.Screen

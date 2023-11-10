@@ -121,6 +121,7 @@ const AuthPageScreen = function ({ navigation }) {
           api.getUserProfile(user.uid).then((userProfile) => {
             dispatchRedux(setUserProfileData(userProfile));
           });
+          navigation.navigate("Landing Page");
         }
       })
       .catch((error) => alert(error.message));
@@ -162,8 +163,8 @@ const AuthPageScreen = function ({ navigation }) {
       </KeyboardAvoidingView>
     </View>
   ) : (
-    <View>
-      <HeaderBar title="Sign Up" align="center"></HeaderBar>
+    <View style={{ flex: 1 }}>
+      <HeaderBar title="Sign Up" align="center" />
       <KeyboardAvoidingView style={styles.container} behavior="padding">
         <View style={styles.inputContainer}>
           <TextInput
