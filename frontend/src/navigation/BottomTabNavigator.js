@@ -36,12 +36,10 @@ export default function BottomTab({ navigation }) {
       screenOptions={(_, color, __) => {
         return {
           tabBarActiveTintColor: contrastColor,
-          tabBarActiveTintColor: contrastColor,
           tabBarInactiveTintColor: color,
           tabBarStyle: {
             position: "absolute",
             paddingTop: 8,
-            backgroundColor: primaryColor,
             backgroundColor: primaryColor,
           },
           headerShown: false,
