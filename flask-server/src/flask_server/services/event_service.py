@@ -202,29 +202,27 @@ Event Details:
     message = message.replace("[Event Venue]", event_obj._location)
 
     # Connect to the SMTP server (in this case, Gmail's SMTP server)
-    try:
-        with smtplib.SMTP('smtp.gmail.com', 587) as server:
-            server.ehlo()
-            server.starttls()
-            server.login(sender_email, sender_password)
+    with smtplib.SMTP('smtp.gmail.com', 587) as server:
+        server.ehlo()
+        server.starttls()
+        server.login(sender_email, sender_password)
 
-            for receiver_email in event_obj._rsvp_email_list:
+        for receiver_email in event_obj._rsvp_email_list:
 
-                # Create a message
-                msg = MIMEMultipart()
-                msg['From'] = sender_email
-                msg['To'] = receiver_email
-                msg['Subject'] = subject
+            # Create a message
+            msg = MIMEMultipart()
+            msg['From'] = sender_email
+            msg['To'] = receiver_email
+            msg['Subject'] = subject
 
-                msg.attach(MIMEText(message, 'plain'))
+            msg.attach(MIMEText(message, 'plain'))
 
-                # Send the email
-                text = msg.as_string()
-                server.sendmail(sender_email, receiver_email, text)
-            server.quit()
+            # Send the email
+            text = msg.as_string()
+            server.sendmail(sender_email, receiver_email, text)
+        server.quit()
 
-    except Exception:
-        return jsonify({'message': 'RSVP email could not send!'}), 400
+        # return jsonify({'message': 'RSVP email could not send!'}), 400
 
     event_obj._rsvp_sent = True
 
