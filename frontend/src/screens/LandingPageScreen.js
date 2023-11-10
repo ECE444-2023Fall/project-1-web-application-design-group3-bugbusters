@@ -92,6 +92,7 @@ const LandingPageScreen = function ({ navigation }) {
                 title={event?.event_title}
                 owner={event?.friendly_creator_name}
                 image={event?.header_image_URL}
+                id={event?.event_id}
               />
             </TouchableOpacity>
           );

@@ -39,6 +39,13 @@ const EventDetailsScreen = function ({ route, navigation }) {
     retrieveEvent(event_id);
   }, []);
 
+  const reportEvent = async () => {
+    const response = await api.report(event_id);
+    if (response.result == "SUCCESSFUL") {
+      // Event reported
+    }
+  };
+
   return (
     <View>
       <HeaderBar
@@ -83,7 +90,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
             <AntDesign name="adduser" color={contrastColor} size={30} />
           </TouchableOpacity>
         )}
-        <TouchableOpacity /* Add reporting functionality */>
+        <TouchableOpacity onPress={() => reportEvent()}>
           <MaterialIcons name="report" size={40} color={contrastColor} />
         </TouchableOpacity>
       </View>

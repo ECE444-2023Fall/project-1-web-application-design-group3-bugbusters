@@ -2,39 +2,34 @@ import React from "react";
 import { Text, StyleSheet, View, TouchableOpacity, Image } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useSelector, useDispatch } from "react-redux";
+import api from "../helpers/API";
 
-const EventCard = function ({ navigation, image, title, owner }) {
+const EventCard = function ({ navigation, image, title, owner, id }) {
   const dispatchRedux = useDispatch();
   const primaryColor = useSelector((state) => state.main.primaryColor);
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
   const contrastColor = useSelector((state) => state.main.contrastColor);
 
+  const reportEvent = async () => {
+    const response = await api.report(id);
+    if (response.result == "SUCCESSFUL") {
+      // Event reported
+    }
+  };
+
   return (
     <View style={styles.cardContainer}>
-      {/* <Image source={}/> */}
       <Image style={{ height: 140 }} source={{ uri: image }} />
-      {/* <View
-        style={{
-          backgroundColor: "grey",
-          height: 140,
-          justifyContent: "center",
-        }}
-      >
-        <Text
-          style={{
-            alignSelf: "center",
-          }}
-        >
-          Placeholder for image
-        </Text>
-      </View> */}
       <View style={styles.cardBar}>
         <View style={{ width: 50 }}></View>
         <View>
           <Text style={styles.eventTitle}>{title}</Text>
           <Text style={styles.eventOwner}>{owner}</Text>
         </View>
-        <TouchableOpacity style={styles.reportButton}>
+        <TouchableOpacity
+          style={styles.reportButton}
+          onPress={() => reportEvent()}
+        >
           <MaterialIcons name="report" size={40} color={primaryColor} />
         </TouchableOpacity>
       </View>

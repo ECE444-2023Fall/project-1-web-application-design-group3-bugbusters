@@ -52,6 +52,10 @@ export class Api {
   async search(data) {
     return this.makeRequest("search-service/search", data, "POST");
   }
+
+  async report(id) {
+    return this.makeRequest(`report-service/report/${id}`, null, "POST");
+  }
 }
 
 const api = new Api("apiKey");
