@@ -100,7 +100,11 @@ const EventDetailsScreen = function ({ route, navigation }) {
   return (
     <View>
       <HeaderBar
-        title="Event Details Screen"
+        title={
+          currentEvent?._event_title
+            ? currentEvent?._event_title
+            : "Event Doesn't Have Title"
+        }
         childrenLeft={
           <TouchableOpacity
             style={styles.backButton}
