@@ -9,6 +9,7 @@ import ProfilePageScreen from "../screens/ProfilePageScreen";
 import api from "../helpers/API";
 import CreateEditEventScreen from "../screens/CreateEditEventScreen";
 import { reset, setUserProfileData } from "../store/Action";
+import CreateAnnouncementScreen from "../screens/CreateAnnouncementScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -73,8 +74,13 @@ export default function BottomTab({ navigation }) {
         }}
       />
       <Tab.Screen
-        name="Create Edit Event"
-        component={CreateEditEventScreen}
+        name="Create Edit"
+        component={
+          userProfileSelector.data?.is_admin
+            ? // TODO: show CreateAnnouncementScreen
+              CreateAnnouncementScreen
+            : CreateEditEventScreen
+        }
         options={{
           tabBarIcon: ({ color, size }) => {
             return (
@@ -82,12 +88,6 @@ export default function BottomTab({ navigation }) {
             );
           },
           gestureEnabled: false,
-        }}
-        listeners={{
-          tabPress: (e) => {
-            e.preventDefault();
-            navigation.navigate("Create/Edit Event");
-          },
         }}
       />
       <Tab.Screen
