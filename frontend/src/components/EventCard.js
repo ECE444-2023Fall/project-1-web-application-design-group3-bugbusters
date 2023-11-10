@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Text, StyleSheet, View, TouchableOpacity, Image } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useSelector, useDispatch } from "react-redux";
@@ -9,39 +9,25 @@ const EventCard = function ({ navigation, image, title, owner }) {
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
   const contrastColor = useSelector((state) => state.main.contrastColor);
 
-  const [imageUrl, setImageUrl] = useState(image);
-
-  const PlaceHolderImage = () => (
-    <View
-      style={{
-        backgroundColor: "grey",
-        height: 140,
-        justifyContent: "center",
-      }}
-    >
-      <Text
-        style={{
-          alignSelf: "center",
-        }}
-      >
-        Placeholder for image
-      </Text>
-    </View>
-  );
-
   return (
     <View style={styles.cardContainer}>
-      {imageUrl ? (
-        <Image
-          style={{ height: 140, resizeMode: "contain" }}
-          source={imageUrl}
-          onError={(error) => {
-            setImageUrl(null);
+      {/* <Image source={}/> */}
+      <Image style={{ height: 140 }} source={{ uri: image }} />
+      {/* <View
+        style={{
+          backgroundColor: "grey",
+          height: 140,
+          justifyContent: "center",
+        }}
+      >
+        <Text
+          style={{
+            alignSelf: "center",
           }}
-        />
-      ) : (
-        PlaceHolderImage()
-      )}
+        >
+          Placeholder for image
+        </Text>
+      </View> */}
       <View style={styles.cardBar}>
         <View style={{ width: 50 }}></View>
         <View>

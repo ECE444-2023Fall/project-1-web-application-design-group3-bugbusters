@@ -1,6 +1,7 @@
 from flask_server.classes.event import Event, EVENT_FIELDS
 from flask_server.global_config import db_client
 from flask_server import create_app
+import random
 import pytest
 import json
 
@@ -18,7 +19,7 @@ def test_client():
 # Lab 5 - Ben Goel Unit Test 
 def test_valid_get_event(test_client):
     # call /event-service/<event_id> endpoint with test event ID
-    response = test_client.get("/event-service/79h6hq5oW7lVX8gPwuXM")
+    response = test_client.get("/event-service/761bb946-1445-4f61-a1fd-d61411e0a336")
     
     # ensure the response status code is 200 (OK)
     assert response.status_code == 200
@@ -27,7 +28,7 @@ def test_valid_get_event(test_client):
     data = json.loads(response.data)
 
     # Check if the 'event_id' key in the JSON response matches the expected value
-    assert data.get('_event_id') == "79h6hq5oW7lVX8gPwuXM"
+    assert data.get('_event_id') == "761bb946-1445-4f61-a1fd-d61411e0a336"
 
 # Lab 5 - Ata Unit Test 
 def test_invalid_get_event(test_client):
@@ -65,7 +66,32 @@ def test_get_all_events(test_client):
 def test_create_event(test_client):
     required_keys = Event.required_keys
     data = {key: "TEST" for key in required_keys}
+    data['_event_start_time'] = "2023-11-07T14:00:00-05:00"
+    data['_event_end_time'] = "2023-11-08T14:00:00-05:00"
     response = test_client.post('/event-service/create-event', json=data)
     assert response.status_code == 201
+    
+    return
+
+def test_edit_event(test_client):
+    # Create what the modified obj should look like
+    required_keys = Event.required_keys
+    data = {key: "TEST" for key in required_keys}
+    randomDescription = random.choice(["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"])
+    data['_event_start_time'] = "2023-11-07T14:00:00-05:00"
+    data['_event_end_time'] = "2023-11-08T14:00:00-05:00"
+    data['_description'] = randomDescription
+
+    # Modify the event object
+    response = test_client.put('/event-service/edit-event/fc48bf4d-6445-47ec-bbb6-67cc29397295', json=data)
+    
+    # Confirm the obj has been modified correctly
+    assert response.status_code == 200
+    modifiedEventObj = db_client.events_collection.document("fc48bf4d-6445-47ec-bbb6-67cc29397295").get().to_dict()
+    assert modifiedEventObj['_description'] == randomDescription
+
+    # Reset the description / obj
+    data['_description'] = "resetValue"
+    response = test_client.put('/event-service/edit-event/fc48bf4d-6445-47ec-bbb6-67cc29397295', json=data)
     
     return

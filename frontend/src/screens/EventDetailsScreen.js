@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Image, Text, StyleSheet, View, TouchableOpacity } from "react-native";
+import { Text, StyleSheet, View, TouchableOpacity, Image } from "react-native";
 import HeaderBar from "../components/HeaderBar";
 import {
   Ionicons,
@@ -20,24 +20,22 @@ const EventDetailsScreen = function ({ route, navigation }) {
   const contrastColor = useSelector((state) => state.main.contrastColor);
 
   // const currentEventRedux = useSelector((state) => state.currentEventData);
-  const userProfileRedux = useSelector((state) => state.main.userData);
+  const userProfileRedux = useSelector((state) => state.userProfileData);
 
   const [isOwner, setOwner] = useState(
-    userProfileRedux.id == currentEvent?._creator_id
+    userProfileRedux?.id == currentEvent?._creator_id
   );
-  const [imageUrl, setImageUrl] = useState();
-
   const [rsvpPopup, setRsvpPopup] = useState(false);
   const [currentEvent, setCurrentEvent] = useState({});
 
-  useEffect(() => {
-    async function retrieveEvent(id) {
-      const response = await api.getEvent(id);
-      if (response.result == "SUCCESSFUL") {
-        setCurrentEvent(response.data);
-        setImageUrl(response.data._images._header_image);
-      }
+  async function retrieveEvent(id) {
+    const response = await api.getEvent(id);
+    if (response.result == "SUCCESSFUL") {
+      setCurrentEvent(response.data);
     }
+  }
+
+  useEffect(() => {
     retrieveEvent(event_id);
   }, []);
 
@@ -57,29 +55,21 @@ const EventDetailsScreen = function ({ route, navigation }) {
       />
 
       {/* Image gallery (Swipeable) */}
-      <View
+      <Image
         style={{
-          backgroundColor: "grey",
           height: 300,
+          resizeMode: "contain",
           justifyContent: "center",
+          alignItems: "center",
         }}
-      >
-        {imageUrl ? (
-          <Image
-            style={{ height: "100%", resizeMode: "contain" }}
-            source={imageUrl}
-            onError={(error) => {
-              setImageUrl(null);
-            }}
-          ></Image>
-        ) : (
-          <Text style={{ alignSelf: "center" }}>Placeholder for image</Text>
-        )}
-      </View>
+        source={{ uri: currentEvent?._images?._header_image }}
+      />
 
       {/* Bar below the image */}
       <View style={{ ...styles.imageBar, backgroundColor: primaryColor }}>
-        <ProfilePicture source={require("../../assets/favicon.png")} />
+        <ProfilePicture
+          source={{ uri: currentEvent?._images?._profile_image }}
+        />
         {isOwner ? (
           <TouchableOpacity onPress={() => setRsvpPopup(true)}>
             <MaterialCommunityIcons

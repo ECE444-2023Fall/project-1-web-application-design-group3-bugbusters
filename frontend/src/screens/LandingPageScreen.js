@@ -1,8 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { StyleSheet, View, TouchableOpacity } from "react-native";
+import React, { useState, useContext, useEffect } from "react";
+import {
+  Text,
+  StyleSheet,
+  View,
+  TextInput,
+  Button,
+  TouchableOpacity,
+  ScrollView,
+  RefreshControl,
+} from "react-native";
 import HeaderBar from "../components/HeaderBar";
 import api from "../helpers/API";
 import { useSelector, useDispatch } from "react-redux";
+import { setUserData } from "../store/Action";
 import EventCard from "../components/EventCard";
 
 const LandingPageScreen = function ({ navigation }) {
@@ -16,10 +26,10 @@ const LandingPageScreen = function ({ navigation }) {
 
   const fetchEvents = async () => {
     const response = await api.getAllEvents();
-    // console.log("response:", response);
     if (response.result == "SUCCESSFUL") {
-      // console.log("Events successfully obtained\n");
+      setEvents(response.data);
     } else {
+      // TODO: Display error modal
       console.error("Events cannot be obtained!!\n");
     }
   };
@@ -31,26 +41,28 @@ const LandingPageScreen = function ({ navigation }) {
   return (
     <View style={{ backgroundColor: "white", flex: 1 }}>
       <HeaderBar title="Landing Page" align="center" />
-      <TouchableOpacity
-        onPress={() =>
-          navigation.navigate("Event Details", {
-            event_id: "Event Details",
-          })
-        }
+      <ScrollView
+        refreshControl={<RefreshControl onRefresh={() => fetchEvents()} />}
       >
-        <EventCard title="Event Title" owner="Event Owner" />
-      </TouchableOpacity>
-      {events.map((event) => {
-        <TouchableOpacity
-          onPress={() =>
-            navigation.navigate("Event Details", {
-              event_id: event._event_id,
-            })
-          }
-        >
-          <EventCard title="Event Title" owner="Event Owner" />
-        </TouchableOpacity>;
-      })}
+        {events.map((event) => {
+          return (
+            <TouchableOpacity
+              onPress={() =>
+                navigation.navigate("Event Details", {
+                  event_id: event?._event_id,
+                })
+              }
+              key={event?._event_id}
+            >
+              <EventCard
+                title={event?._event_title}
+                owner={event?._creator_id}
+                image={event?._images?._header_image}
+              />
+            </TouchableOpacity>
+          );
+        })}
+      </ScrollView>
     </View>
   );
 };
