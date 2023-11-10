@@ -47,7 +47,19 @@ export class Api {
   }
 
   async createUserProfile(data) {
-    return this.makeRequest(`user-service/create-profile`, data, "POST");
+    return this.makeRequest("user-service/create-profile", data, "POST");
+  }
+
+  async search(data) {
+    return this.makeRequest("search-service/search", data, "POST");
+  }
+
+  async rsvp(data) {
+    return this.makeRequest("event-service/rsvp", data, "PUT");
+  }
+
+  async sendRsvp(data) {
+    return this.makeRequest("event-service/send-rsvp", data, "PUT");
   }
 
   async getAllAnnouncements() {

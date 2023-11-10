@@ -11,23 +11,7 @@ const EventCard = function ({ navigation, image, title, owner }) {
 
   return (
     <View style={styles.cardContainer}>
-      {/* <Image source={}/> */}
-      <Image style={{ height: 140 }} source={{ uri: image }} />
-      {/* <View
-        style={{
-          backgroundColor: "grey",
-          height: 140,
-          justifyContent: "center",
-        }}
-      >
-        <Text
-          style={{
-            alignSelf: "center",
-          }}
-        >
-          Placeholder for image
-        </Text>
-      </View> */}
+      <Image style={{ height: 200 }} source={{ uri: image }} />
       <View style={styles.cardBar}>
         <View style={{ width: 50 }}></View>
         <View>
@@ -46,8 +30,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     margin: 20,
     borderRadius: 10,
-    height: 220,
-    backgroundColor: "grey",
+    height: 280,
     overflow: "hidden",
   },
   cardBar: {

@@ -4,7 +4,7 @@ const initialState = {
   primaryColor: "#25355A",
   secondaryColor: "#007FA3",
   contrastColor: "white",
-  userData: {},
+  userProfileData: {},
   currentEventData: {},
 };
 
@@ -13,7 +13,7 @@ export const mainReducer = (state = initialState, action) => {
     case SETUSERPROFILEDATA:
       return {
         ...state,
-        userData: { ...state.userData, ...action.payload },
+        userProfileData: { ...state.userProfileData, ...action.payload },
       };
     case SETCURRENTEVENTDATA:
       return {

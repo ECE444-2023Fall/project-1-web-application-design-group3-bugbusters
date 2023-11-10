@@ -56,6 +56,7 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
     signOut(auth)
       .then(() => {
         // Sign-out successful.
+        navigation.navigate("Landing Page");
       })
       .catch((error) => {
         // An error happened.
