@@ -16,9 +16,11 @@ import ProfileList from "../components/ProfileList";
 import { getAuth, signOut } from "firebase/auth";
 import { useSelector } from "react-redux";
 import api from "../helpers/API";
+import AnnouncementCard from "../components/AnnouncementCard";
 
 const ProfilePageScreen = function ({ navigation, userProfile }) {
   const [event_data, setEventData] = useState([]);
+  const [announcement_data, setAnnouncementData] = useState([]);
   const [menuPopup, setMenuPopup] = useState(false);
   const auth = getAuth();
 
@@ -34,7 +36,20 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
       }
     };
 
-    callGetAllEvents();
+    callGetAllAnnouncements = async () => {
+      const response = await api.getAllAnnouncements();
+      if (response.result == "SUCCESSFUL") {
+        setAnnouncementData(response.data);
+      } else {
+        alert("FAILED TO GET ALL ANNOUNCEMENTS");
+      }
+    };
+
+    if (userProfile?.is_admin) {
+      callGetAllAnnouncements();
+    } else {
+      callGetAllEvents();
+    }
   }, []);
 
   const handleSignOut = () => {
@@ -69,7 +84,7 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
 
   // Extend AnnouncementCard component
   const AnnouncementItem = ({ item }) => {
-    return <Text>JOE MAMA</Text>;
+    return <AnnouncementCard announcement_data={item} />;
   };
 
   return (

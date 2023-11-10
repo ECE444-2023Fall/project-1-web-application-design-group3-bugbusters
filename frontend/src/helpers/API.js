@@ -48,6 +48,10 @@ export class Api {
   async createUserProfile(data) {
     return this.makeRequest(`user-service/create-profile`, data, "POST");
   }
+
+  async getAllAnnouncements() {
+    return this.makeRequest(`announcement-service`, null, "GET");
+  }
 }
 
 const api = new Api("apiKey");
