@@ -3,6 +3,7 @@ from flask_server.global_config import db_client
 from flask_server.classes.event import Event
 from flask_server.global_config import search_client
 from flask_server.services.user_service import getUserProfile
+from google.api_core.exceptions import NotFound as FirestoreNotFound
 from google.cloud import firestore
 import smtplib
 from email.mime.text import MIMEText
@@ -90,8 +91,8 @@ def editEventHelper(event_obj):
         event_ref.set(event_data)
 
         return True
-
-    except:
+    
+    except FirestoreNotFound: 
         return False
 
 @event_service.route('/edit-event/<event_id>', methods=['PUT'])

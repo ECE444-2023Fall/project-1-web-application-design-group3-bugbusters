@@ -11,7 +11,7 @@ def event_time_factory(time_string):
     try:
         # If the input is a datetime string this will pass
         return parser.isoparse(time_string)
-    except:
+    except TypeError:
         # If it fails then just return the datetime object
         return time_string
 
