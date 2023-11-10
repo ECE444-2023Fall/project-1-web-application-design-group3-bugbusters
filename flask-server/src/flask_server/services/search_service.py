@@ -17,12 +17,12 @@ def search():
         return jsonify(search_client.search_index("", "reported:true", None, None))
 
     if start_time != "" and start_time != None:
-        start_time = datetime.strptime(start_time, "%Y-%m-%dT%H:%M:%S.%f").timestamp()
+        start_time = search_client.parse_search_datetime(start_time)
     else:
         start_time = None
 
     if end_time != "" and end_time != None:
-        end_time = datetime.strptime(end_time, "%Y-%m-%dT%H:%M:%S.%f").timestamp()
+        end_time = search_client.parse_search_datetime(end_time)
     else:
         end_time = None
 
@@ -31,7 +31,7 @@ def search():
 
     search_results = search_client.search_index(query, filters, start_time, end_time)
 
-    return jsonify(search_results)
+    return jsonify(search_results), 200
 
 
 @search_service.route('/add', methods=['POST'])
@@ -60,10 +60,13 @@ def update_index():
 
 @search_service.route('/delete', methods=['DELETE'])
 def delete_from_index():
-    object_id = request.args.get('objectID')
+    content = request.json
+    object_id = content.get('objectID')
 
     if not object_id:
         return jsonify({"error": "objectID query parameter is required"}), 400
 
+    print("made it here?")
     search_client.delete_from_index(object_id)
-    return jsonify({"message": "Deleted from index successfully"}), 200
+    print("MAde it here")
+    return jsonify({"message": "Deleted from index successfully, or was never in index to begin with."}), 200

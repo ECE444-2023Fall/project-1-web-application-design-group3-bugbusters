@@ -59,8 +59,13 @@ def createEvent():
     data['_event_id'] = event_id
 
     # Fetch friendly creator name and add the object to the search index
-    friendly_name = getUserProfile(data['_creator_id'])[0]['display_name']
     search_data = data.copy()
+    
+    try:
+        friendly_name = getUserProfile(data['_creator_id'])[0]['display_name']
+    except Exception as e:
+        friendly_name = "user_not_found"
+
     search_data['_friendly_creator_name'] = friendly_name
     search_client.add_to_index(search_data['_event_id'], search_data)
 
