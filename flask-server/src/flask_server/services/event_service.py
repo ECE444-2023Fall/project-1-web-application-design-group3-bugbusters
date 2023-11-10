@@ -63,6 +63,7 @@ def createEvent():
     search_data['_friendly_creator_name'] = friendly_name
     search_client.add_to_index(search_data['_event_id'], search_data)
 
+
     try:
         event_obj = Event.from_json(data)
     except KeyError as key_error:
@@ -85,10 +86,13 @@ def editEventHelper(event_obj):
 
         # Add the event data to the Firestore "Events" collection
         event_ref = db_client.events_collection.document(event_obj._event_id)
+
         event_ref.set(event_data)
+
+        return True
+
     except:
         return False
-    return True
 
 @event_service.route('/edit-event/<event_id>', methods=['PUT'])
 def editEvent(event_id):
@@ -104,13 +108,7 @@ def editEvent(event_id):
     except KeyError as key_error:
         return {'message': 'Error, bad input!'}, 400
 
-    # # Retrieve the json back from our obj
-    # event_data = event_obj.to_json()
-
-    # # Add the event data to the Firestore "Events" collection
-    # event_ref = db_client.events_collection.document(event_id)
-    # event_ref.set(event_data)
-
+    # call event edit helper
     if editEventHelper(event_obj):
         return {'message': 'Event edited successfully!', 'event_id': event_id}, 200
 
@@ -125,30 +123,28 @@ def rsvpSignup():
     email = data["_email"]
 
     if event_id is None or email is None:
-        return jsonify({'message': 'Error, bad input!'}), 400
+        return jsonify({'message': 'Error, no email or event id provided!'}), 400
 
     event_data = getEventHelper(event_id)
 
     if event_data is None:
-       return jsonify({'message': 'Error, no event!'}), 400
+       return jsonify({'message': 'Error, no event with matching event id!'}), 400
 
-    print("RSVP SING UP")
-    print(event_data)
     event_obj = Event.from_json(event_data)
 
     if email in event_obj._rsvp_email_list:
-        return jsonify({'message': 'Error, email!'}), 400
+        return jsonify({'message': 'Error, email already signed up!'}), 409
 
     event_obj._rsvp_email_list.append(email)
 
-    if editEventHelper(event_obj):
+    if not editEventHelper(event_obj):
         return jsonify({'message': 'Error, could not update object!'}), 400
 
-    return jsonify({'message': 'RSVP successful!'}), 201
+    return jsonify({'message': 'RSVP successful!'}), 200
 
 
 @event_service.route('/rsvp-send', methods=['POST'])
-def rsvpSend(event_id):
+def rsvpSend():
     data = request.json
 
     event_id = data["_event_id"]
@@ -162,8 +158,6 @@ def rsvpSend(event_id):
        return jsonify({'message': 'Error, no event!'}), 400
 
     event_obj = Event.from_json(event_data)
-
-    print(event_obj._event_expiry_time)
 
     # Check that an RSVP email has not been sent out already
     if event_obj._rsvp_sent is True:
@@ -195,7 +189,7 @@ Event Details:
     """
 
     # Parse the string into a datetime object
-    parsed_datetime = datetime.strptime(event_obj._event_start_time, "%Y-%m-%d %H:%M:%S.%f")
+    parsed_datetime =event_obj._event_start_time
 
     formatted_time = parsed_datetime.strftime('%I:%M %p')  # %I for 12-hour, %p for AM/PM
     formatted_date = parsed_datetime.strftime('%Y-%m-%d')
@@ -233,7 +227,7 @@ Event Details:
 
     event_obj._rsvp_sent = True
 
-    if editEventHelper(event_obj):
+    if not editEventHelper(event_obj):
         return jsonify({'message': 'Error, could not update object!'}), 400
 
     return jsonify({'message': 'RSVP reminder sent successfully!'}), 200

@@ -8,7 +8,12 @@ from proto.datetime_helpers import DatetimeWithNanoseconds
 def event_time_factory(time_string):
 #    # Parse the string to a datetime object with dateutil
 #    # Sample expected input: "2023-11-07T14:00:00-05:00"
-    return parser.isoparse(time_string)
+    try:
+        # If the input is a datetime string this will pass
+        return parser.isoparse(time_string)
+    except:
+        # If it fails then just return the datetime object
+        return time_string
 
 EVENT_FIELDS = DataField([
     ClassField("_event_id"),
