@@ -32,6 +32,11 @@ const EventDetailsScreen = function ({ route, navigation }) {
 
   const [currentEvent, setCurrentEvent] = useState({});
   const [currentEventUser, setCurrentEventUser] = useState({});
+  const [isOwner, setOwner] = useState(
+    userProfileRedux?.uid &&
+      currentEvent?._creator_id &&
+      userProfileRedux?.uid == currentEvent?._creator_id,
+  );
 
   useEffect(() => {
     async function retrieveEvent(id) {
@@ -47,14 +52,14 @@ const EventDetailsScreen = function ({ route, navigation }) {
       }
     }
     retrieveEvent(event_id);
-    retrieveEventUser(currentEvent?._creator_id);
+
+    if (isOwner) {
+      setCurrentEventUser(userProfileRedux);
+    } else {
+      retrieveEventUser(currentEvent?._creator_id);
+    }
   }, [event_id]);
 
-  const [isOwner, setOwner] = useState(
-    userProfileRedux?.uid &&
-      currentEventUser?.uid &&
-      userProfileRedux?.uid == currentEventUser?.uid,
-  );
   const [rsvpPopup, setRsvpPopup] = useState(false);
   const [rsvped, setRsvped] = useState(
     currentEvent?._rsvp_email_list?.includes(userProfileRedux?.email),
