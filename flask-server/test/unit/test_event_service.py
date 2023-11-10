@@ -107,20 +107,20 @@ def test_event_rsvp(test_client):
     data["_email"] = email
 
     # Add email to RSVP list
-    response = test_client.post('/event-service/rsvp', json=data)
+    response = test_client.put('/event-service/rsvp', json=data)
 
     # Check return code and get the event which we just changed
     assert response.status_code == 200
 
     # try signing up again, and assert that the endpoint respnsed accordingly
-    response = test_client.post('/event-service/rsvp', json=data)
+    response = test_client.put('/event-service/rsvp', json=data)
     assert response.status_code == 409
 
     # Now lets send an rsvp email to this new signed up user
     data = {}
     data["_event_id"] = event_id
 
-    response = test_client.put('/event-service/rsvp-send', json=data)
+    response = test_client.post('/event-service/rsvp-send', json=data)
     assert response.status_code == 200
 
     # Find this event document and ensure that the email has been signed up

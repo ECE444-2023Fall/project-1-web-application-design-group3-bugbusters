@@ -116,7 +116,7 @@ def editEvent(event_id):
     return {'message': 'Event editing failed!', 'event_id': event_id}, 400
 
 
-@event_service.route('/rsvp', methods=['POST'])
+@event_service.route('/rsvp', methods=['PUT'])
 def rsvpSignup():
     data = request.json
 
@@ -144,7 +144,7 @@ def rsvpSignup():
     return jsonify({'message': 'RSVP successful!'}), 200
 
 
-@event_service.route('/rsvp-send', methods=['PUT'])
+@event_service.route('/rsvp-send', methods=['POST'])
 def rsvpSend():
     data = request.json
 
