@@ -1,5 +1,6 @@
 from flask_server.classes.user_profile import UserProfile, USER_PROFILE_FIELDS
 from flask_server.global_config import db_client
+from flask_server.global_config import search_client
 from flask_server import create_app
 import pytest
 import json
@@ -12,6 +13,7 @@ def test_client():
     app.config["TESTING"] = True
     client = app.test_client()
     db_client._testing = True
+    search_client.set_testing(True)
     yield client
     db_client._testing = False
 

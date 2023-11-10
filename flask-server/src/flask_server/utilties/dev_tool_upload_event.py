@@ -20,6 +20,8 @@ if __name__ == "__main__":
         "_image_gallery" : ["image_1_url", "image_2_url"]
     },
     "_creator_id" : "rgLV0SQuAa0QPAXH9wl7",
+    "_rsvp_email_list" : [""],
+    "_rsvp_sent" : False
     }
     
     new_doc_ref = events_ref.document(data_to_upload['_event_id']).set(data_to_upload)
