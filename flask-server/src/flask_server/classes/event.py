@@ -8,7 +8,12 @@ from proto.datetime_helpers import DatetimeWithNanoseconds
 def event_time_factory(time_string):
 #    # Parse the string to a datetime object with dateutil
 #    # Sample expected input: "2023-11-07T14:00:00-05:00"
-    return parser.isoparse(time_string)
+    try:
+        # If the input is a datetime string this will pass
+        return parser.isoparse(time_string)
+    except TypeError:
+        # If it fails then just return the datetime object
+        return time_string
 
 EVENT_FIELDS = DataField([
     ClassField("_event_id"),
@@ -19,10 +24,14 @@ EVENT_FIELDS = DataField([
     ClassField("_event_start_time", event_time_factory, lambda arg: arg.isoformat()),
     ClassField("_event_end_time", event_time_factory, lambda arg: arg.isoformat()),
     ClassField("_images", lambda arg: EventImages.from_json(arg), lambda arg: arg.to_json()),
-    #ClassField("_rsvp_email_list")
-    #ClassField("_flagged"),
+    ClassField("_rsvp_email_list"),
+    ClassField("_rsvp_sent"),
+    ClassField("_flagged"),
     ClassField("_event_expiry_time", event_time_factory)
 ])
+    
+
+# Out of scope fields '_tags'
 
 class Event:
     """Event class"""
@@ -40,9 +49,17 @@ class Event:
         self._event_start_time = ""
         self._event_end_time = ""
         self._images = EventImages()
-        #self._rsvp_email_list = []
-        #self._flagged = False
+        self._rsvp_email_list = []
+        self._rsvp_sent = False
+        self._flagged = False
         self._event_expiry_time = current_time_toronto
+
+        
+
+
+        # out of scope for the time being
+        # self._tags = []
+        
         return
 
     @classmethod

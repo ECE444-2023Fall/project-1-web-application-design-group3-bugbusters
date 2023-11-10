@@ -18,8 +18,9 @@ def test_client():
 
 # Lab 5 - Ben Goel Unit Test 
 def test_valid_get_event(test_client):
+    event_id = "fc48bf4d-6445-47ec-bbb6-67cc29397295"
     # call /event-service/<event_id> endpoint with test event ID
-    response = test_client.get("/event-service/761bb946-1445-4f61-a1fd-d61411e0a336")
+    response = test_client.get("/event-service/"+event_id)
     
     # ensure the response status code is 200 (OK)
     assert response.status_code == 200
@@ -28,7 +29,7 @@ def test_valid_get_event(test_client):
     data = json.loads(response.data)
 
     # Check if the 'event_id' key in the JSON response matches the expected value
-    assert data.get('_event_id') == "761bb946-1445-4f61-a1fd-d61411e0a336"
+    assert data.get('_event_id') == event_id
 
 # Lab 5 - Ata Unit Test 
 def test_invalid_get_event(test_client):
@@ -42,10 +43,10 @@ def test_get_all_events(test_client):
     event_size = len(list(db_client.events_collection.stream()))
     event_json_response = test_client.get('/event-service/')
     events = []
-    print("response")
-    print(event_json_response.status_code)
-    print("data")
-    print(json.loads(event_json_response.data))
+    # print("response")
+    # print(event_json_response.status_code)
+    # print("data")
+    # print(json.loads(event_json_response.data))
 
     for event_json in json.loads(event_json_response.data):
         event = Event.from_json(event_json)
@@ -66,6 +67,7 @@ def test_get_all_events(test_client):
 def test_create_event(test_client):
     required_keys = Event.required_keys
     data = {key: "TEST" for key in required_keys}
+    data['_creator_id'] = "213j124b346k5j6klvv2"
     data['_event_start_time'] = "2023-11-07T14:00:00-05:00"
     data['_event_end_time'] = "2023-11-08T14:00:00-05:00"
     response = test_client.post('/event-service/create-event', json=data)
@@ -95,3 +97,48 @@ def test_edit_event(test_client):
     response = test_client.put('/event-service/edit-event/fc48bf4d-6445-47ec-bbb6-67cc29397295', json=data)
     
     return
+
+def test_event_rsvp(test_client):
+    event_id =  'fc48bf4d-6445-47ec-bbb6-67cc29397295'
+    email = 'some_email@mail.utoronto.ca'
+
+    data = {}
+    data["_event_id"] = event_id
+    data["_email"] = email
+
+    # Add email to RSVP list
+    response = test_client.put('/event-service/rsvp', json=data)
+
+    # Check return code and get the event which we just changed
+    assert response.status_code == 200
+
+    # try signing up again, and assert that the endpoint respnsed accordingly
+    response = test_client.put('/event-service/rsvp', json=data)
+    assert response.status_code == 409
+
+    # Now lets send an rsvp email to this new signed up user
+    data = {}
+    data["_event_id"] = event_id
+
+    response = test_client.post('/event-service/rsvp-send', json=data)
+    assert response.status_code == 200
+
+    # Find this event document and ensure that the email has been signed up
+    # and the rsvp has been sent
+    response = test_client.get("/event-service/"+event_id)
+    assert response.status_code == 200
+
+    modifiedEventDict = json.loads(response.data)
+
+    # Assert this event has been modified and contains the email and has sent the rsvp
+    assert email in modifiedEventDict['_rsvp_email_list']
+    assert modifiedEventDict['_rsvp_sent'] == True
+
+    # reset the email field and rsvp sent field
+    modifiedEventDict['_rsvp_email_list'] = []
+    modifiedEventDict['_rsvp_sent'] = False
+
+    # Edit event with no rsvp emails and ensure the endpoint succeeded
+    response = test_client.put('/event-service/edit-event/' + event_id, json=modifiedEventDict)
+    assert response.status_code == 200
+
