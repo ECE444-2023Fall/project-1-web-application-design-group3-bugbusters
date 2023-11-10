@@ -48,7 +48,8 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
       });
   };
 
-  const Item = ({ item }) => {
+  // Extend EventCard component
+  const EventItem = ({ item }) => {
     return (
       <TouchableOpacity
         onPress={() =>
@@ -64,6 +65,11 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
         />
       </TouchableOpacity>
     );
+  };
+
+  // Extend AnnouncementCard component
+  const AnnouncementItem = ({ item }) => {
+    return <Text>JOE MAMA</Text>;
   };
 
   return (
@@ -107,9 +113,11 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
       </View>
       {/* Profile list */}
       <ProfileList
-        data={event_data}
-        RenderItem={Item}
-        keyExtractor={(item) => item._event_id}
+        data={userProfile.is_admin ? announcement_data : event_data}
+        RenderItem={userProfile.is_admin ? AnnouncementItem : EventItem}
+        keyExtractor={(item) =>
+          userProfile.is_admin ? item.id : item._event_id
+        }
       />
     </KeyboardAvoidingView>
   );
