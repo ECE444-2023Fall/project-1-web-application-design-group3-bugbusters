@@ -75,12 +75,17 @@ export default function BottomTab({ navigation }) {
       />
       <Tab.Screen
         name="Create Edit"
-        component={
-          userProfileSelector.data?.is_admin
-            ? // TODO: show CreateAnnouncementScreen
-              CreateAnnouncementScreen
-            : CreateEditEventScreen
-        }
+        // navigation logic
+        getComponent={() => {
+          if (auth.currentUser) {
+            return userProfileSelector.data?.is_admin
+              ? // TODO: show CreateAnnouncementScreen
+                CreateAnnouncementScreen
+              : CreateEditEventScreen;
+          } else {
+            return AuthPageScreen;
+          }
+        }}
         options={{
           tabBarIcon: ({ color, size }) => {
             return (
