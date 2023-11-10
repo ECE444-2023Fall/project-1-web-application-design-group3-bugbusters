@@ -9,7 +9,7 @@ import {
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useSelector, useDispatch } from "react-redux";
 
-const ProfileList = ({ data, RenderItem, keyExtractor }) => {
+const ProfileList = ({ data, RenderItem, keyExtractor, deleter }) => {
   const [refreshing, setRefreshing] = useState(false);
 
   const EmptyItem = () => (
@@ -30,7 +30,7 @@ const ProfileList = ({ data, RenderItem, keyExtractor }) => {
     <View style={{ width: "100%", flex: 1 }}>
       <FlatList
         data={data}
-        renderItem={({ item }) => <RenderItem item={item} />}
+        renderItem={({ item }) => <RenderItem item={item} deleter={deleter} />}
         keyExtractor={keyExtractor}
         onRefresh={() => {
           // simulate fetching more events

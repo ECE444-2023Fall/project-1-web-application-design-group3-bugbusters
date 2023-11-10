@@ -1,9 +1,8 @@
 import { Text, StyleSheet, View, TouchableOpacity, Image } from "react-native";
 import { Feather, MaterialIcons } from "@expo/vector-icons";
-import { useSelector, useDispatch } from "react-redux";
+import api from "../helpers/API";
 
-const AnnouncementCard = function ({ announcement_data }) {
-  const primaryColor = useSelector((state) => state.main.primaryColor);
+const AnnouncementCard = function ({ announcement_data, deleter }) {
   const buttonSize = 28;
 
   return (
@@ -21,7 +20,9 @@ const AnnouncementCard = function ({ announcement_data }) {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
-            console.log("DELETING", announcement_data?.id);
+            api.deleteAnnouncement(announcement_data?.id);
+            deleter(announcement_data?.id);
+            console.log("DELETED", announcement_data?.id);
           }}
         >
           <MaterialIcons

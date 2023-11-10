@@ -63,6 +63,18 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
       });
   };
 
+  // delete callback for announcements
+  deleteAnnouncementById = (id) => {
+    const filteredData = announcement_data.filter((item) => item.id !== id);
+    setAnnouncementData(filteredData);
+  };
+
+  // delete callback for events
+  deleteEventById = (id) => {
+    const filteredData = event_data.filter((item) => item.id !== id);
+    setEventData(filteredData);
+  };
+
   // Extend EventCard component
   const EventItem = ({ item }) => {
     return (
@@ -83,8 +95,8 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
   };
 
   // Extend AnnouncementCard component
-  const AnnouncementItem = ({ item }) => {
-    return <AnnouncementCard announcement_data={item} />;
+  const AnnouncementItem = ({ item, deleter }) => {
+    return <AnnouncementCard announcement_data={item} deleter={deleter} />;
   };
 
   return (
@@ -133,6 +145,7 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
         keyExtractor={(item) =>
           userProfile.is_admin ? item.id : item._event_id
         }
+        deleter={userProfile.is_admin ? deleteAnnouncementById : () => {}}
       />
     </KeyboardAvoidingView>
   );
