@@ -10,38 +10,36 @@ defaults:
 
 on:
   push:
-    branches: [ "develop" ]
+    branches: ["develop"]
   workflow_dispatch:
 
 env:
   ALGOLIA_API_KEY: ${{secrets.ALGOLIA_API_KEY}}
-  CLUBHUBEMAIL_USER=${{secrets.CLUBHUBEMAIL_USER}}
-  CLUBHUBEMAIL_PASSWORD=${{CLUBHUBEMAIL_PASSWORD}}
-
+  CLUBHUBEMAIL_USER: ${{secrets.CLUBHUBEMAIL_USER}}
+  CLUBHUBEMAIL_PASSWORD: ${{CLUBHUBEMAIL_PASSWORD}}
 
 permissions:
   contents: read
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Create Firebase Admin SDK JSON
-      env:
-        FIREBASE_ADMIN_SDK : ${{secrets.FIREBASE_ADMIN_SDK}}
-      run: |
+      - uses: actions/checkout@v3
+      - name: Create Firebase Admin SDK JSON
+        env:
+          FIREBASE_ADMIN_SDK: ${{secrets.FIREBASE_ADMIN_SDK}}
+        run: |
           echo $FIREBASE_ADMIN_SDK >> ece444bulletin-firebase-adminsdk.json
-    - name: Set up Python 3.9
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.9.x"
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -e '.[dev]'
-    - name: Test with pytest
-      run: |
-        pytest -vv
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9.x"
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -e '.[dev]'
+      - name: Test with pytest
+        run: |
+          pytest -vv
