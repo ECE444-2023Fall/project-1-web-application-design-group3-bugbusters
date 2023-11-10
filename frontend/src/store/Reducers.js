@@ -1,4 +1,4 @@
-import { SETUSERPROFILEDATA, RESET, SETCURRENTEVENTDATA } from "./ActionType";
+import { SETUSERPROFILEDATA, RESET } from "./ActionType";
 
 const initialState = {
   primaryColor: "#25355A",
@@ -14,11 +14,6 @@ export const mainReducer = (state = initialState, action) => {
       return {
         ...state,
         userProfileData: { ...state.userProfileData, ...action.payload },
-      };
-    case SETCURRENTEVENTDATA:
-      return {
-        ...state,
-        currentEventData: { ...state.currentEventData, ...action.payload },
       };
     case RESET:
       return { ...initialState };
