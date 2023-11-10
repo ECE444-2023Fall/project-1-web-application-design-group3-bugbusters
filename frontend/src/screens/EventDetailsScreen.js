@@ -66,22 +66,31 @@ const EventDetailsScreen = function ({ route, navigation }) {
 
   async function rsvp(event_id, email) {
     const response = await api.rsvp({ event_id, email });
-    // TODO: consider the case when already rsvped (response 409)
     if (response.result == "SUCCESSFUL") {
       setRsvped(true);
       setRsvpTextInput("");
     } else {
-      console.log("Could not rsvp");
+      if (response.data.status_code == 409) {
+        // Already RSVP'ed
+        setRsvped(true);
+        setRsvpTextInput("");
+      } else {
+        console.log("Could not rsvp");
+      }
     }
   }
 
   async function sendRsvp(event_id) {
     const response = await api.sendRsvp(event_id);
-    // TODO: consider case when already sent (response 409)
     if (response.result == "SUCCESSFUL") {
       setRsvpInfoSent(true);
     } else {
-      console.error("Couldn't send rsvp info");
+      if (response.data.status_code == 409) {
+        // RSVP info already sent
+        setRsvpInfoSent(true);
+      } else {
+        console.error("Couldn't send rsvp info");
+      }
     }
   }
 
