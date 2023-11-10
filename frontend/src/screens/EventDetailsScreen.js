@@ -31,22 +31,29 @@ const EventDetailsScreen = function ({ route, navigation }) {
   const userProfileRedux = useSelector((state) => state.userProfileData);
 
   const [currentEvent, setCurrentEvent] = useState({});
-  async function retrieveEvent(id) {
-    const response = await api.getEvent(id);
-    if (response.result == "SUCCESSFUL") {
-      setCurrentEvent(response.data);
-    }
-  }
+  const [currentEventUser, setCurrentEventUser] = useState({});
 
   useEffect(() => {
+    async function retrieveEvent(id) {
+      const response = await api.getEvent(id);
+      if (response.result == "SUCCESSFUL") {
+        setCurrentEvent(response.data);
+      }
+    }
+    async function retrieveEventUser(uid) {
+      const response = await api.getUserProfile(uid);
+      if (response.result == "SUCCESSFUL") {
+        setCurrentEventUser(response.data);
+      }
+    }
     retrieveEvent(event_id);
-    // TODO: retrieve user profile
+    retrieveEventUser(currentEvent?._creator_id);
   }, [event_id]);
 
   const [isOwner, setOwner] = useState(
     userProfileRedux?.uid &&
-      currentEvent?._creator_id &&
-      userProfileRedux?.uid == currentEvent?._creator_id,
+      currentEventUser?.uid &&
+      userProfileRedux?.uid == currentEventUser?.uid,
   );
   const [rsvpPopup, setRsvpPopup] = useState(false);
   const [rsvped, setRsvped] = useState(
@@ -66,7 +73,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
 
   async function rsvp(event_id, email) {
     const response = await api.rsvp({ event_id, email });
-    // TODO: consider the case when already rsvped (response 409)
+    // TODO: consider case when already rsvped (response 409), update coming in RSVP PR
     if (response.result == "SUCCESSFUL") {
       setRsvped(true);
       setRsvpTextInput("");
@@ -77,7 +84,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
 
   async function sendRsvp(event_id) {
     const response = await api.sendRsvp(event_id);
-    // TODO: consider case when already sent (response 409)
+    // TODO: consider case when already sent (response 409), update coming in RSVP PR
     if (response.result == "SUCCESSFUL") {
       setRsvpInfoSent(true);
     } else {
@@ -150,8 +157,8 @@ const EventDetailsScreen = function ({ route, navigation }) {
         <View style={{ flexDirection: "row" }}>
           <Text style={{ fontWeight: "bold" }}>Creator: </Text>
           <Text>
-            {currentEvent?._creator_id
-              ? currentEvent?._creator_id
+            {currentEventUser
+              ? currentEventUser?.display_name
               : "No creator name"}
           </Text>
         </View>
