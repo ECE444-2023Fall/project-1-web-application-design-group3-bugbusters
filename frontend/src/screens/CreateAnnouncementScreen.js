@@ -29,6 +29,8 @@ const CreateAnnouncementScreen = ({ navigation }) => {
       <View style={styles.container}>
         <AnnouncementCard
           announcement_data={{ description: proposedText }}
+          show_delete_button={false}
+          show_popup
           editer={({ text, textSetter, popupSetter }) => {
             textSetter(text);
             setProposedText(text);

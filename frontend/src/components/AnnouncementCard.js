@@ -13,12 +13,18 @@ import api from "../helpers/API";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
-const AnnouncementCard = function ({ announcement_data, editer, deleter }) {
+const AnnouncementCard = function ({
+  announcement_data,
+  show_popup = false,
+  show_delete_button = true,
+  editer,
+  deleter,
+}) {
   const buttonSize = 28;
   const [description, setDescription] = useState(
     announcement_data?.description
   );
-  const [editPopup, setEditPopup] = useState(false);
+  const [editPopup, setEditPopup] = useState(show_popup);
   const [editText, setEditText] = useState(announcement_data?.description);
   const primaryColor = useSelector((state) => state.main.primaryColor);
 
@@ -34,51 +40,53 @@ const AnnouncementCard = function ({ announcement_data, editer, deleter }) {
         >
           <Feather name="edit-2" size={buttonSize} style={styles.button} />
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => deleter({ id: announcement_data?.id })}
-        >
-          <MaterialIcons
-            name="delete-outline"
-            size={buttonSize}
-            style={styles.button}
-          />
-          <PopUp visible={editPopup} setVisible={setEditPopup}>
-            <TextInput
-              value={editText}
-              onChangeText={(text) => {
-                setEditText(text);
-              }}
-              style={{ ...styles.input, borderColor: primaryColor }}
-              autoFocus
-              selectTextOnFocus
-              multiline
-              placeholder="Enter description"
-              placeholderTextColor={"grey"}
-              onPressIn={() => {
-                console.log("PRESSED");
-              }}
+        {show_delete_button ? (
+          <TouchableOpacity
+            onPress={() => deleter({ id: announcement_data?.id })}
+          >
+            <MaterialIcons
+              name="delete-outline"
+              size={buttonSize}
+              style={styles.button}
             />
-            <TouchableOpacity
-              style={styles.done_editing_button}
-              onPress={() => {
-                // only edit description if text has changed
-                if (editText != description) {
-                  editer({
-                    text: editText,
-                    id: announcement_data?.id,
-                    textSetter: setDescription,
-                    popupSetter: setEditPopup,
-                  });
-                } else {
-                  console.log("NO CHANGE");
-                  setEditPopup(false);
-                }
-              }}
-            >
-              <Text style={styles.done_editing_text}>DONE</Text>
-            </TouchableOpacity>
-          </PopUp>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        ) : null}
+        <PopUp visible={editPopup} setVisible={setEditPopup}>
+          <TextInput
+            value={editText}
+            onChangeText={(text) => {
+              setEditText(text);
+            }}
+            style={{ ...styles.input, borderColor: primaryColor }}
+            autoFocus
+            selectTextOnFocus
+            multiline
+            placeholder="Enter description"
+            placeholderTextColor={"grey"}
+            onPressIn={() => {
+              console.log("PRESSED");
+            }}
+          />
+          <TouchableOpacity
+            style={styles.done_editing_button}
+            onPress={() => {
+              // only edit description if text has changed
+              if (editText != description) {
+                editer({
+                  text: editText,
+                  id: announcement_data?.id,
+                  textSetter: setDescription,
+                  popupSetter: setEditPopup,
+                });
+              } else {
+                console.log("NO CHANGE");
+                setEditPopup(false);
+              }
+            }}
+          >
+            <Text style={styles.done_editing_text}>DONE</Text>
+          </TouchableOpacity>
+        </PopUp>
       </View>
     </View>
   );
@@ -101,7 +109,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
   },
   button: {
-    paddingLeft: 8,
+    paddingHorizontal: 4,
     color: "#858585",
   },
   input: {
