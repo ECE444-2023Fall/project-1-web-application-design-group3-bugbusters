@@ -39,6 +39,9 @@ const CreateAnnouncementScreen = ({ navigation }) => {
           }}
           deleter={() => console.log("DELETER CALLBACK WORKING")}
         />
+        <TouchableOpacity style={styles.create_button}>
+          <Text style={styles.create_button_text}>CREATE</Text>
+        </TouchableOpacity>
       </View>
     </View>
   );
@@ -46,6 +49,13 @@ const CreateAnnouncementScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, alignItems: "center", justifyContent: "center" },
+  create_button: {
+    backgroundColor: "#16aed9",
+    paddingHorizontal: 32,
+    paddingVertical: 16,
+    borderRadius: 6,
+  },
+  create_button_text: { fontsize: 24, fontWeight: 700, color: "white" },
 });
 
 export default CreateAnnouncementScreen;

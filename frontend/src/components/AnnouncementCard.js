@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   done_editing_text: {
+    fontWeight: 700,
     color: "white",
   },
 });
