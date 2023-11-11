@@ -34,7 +34,9 @@ const AnnouncementCard = function ({ announcement_data, editer, deleter }) {
         >
           <Feather name="edit-2" size={buttonSize} style={styles.button} />
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => deleter(announcement_data?.id)}>
+        <TouchableOpacity
+          onPress={() => deleter({ id: announcement_data?.id })}
+        >
           <MaterialIcons
             name="delete-outline"
             size={buttonSize}
@@ -48,6 +50,10 @@ const AnnouncementCard = function ({ announcement_data, editer, deleter }) {
               }}
               style={{ ...styles.input, borderColor: primaryColor }}
               autoFocus
+              selectTextOnFocus
+              multiline
+              placeholder="Enter description"
+              placeholderTextColor={"grey"}
               onPressIn={() => {
                 console.log("PRESSED");
               }}

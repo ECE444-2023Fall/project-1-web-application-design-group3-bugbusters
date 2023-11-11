@@ -8,7 +8,7 @@ import AnnouncementCard from "../components/AnnouncementCard";
 
 const CreateAnnouncementScreen = ({ navigation }) => {
   const contrastColor = useSelector((state) => state.main.contrastColor);
-  const [showPopup, setShowPopup] = useState(true);
+  const [proposedText, setProposedText] = useState("");
 
   return (
     <View style={{ flex: 1 }}>
@@ -28,12 +28,16 @@ const CreateAnnouncementScreen = ({ navigation }) => {
       />
       <View style={styles.container}>
         <AnnouncementCard
-          announcement_data={{ description: "Testing creation" }}
+          announcement_data={{ description: proposedText }}
+          editer={({ text, textSetter, popupSetter }) => {
+            textSetter(text);
+            setProposedText(text);
+            popupSetter(false);
+            console.log("EDITER CALLBACK WORKING");
+          }}
+          deleter={() => console.log("DELETER CALLBACK WORKING")}
         />
       </View>
-      <PopUp visible={showPopup} setVisible={setShowPopup}>
-        <Text>JOE MAMA</Text>
-      </PopUp>
     </View>
   );
 };

@@ -65,7 +65,7 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
   };
 
   // delete callback for announcements
-  announcement_deleter = (id) => {
+  announcement_deleter = ({ id }) => {
     api.deleteAnnouncement(id);
     const filteredData = announcement_data.filter((item) => item.id !== id);
     setAnnouncementData(filteredData);
