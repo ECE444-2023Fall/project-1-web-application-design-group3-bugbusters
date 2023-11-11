@@ -18,20 +18,48 @@ const AnnouncementCard = function ({
   show_popup = false,
   hide_edit_button = false,
   hide_delete_button = false,
+  show_minimize_button = false,
   editer,
   deleter,
+  style,
 }) {
   const buttonSize = 28;
   const [description, setDescription] = useState(
     announcement_data?.description
   );
+  const [minimized, setMinimize] = useState(false);
   const [editPopup, setEditPopup] = useState(show_popup);
   const [editText, setEditText] = useState(announcement_data?.description);
   const primaryColor = useSelector((state) => state.main.primaryColor);
 
-  return (
-    <View style={styles.announcementContainer}>
-      <Text style={styles.announcementText}>{description}</Text>
+  return minimized ? (
+    <View style={{ ...styles.announcementContainer, ...style }}>
+      {show_minimize_button ? (
+        <View style={{ justifyContent: "flex-end", flexDirection: "row" }}>
+          <TouchableOpacity onPress={() => setMinimize(!minimized)}>
+            <Feather
+              name={minimized ? "maximize-2" : "minimize-2"}
+              size={buttonSize - 6}
+              style={{ ...styles.button, marginVertical: 4 }}
+            />
+          </TouchableOpacity>
+        </View>
+      ) : null}
+    </View>
+  ) : (
+    <View style={{ ...styles.announcementContainer, ...style }}>
+      <View style={{ justifyContent: "space-between", flexDirection: "row" }}>
+        <Text style={styles.announcementText}>{description}</Text>
+        {show_minimize_button ? (
+          <TouchableOpacity onPress={() => setMinimize(!minimized)}>
+            <Feather
+              name={minimized ? "maximize-2" : "minimize-2"}
+              size={buttonSize - 6}
+              style={{ ...styles.button, marginTop: 4 }}
+            />
+          </TouchableOpacity>
+        ) : null}
+      </View>
       <View style={styles.buttonContainer}>
         {hide_edit_button ? null : (
           <TouchableOpacity

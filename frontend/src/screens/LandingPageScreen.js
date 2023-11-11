@@ -100,6 +100,8 @@ const LandingPageScreen = function ({ navigation }) {
             announcement_data={announcement}
             hide_edit_button
             hide_delete_button
+            show_minimize_button
+            style={styles.announcement_style}
           />
         );
       })}
@@ -192,6 +194,12 @@ const styles = StyleSheet.create({
     paddingLeft: 6,
     paddingVertical: 4,
     backgroundColor: "white",
+  },
+  announcement_style: {
+    marginHorizontal: 20,
+    marginTop: 12,
+    marginBottom: 0,
+    paddingVertical: 0,
   },
 });
 
