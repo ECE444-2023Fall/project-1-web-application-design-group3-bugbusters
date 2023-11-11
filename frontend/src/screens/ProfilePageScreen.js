@@ -145,14 +145,16 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
           }}
         ></Image>
         {/* Menu button */}
-        <TouchableOpacity
-          style={styles.menu_button}
-          onPress={() => {
-            setMenuPopup(true);
-          }}
-        >
-          <Ionicons name="menu" size={36} color={primaryColor} />
-        </TouchableOpacity>
+        {userProfile?.uid == auth.currentUser.uid ? (
+          <TouchableOpacity
+            style={styles.menu_button}
+            onPress={() => {
+              setMenuPopup(true);
+            }}
+          >
+            <Ionicons name="menu" size={36} color={primaryColor} />
+          </TouchableOpacity>
+        ) : null}
         {/* Menu */}
         <PopUp visible={menuPopup} setVisible={setMenuPopup}>
           <TouchableOpacity
