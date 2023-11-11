@@ -49,7 +49,6 @@ const EditProfileScreen = function ({ navigation, route }) {
       aspect: [1, 1],
       quality: 1,
     }).then(async (pickerResult) => {
-      console.log(pickerResult);
       if (!pickerResult.cancelled) {
         const uploadUrl = await uploadImageAsync(pickerResult.uri);
         // handle uploadUrl has desired
@@ -81,7 +80,6 @@ const EditProfileScreen = function ({ navigation, route }) {
       });
 
       const fileRef = ref(getStorage(), "images/" + uuid.v4());
-      console.log(fileRef);
       const result = await uploadBytes(fileRef, blob);
 
       return await getDownloadURL(fileRef);
@@ -114,13 +112,8 @@ const EditProfileScreen = function ({ navigation, route }) {
         ></Image>
         <View
           style={{
-            position: "absolute",
+            ...styles.profile_edit_button_container,
             transform: [{ translateX: 32 }],
-            bottom: "0%",
-            borderColor: "black",
-            borderWidth: 1,
-            backgroundColor: "white",
-            borderRadius: "50%",
           }}
         >
           <TouchableOpacity
@@ -139,6 +132,27 @@ const EditProfileScreen = function ({ navigation, route }) {
       {/* Display name container */}
       <View style={styles.display_name_container}>
         <Text style={styles.display_name_text}>{userProfile.display_name}</Text>
+        <View
+          style={{
+            ...styles.profile_edit_button_container,
+            transform: [{ translateX: 80 }],
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => {
+              console.log("EDIT DISPLAY NAME");
+            }}
+          >
+            <Feather
+              name="edit-2"
+              size={20}
+              style={{
+                marginVertical: 3,
+                marginHorizontal: 4,
+              }}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
     </KeyboardAvoidingView>
   );
@@ -163,8 +177,16 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderRadius: 20,
   },
+  profile_edit_button_container: {
+    position: "absolute",
+    bottom: "0%",
+    borderColor: "black",
+    borderWidth: 1,
+    backgroundColor: "white",
+    borderRadius: "50%",
+  },
   display_name_container: {
-    paddingBottom: 16,
+    alignItems: "center",
   },
   display_name_text: {
     fontWeight: 700,
