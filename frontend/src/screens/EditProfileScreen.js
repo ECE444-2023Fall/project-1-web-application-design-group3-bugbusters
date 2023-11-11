@@ -27,6 +27,20 @@ const EditProfileScreen = function ({ navigation, route }) {
 
   const [profileUrl, setProfileUrl] = useState(userProfile?.photo_url);
 
+  const callEditUserProfile = ({ uid, display_name, photo_url }) => {
+    api
+      .editUserProfile({
+        uid: uid,
+        display_name: display_name,
+        photo_url: photo_url,
+      })
+      .then((response) => {
+        if (response.result == "SUCCESSFUL") {
+          // do something if profile screen set successfully
+        }
+      });
+  };
+
   const pickImage = () => {
     // No permissions request is necessary for launching the image library
     ImagePicker.launchImageLibraryAsync({
@@ -41,17 +55,11 @@ const EditProfileScreen = function ({ navigation, route }) {
         // handle uploadUrl has desired
         setProfileUrl(uploadUrl);
         // call edit profile
-        api
-          .editUserProfile({
-            uid: userProfile.uid,
-            display_name: userProfile.display_name,
-            photo_url: uploadUrl,
-          })
-          .then((response) => {
-            if (response.result == "SUCCESSFUL") {
-              // do something if profile screen set successfully
-            }
-          });
+        callEditUserProfile({
+          uid: userProfile.uid,
+          display_name: userProfile.display_name,
+          photo_url: uploadUrl,
+        });
       }
     });
 
