@@ -55,7 +55,7 @@ const AnnouncementCard = function ({
             <Feather
               name={minimized ? "maximize-2" : "minimize-2"}
               size={buttonSize - 6}
-              style={{ ...styles.button, marginTop: 4 }}
+              style={{ ...styles.button, marginTop: 12 }}
             />
           </TouchableOpacity>
         ) : null}
