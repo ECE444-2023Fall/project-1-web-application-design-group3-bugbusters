@@ -16,6 +16,7 @@ import * as ImagePicker from "expo-image-picker";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import uuid from "uuid";
 import api from "../helpers/API";
+import { setUserProfileData } from "../store/Action";
 
 // style consts
 const profileHeight = 80;
@@ -23,6 +24,9 @@ const profileWidth = 80;
 
 const EditProfileScreen = function ({ navigation, route }) {
   const { userProfile } = route.params;
+  const userProfileSelector = useSelector((state) => {
+    return state.main.userProfileData;
+  });
   const dispatchRedux = useDispatch();
   const primaryColor = useSelector((state) => state.main.primaryColor);
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
@@ -34,17 +38,19 @@ const EditProfileScreen = function ({ navigation, route }) {
   const [editText, setEditText] = useState(userProfile?.display_name);
 
   const callEditUserProfile = ({ uid, display_name, photo_url }) => {
-    api
-      .editUserProfile({
-        uid: uid,
-        display_name: display_name,
-        photo_url: photo_url,
-      })
-      .then((response) => {
-        if (response.result == "SUCCESSFUL") {
-          // do something if profile screen set successfully
-        }
-      });
+    data = {
+      uid: uid,
+      display_name: display_name,
+      photo_url: photo_url,
+    };
+    api.editUserProfile(data).then((response) => {
+      if (response.result == "SUCCESSFUL") {
+        // do something if profile screen set successfully
+        // update user profile data
+        dispatchRedux(setUserProfileData({ data: data }));
+        // console.log(userProfileSelector);
+      }
+    });
   };
 
   const pickImage = () => {
