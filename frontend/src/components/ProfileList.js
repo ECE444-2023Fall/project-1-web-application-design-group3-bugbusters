@@ -6,10 +6,8 @@ import {
   TouchableOpacity,
   FlatList,
 } from "react-native";
-import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { useSelector, useDispatch } from "react-redux";
 
-const ProfileList = ({ data, RenderItem, keyExtractor, deleter }) => {
+const ProfileList = ({ data, RenderItem, keyExtractor, editer, deleter }) => {
   const [refreshing, setRefreshing] = useState(false);
 
   const EmptyItem = () => (
@@ -30,7 +28,9 @@ const ProfileList = ({ data, RenderItem, keyExtractor, deleter }) => {
     <View style={{ width: "100%", flex: 1 }}>
       <FlatList
         data={data}
-        renderItem={({ item }) => <RenderItem item={item} deleter={deleter} />}
+        renderItem={({ item }) => (
+          <RenderItem item={item} editer={editer} deleter={deleter} />
+        )}
         keyExtractor={keyExtractor}
         onRefresh={() => {
           // simulate fetching more events

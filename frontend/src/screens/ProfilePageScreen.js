@@ -65,9 +65,28 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
   };
 
   // delete callback for announcements
-  deleteAnnouncementById = (id) => {
+  announcement_deleter = (id) => {
+    api.deleteAnnouncement(id);
     const filteredData = announcement_data.filter((item) => item.id !== id);
     setAnnouncementData(filteredData);
+    console.log("DELETED", id);
+  };
+
+  // edit callback for announcements
+  announcement_editer = ({ text, id, textSetter, popupSetter }) => {
+    api
+      .editAnnouncement(text, id)
+      .then((response) => {
+        if (response.result == "SUCCESSFUL") {
+          textSetter(text);
+          popupSetter(false);
+        } else {
+          // show UI that it didn't work
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   // delete callback for events
@@ -96,8 +115,14 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
   };
 
   // Extend AnnouncementCard component
-  const AnnouncementItem = ({ item, deleter }) => {
-    return <AnnouncementCard announcement_data={item} deleter={deleter} />;
+  const AnnouncementItem = ({ item, editer, deleter }) => {
+    return (
+      <AnnouncementCard
+        announcement_data={item}
+        editer={editer}
+        deleter={deleter}
+      />
+    );
   };
 
   return (
@@ -146,7 +171,8 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
         keyExtractor={(item) =>
           userProfile?.is_admin ? item.id : item._event_id
         }
-        deleter={userProfile?.is_admin ? deleteAnnouncementById : () => {}}
+        deleter={userProfile?.is_admin ? announcement_deleter : () => {}}
+        editer={userProfile?.is_admin ? announcement_editer : () => {}}
       />
     </KeyboardAvoidingView>
   );

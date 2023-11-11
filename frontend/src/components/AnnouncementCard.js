@@ -13,7 +13,7 @@ import api from "../helpers/API";
 import { useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 
-const AnnouncementCard = function ({ announcement_data, deleter }) {
+const AnnouncementCard = function ({ announcement_data, editer, deleter }) {
   const buttonSize = 28;
   const [description, setDescription] = useState(
     announcement_data?.description
@@ -34,13 +34,7 @@ const AnnouncementCard = function ({ announcement_data, deleter }) {
         >
           <Feather name="edit-2" size={buttonSize} style={styles.button} />
         </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            api.deleteAnnouncement(announcement_data?.id);
-            deleter(announcement_data?.id);
-            console.log("DELETED", announcement_data?.id);
-          }}
-        >
+        <TouchableOpacity onPress={() => deleter(announcement_data?.id)}>
           <MaterialIcons
             name="delete-outline"
             size={buttonSize}
@@ -63,19 +57,12 @@ const AnnouncementCard = function ({ announcement_data, deleter }) {
               onPress={() => {
                 // only edit description if text has changed
                 if (editText != description) {
-                  api
-                    .editAnnouncement(editText, announcement_data?.id)
-                    .then((response) => {
-                      if (response.result == "SUCCESSFUL") {
-                        setDescription(editText);
-                        setEditPopup(false);
-                      } else {
-                        // show UI that it didn't work
-                      }
-                    })
-                    .catch((err) => {
-                      console.log(err);
-                    });
+                  editer({
+                    text: editText,
+                    id: announcement_data?.id,
+                    textSetter: setDescription,
+                    popupSetter: setEditPopup,
+                  });
                 } else {
                   console.log("NO CHANGE");
                   setEditPopup(false);
