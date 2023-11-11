@@ -7,7 +7,14 @@ import {
   FlatList,
 } from "react-native";
 
-const ProfileList = ({ data, RenderItem, keyExtractor, editer, deleter }) => {
+const ProfileList = ({
+  title,
+  data,
+  RenderItem,
+  keyExtractor,
+  editer,
+  deleter,
+}) => {
   const [refreshing, setRefreshing] = useState(false);
 
   const EmptyItem = () => (
@@ -41,7 +48,7 @@ const ProfileList = ({ data, RenderItem, keyExtractor, editer, deleter }) => {
           }, 2000);
         }}
         refreshing={refreshing}
-        ListHeaderComponent={<ListHeaderComponent item_types={"Events"} />}
+        ListHeaderComponent={<ListHeaderComponent item_types={title} />}
         ListEmptyComponent={<EmptyItem />}
         stickyHeaderIndices={[0]}
       />

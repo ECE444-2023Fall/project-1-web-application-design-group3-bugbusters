@@ -166,6 +166,7 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
       </View>
       {/* Profile list */}
       <ProfileList
+        title={userProfile?.is_admin ? "Announcements" : "Events"}
         data={userProfile?.is_admin ? announcement_data : event_data}
         RenderItem={userProfile?.is_admin ? AnnouncementItem : EventItem}
         keyExtractor={(item) =>
