@@ -1,6 +1,7 @@
 from flask import Blueprint, abort, request
 from flask_server.classes.user_profile import UserProfile
 from flask_server.global_config import db_client
+from google.api_core.exceptions import NotFound as FirestoreNotFound
 from werkzeug.exceptions import BadRequest, NotFound, Forbidden
 
 
@@ -53,3 +54,33 @@ def createUserProfile():
     # Add the user profile data to the Firestore "UserProfiles" collection
     user_profiles_collection_ref.document(uid).set(user_profile_data)
     return user_profile_data, 201
+
+
+@user_service.route('/edit-profile', methods=['PUT'])
+def editUserProfile():
+    data = request.json
+
+    # abort 400 if no uid is passed in body
+    if (uid := data.get('uid')) is None:
+        abort(BadRequest.code)
+
+    # abort 400 if no display_name is passed in body
+    if (display_name := data.get('display_name')) is None:
+        abort(BadRequest.code)
+
+    # abort 400 if no photo_url is passed in body
+    if (photo_url := data.get('photo_url')) is None:
+        abort(BadRequest.code)
+
+    # get reference to user profiles collection
+    user_profiles_collection_ref = db_client.user_profiles_collection
+
+    # abort 404 if the announcement does not exist
+    try:
+        doc_ref = user_profiles_collection_ref.document(uid)
+        # update description
+        doc_ref.update({'display_name': display_name, 'photo_url': photo_url})
+    except FirestoreNotFound:
+        abort(NotFound.code)
+
+    return "", 204

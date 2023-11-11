@@ -138,15 +138,11 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
       <View style={styles.profile_picture_container}>
         <Image
           style={styles.profile_picture}
-          source={
-            userProfile?.photo_url
-              ? {
-                  uri: "https://reactnative.dev/img/tiny_logo.png",
-                }
-              : {
-                  uri: "https://media.istockphoto.com/id/1451587807/vector/user-profile-icon-vector-avatar-or-person-icon-profile-picture-portrait-symbol-vector.jpg?s=612x612&w=0&k=20&c=yDJ4ITX1cHMh25Lt1vI1zBn2cAKKAlByHBvPJ8gEiIg=",
-                }
-          }
+          source={{
+            uri: userProfile?.photo_url
+              ? userProfile.photo_url
+              : "https://media.istockphoto.com/id/1451587807/vector/user-profile-icon-vector-avatar-or-person-icon-profile-picture-portrait-symbol-vector.jpg?s=612x612&w=0&k=20&c=yDJ4ITX1cHMh25Lt1vI1zBn2cAKKAlByHBvPJ8gEiIg=",
+          }}
         ></Image>
         {/* Menu button */}
         <TouchableOpacity

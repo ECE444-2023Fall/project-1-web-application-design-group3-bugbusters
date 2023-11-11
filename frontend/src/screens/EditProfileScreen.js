@@ -13,6 +13,7 @@ import { Feather, Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import uuid from "uuid";
+import api from "../helpers/API";
 
 const profileHeight = 80;
 const profileWidth = 80;
@@ -39,6 +40,18 @@ const EditProfileScreen = function ({ navigation, route }) {
         const uploadUrl = await uploadImageAsync(pickerResult.uri);
         // handle uploadUrl has desired
         setProfileUrl(uploadUrl);
+        // call edit profile
+        api
+          .editUserProfile({
+            uid: userProfile.uid,
+            display_name: userProfile.display_name,
+            photo_url: uploadUrl,
+          })
+          .then((response) => {
+            if (response.result == "SUCCESSFUL") {
+              // do something if profile screen set successfully
+            }
+          });
       }
     });
 

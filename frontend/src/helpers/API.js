@@ -50,6 +50,10 @@ export class Api {
     return this.makeRequest("user-service/create-profile", data, "POST");
   }
 
+  async editUserProfile(data) {
+    return this.makeRequest(`user-service/edit-profile`, data, "PUT");
+  }
+
   async search(data) {
     return this.makeRequest("search-service/search", data, "POST");
   }
