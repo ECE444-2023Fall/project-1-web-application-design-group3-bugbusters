@@ -166,7 +166,6 @@ const styles = StyleSheet.create({
     top: 86,
   },
   searchInput: {
-    borderWidth: 1,
     marginHorizontal: 20,
     marginVertical: 14,
     fontSize: 16,
@@ -177,7 +176,6 @@ const styles = StyleSheet.create({
   },
   checkBoxContainer: {
     marginBottom: 14,
-    // alignSelf: "center",
     alignSelf: "flex-end",
     marginHorizontal: 30,
     flexDirection: "row",
