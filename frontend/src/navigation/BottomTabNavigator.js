@@ -63,13 +63,17 @@ export default function BottomTab({ navigation }) {
         listeners={{
           tabPress: (e) => {
             e.preventDefault();
-            if (auth.currentUser) {
-              navigation.navigate("Create/Edit Event", {
-                isCreate: true,
-              });
-            } else {
-              navigation.navigate("Authentication Page");
-            }
+            // TODO: Remove when testing done
+            navigation.navigate("Create/Edit Event", {
+              isCreate: true,
+            });
+            // if (auth.currentUser) {
+            //   navigation.navigate("Create/Edit Event", {
+            //     isCreate: true,
+            //   });
+            // } else {
+            //   navigation.navigate("Authentication Page");
+            // }
           },
         }}
       />

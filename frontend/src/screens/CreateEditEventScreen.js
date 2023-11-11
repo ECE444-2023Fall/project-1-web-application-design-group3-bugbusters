@@ -16,6 +16,8 @@ import HeaderBar from "../components/HeaderBar";
 import { Ionicons, Feather } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
+import uuid from "uuid";
 import api from "../helpers/API";
 const { DateTime } = require("luxon");
 
@@ -53,8 +55,32 @@ const CreateEditEventScreen = function ({ navigation, route }) {
   const refLocationInput = useRef();
   const refDescriptionInput = useRef();
 
-  let openImagePickerAsync = async () => {
-    let permissionResult =
+  const openImagePickerAsync = async () => {
+    async function uploadImageAsync(uri) {
+      // Why are we using XMLHttpRequest? See:
+      // https://github.com/expo/expo/issues/2402#issuecomment-443726662
+      const blob = await new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+          resolve(xhr.response);
+        };
+        xhr.onerror = function (e) {
+          console.log(e);
+          reject(new TypeError("Network request failed"));
+        };
+        xhr.responseType = "blob";
+        xhr.open("GET", uri, true);
+        xhr.send(null);
+      });
+
+      const fileRef = ref(getStorage(), "images/" + uuid.v4());
+      console.log(fileRef);
+      const result = await uploadBytes(fileRef, blob);
+
+      return await getDownloadURL(fileRef);
+    }
+
+    const permissionResult =
       await ImagePicker.requestMediaLibraryPermissionsAsync();
 
     if (permissionResult.granted === false) {
@@ -62,14 +88,19 @@ const CreateEditEventScreen = function ({ navigation, route }) {
       return;
     }
 
-    let pickerResult = await ImagePicker.launchImageLibraryAsync();
-    if (pickerResult.canceled === true) return;
-
-    // console.log(pickerResult.assets[0].uri);
-    setImg(pickerResult.assets[0].uri);
+    const pickerResult = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    }).then(async (pickerResult) => {
+      if (!pickerResult.canceled) {
+        const uploadUrl = await uploadImageAsync(pickerResult.assets[0].uri);
+        setImg(uploadUrl);
+      }
+    });
   };
 
-  // TODO: Set correct image when sending to api
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [failedToSubmit, setFailedToSubmit] = useState(false);
 
