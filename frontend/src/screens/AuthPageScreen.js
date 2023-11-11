@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   buttonOutlineText: {
-    color: "1E3765",
+    color: "#1E3765",
     fontWeight: 700,
     fontSize: 16,
   },

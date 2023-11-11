@@ -37,6 +37,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
       currentEvent?._creator_id &&
       userProfileRedux?.uid == currentEvent?._creator_id,
   );
+  const [isReported, setIsReported] = useState(false);
 
   useEffect(() => {
     async function retrieveEvent(id) {
@@ -110,6 +111,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
     const response = await api.report(event_id);
     if (response.result == "SUCCESSFUL") {
       // Event reported
+      setIsReported(true);
     }
   };
 
@@ -171,9 +173,15 @@ const EventDetailsScreen = function ({ route, navigation }) {
             <AntDesign name="adduser" color={contrastColor} size={30} />
           )}
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => reportEvent()}>
-          <MaterialIcons name="report" size={40} color={contrastColor} />
-        </TouchableOpacity>
+        {isReported ? (
+          <View style={styles.reportButton}>
+            <Ionicons name="checkmark-sharp" size={36} color={contrastColor} />
+          </View>
+        ) : (
+          <TouchableOpacity onPress={() => reportEvent()}>
+            <MaterialIcons name="report" size={40} color={contrastColor} />
+          </TouchableOpacity>
+        )}
       </View>
 
       {/* Event Information */}
