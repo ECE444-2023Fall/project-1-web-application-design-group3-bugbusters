@@ -76,16 +76,11 @@ export default function BottomTab({ navigation }) {
       <Tab.Screen
         name="Create Edit"
         // navigation logic
-        getComponent={() => {
-          if (auth.currentUser) {
-            return userProfileSelector.data?.is_admin
-              ? // TODO: show CreateAnnouncementScreen
-                CreateAnnouncementScreen
-              : CreateEditEventScreen;
-          } else {
-            return AuthPageScreen;
-          }
-        }}
+        component={
+          userProfileSelector.data?.is_admin
+            ? CreateAnnouncementScreen
+            : CreateEditEventScreen
+        }
         options={{
           tabBarIcon: ({ color, size }) => {
             return (
@@ -93,6 +88,15 @@ export default function BottomTab({ navigation }) {
             );
           },
           gestureEnabled: false,
+        }}
+        listeners={{
+          tabPress: (e) => {
+            // do not navigate to component unless user is logged in
+            if (!auth.currentUser) {
+              e.preventDefault();
+              navigation.navigate("Authentication Page");
+            }
+          },
         }}
       />
       <Tab.Screen
