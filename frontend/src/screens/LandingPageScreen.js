@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   ScrollView,
   RefreshControl,
+  Pressable,
 } from "react-native";
 import HeaderBar from "../components/HeaderBar";
 import api from "../helpers/API";
@@ -78,6 +79,14 @@ const LandingPageScreen = function ({ navigation }) {
       <ScrollView
         refreshControl={<RefreshControl onRefresh={() => fetchEvents()} />}
       >
+        {/* Sample event, TODO: Remove when done testing */}
+        <TouchableOpacity onPress={() => navigation.navigate("Event Details")}>
+          <EventCard
+            title="Test event"
+            owner="Me"
+            image="https://picsum.photos/200"
+          />
+        </TouchableOpacity>
         {events.map((event) => {
           return (
             <TouchableOpacity
@@ -91,7 +100,11 @@ const LandingPageScreen = function ({ navigation }) {
               <EventCard
                 title={event?.event_title}
                 owner={event?.friendly_creator_name}
-                image={event?.header_image_URL}
+                image={
+                  event?.header_image_URL
+                    ? event?.header_image_URL
+                    : "https://picsum.photos/200"
+                }
               />
             </TouchableOpacity>
           );

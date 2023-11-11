@@ -17,18 +17,6 @@ export default function BottomTab({ navigation }) {
   const contrastColor = useSelector((state) => state.main.contrastColor);
 
   const auth = getAuth();
-  useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      if (user) {
-        // user is signed in
-        navigation.navigate("Landing Page");
-      } else {
-        // user is signed out
-        navigation.navigate("Landing Page");
-      }
-    });
-    return unsubscribe;
-  }, []);
 
   return (
     <Tab.Navigator
@@ -36,10 +24,12 @@ export default function BottomTab({ navigation }) {
       screenOptions={(_, color, __) => {
         return {
           tabBarActiveTintColor: contrastColor,
+          tabBarActiveTintColor: contrastColor,
           tabBarInactiveTintColor: color,
           tabBarStyle: {
             position: "absolute",
             paddingTop: 8,
+            backgroundColor: primaryColor,
             backgroundColor: primaryColor,
           },
           headerShown: false,
