@@ -67,7 +67,7 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
 
   const handleEditProfile = () => {
     setMenuPopup(false);
-    navigation.navigate("Edit Profile");
+    navigation.navigate("Edit Profile", { userProfile: userProfile });
   };
 
   // delete callback for announcements
