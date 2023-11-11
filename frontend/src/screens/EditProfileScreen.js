@@ -9,7 +9,10 @@ import {
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import HeaderBar from "../components/HeaderBar";
-import { Ionicons } from "@expo/vector-icons";
+import { Feather, Ionicons } from "@expo/vector-icons";
+
+const profileHeight = 80;
+const profileWidth = 80;
 
 const EditProfileScreen = function ({ navigation, route }) {
   const { userProfile } = route.params;
@@ -17,6 +20,8 @@ const EditProfileScreen = function ({ navigation, route }) {
   const primaryColor = useSelector((state) => state.main.primaryColor);
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
   const contrastColor = useSelector((state) => state.main.contrastColor);
+
+  const pickImage = () => {};
 
   return (
     <KeyboardAvoidingView style={styles.container}>
@@ -42,6 +47,29 @@ const EditProfileScreen = function ({ navigation, route }) {
               : "https://media.istockphoto.com/id/1451587807/vector/user-profile-icon-vector-avatar-or-person-icon-profile-picture-portrait-symbol-vector.jpg?s=612x612&w=0&k=20&c=yDJ4ITX1cHMh25Lt1vI1zBn2cAKKAlByHBvPJ8gEiIg=",
           }}
         ></Image>
+        <View
+          style={{
+            position: "absolute",
+            transform: [{ translateX: 32 }],
+            bottom: "0%",
+            borderColor: "black",
+            borderWidth: 1,
+            backgroundColor: "white",
+            borderRadius: "50%",
+          }}
+        >
+          <TouchableOpacity
+            onPress={() => {
+              pickImage();
+            }}
+          >
+            <Feather
+              name="edit-2"
+              size={20}
+              style={{ marginVertical: 3, marginHorizontal: 4 }}
+            />
+          </TouchableOpacity>
+        </View>
       </View>
       {/* Display name container */}
       <View style={styles.display_name_container}>
@@ -63,8 +91,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   profile_picture: {
-    width: 80,
-    height: 80,
+    width: profileWidth,
+    height: profileHeight,
     resizeMode: "stretch",
     borderColor: "#1E3765",
     borderWidth: 3,
