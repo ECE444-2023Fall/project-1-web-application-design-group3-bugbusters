@@ -35,7 +35,6 @@ const AnnouncementCard = function ({
         <TouchableOpacity
           onPress={() => {
             setEditPopup(true);
-            console.log("EDITING", announcement_data?.id);
           }}
         >
           <Feather name="edit-2" size={buttonSize} style={styles.button} />
@@ -69,9 +68,6 @@ const AnnouncementCard = function ({
             multiline
             placeholder="Enter description"
             placeholderTextColor={"grey"}
-            onPressIn={() => {
-              console.log("PRESSED");
-            }}
           />
           <TouchableOpacity
             style={styles.done_editing_button}
@@ -85,7 +81,6 @@ const AnnouncementCard = function ({
                   popupSetter: setEditPopup,
                 });
               } else {
-                console.log("NO CHANGE");
                 setEditPopup(false);
               }
             }}

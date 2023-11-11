@@ -10,6 +10,14 @@ const CreateAnnouncementScreen = ({ navigation }) => {
   const contrastColor = useSelector((state) => state.main.contrastColor);
   const [proposedText, setProposedText] = useState("");
 
+  const createAnnouncement = () => {
+    // must provide description to create announcement
+    if (!proposedText) {
+      alert("Invalid: Cannot create announcement with no description");
+    } else {
+    }
+  };
+
   return (
     <View style={{ flex: 1 }}>
       <HeaderBar
@@ -35,11 +43,12 @@ const CreateAnnouncementScreen = ({ navigation }) => {
             textSetter(text);
             setProposedText(text);
             popupSetter(false);
-            console.log("EDITER CALLBACK WORKING");
           }}
-          deleter={() => console.log("DELETER CALLBACK WORKING")}
         />
-        <TouchableOpacity style={styles.create_button}>
+        <TouchableOpacity
+          style={styles.create_button}
+          onPress={createAnnouncement}
+        >
           <Text style={styles.create_button_text}>CREATE</Text>
         </TouchableOpacity>
       </View>
