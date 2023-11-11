@@ -51,7 +51,13 @@ const AnnouncementCard = function ({
             />
           </TouchableOpacity>
         ) : null}
-        <PopUp visible={editPopup} setVisible={setEditPopup}>
+        <PopUp
+          visible={editPopup}
+          setVisible={setEditPopup}
+          onClose={() => {
+            setEditText(description);
+          }}
+        >
           <TextInput
             value={editText}
             onChangeText={(text) => {
