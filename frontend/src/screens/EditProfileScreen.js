@@ -17,6 +17,7 @@ import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import uuid from "uuid";
 import api from "../helpers/API";
 
+// style consts
 const profileHeight = 80;
 const profileWidth = 80;
 
@@ -118,6 +119,7 @@ const EditProfileScreen = function ({ navigation, route }) {
         <View
           style={{
             ...styles.edit_button_container,
+            backgroundColor: primaryColor,
             bottom: "0%",
             transform: [{ translateX: 32 }],
           }}
@@ -130,6 +132,7 @@ const EditProfileScreen = function ({ navigation, route }) {
             <Feather
               name="edit-2"
               size={20}
+              color={contrastColor}
               style={{ marginVertical: 3, marginHorizontal: 4 }}
             />
           </TouchableOpacity>
@@ -141,6 +144,7 @@ const EditProfileScreen = function ({ navigation, route }) {
         <View
           style={{
             ...styles.edit_button_container,
+            backgroundColor: primaryColor,
             right: "5%",
           }}
         >
@@ -152,6 +156,7 @@ const EditProfileScreen = function ({ navigation, route }) {
             <Feather
               name="edit-2"
               size={20}
+              color={contrastColor}
               style={{
                 marginVertical: 3,
                 marginHorizontal: 4,
@@ -223,9 +228,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
   },
   edit_button_container: {
-    borderColor: "black",
+    borderColor: "white",
     borderWidth: 1,
-    backgroundColor: "white",
     borderRadius: "50%",
     position: "absolute",
   },
