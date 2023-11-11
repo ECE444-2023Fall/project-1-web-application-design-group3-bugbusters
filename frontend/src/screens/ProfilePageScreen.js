@@ -8,7 +8,7 @@ import {
   View,
   FlatList,
 } from "react-native";
-import { Ionicons, Octicons } from "@expo/vector-icons";
+import { Feather, Ionicons, Octicons } from "@expo/vector-icons";
 import HeaderBar from "../components/HeaderBar";
 import EventCard from "../components/EventCard";
 import PopUp from "../components/PopUp";
@@ -17,6 +17,7 @@ import { getAuth, signOut } from "firebase/auth";
 import { useSelector } from "react-redux";
 import api from "../helpers/API";
 import AnnouncementCard from "../components/AnnouncementCard";
+import HorizontalTextBuffer from "../components/HorizontalTextBuffer";
 
 const ProfilePageScreen = function ({ navigation, userProfile }) {
   const [event_data, setEventData] = useState([]);
@@ -62,6 +63,10 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
         // An error happened.
         console.log(error);
       });
+  };
+
+  const handleEditProfile = () => {
+    console.log("EDIT PROFILE");
   };
 
   // delete callback for announcements
@@ -153,7 +158,18 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
         </TouchableOpacity>
         {/* Menu */}
         <PopUp visible={menuPopup} setVisible={setMenuPopup}>
-          <TouchableOpacity onPress={handleSignOut} style={styles.menu_item}>
+          <TouchableOpacity
+            onPress={handleEditProfile}
+            style={styles.menu_item}
+          >
+            <Feather name="edit-2" size={20} color={primaryColor} />
+            <Text style={{ color: primaryColor }}>EDIT PROFILE</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={handleSignOut}
+            // add borderBottomWidth for last menu item
+            style={{ ...styles.menu_item, borderBottomWidth: 0 }}
+          >
             <Octicons name="sign-out" size={20} color={primaryColor} />
             <Text style={{ color: primaryColor }}>SIGN OUT</Text>
           </TouchableOpacity>
@@ -219,10 +235,11 @@ const styles = StyleSheet.create({
     paddingVertical: 80,
   },
   menu_item: {
-    width: "100%",
+    width: "90%",
     justifyContent: "flex-start",
     alignItems: "center",
     flexDirection: "row",
+    borderBottomWidth: 1,
     paddingLeft: 24,
     paddingVertical: 12,
     gap: 24,
