@@ -16,7 +16,8 @@ import { useEffect, useState } from "react";
 const AnnouncementCard = function ({
   announcement_data,
   show_popup = false,
-  show_delete_button = true,
+  hide_edit_button = false,
+  hide_delete_button = false,
   editer,
   deleter,
 }) {
@@ -32,14 +33,16 @@ const AnnouncementCard = function ({
     <View style={styles.announcementContainer}>
       <Text style={styles.announcementText}>{description}</Text>
       <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          onPress={() => {
-            setEditPopup(true);
-          }}
-        >
-          <Feather name="edit-2" size={buttonSize} style={styles.button} />
-        </TouchableOpacity>
-        {show_delete_button ? (
+        {hide_edit_button ? null : (
+          <TouchableOpacity
+            onPress={() => {
+              setEditPopup(true);
+            }}
+          >
+            <Feather name="edit-2" size={buttonSize} style={styles.button} />
+          </TouchableOpacity>
+        )}
+        {hide_delete_button ? null : (
           <TouchableOpacity
             onPress={() => deleter({ id: announcement_data?.id })}
           >
@@ -49,7 +52,7 @@ const AnnouncementCard = function ({
               style={styles.button}
             />
           </TouchableOpacity>
-        ) : null}
+        )}
         <PopUp
           visible={editPopup}
           setVisible={setEditPopup}
@@ -104,7 +107,7 @@ const styles = StyleSheet.create({
     borderWidth: 4,
     borderColor: "#FF5C00",
   },
-  announcementText: { fontWeight: 700, fontSize: 18 },
+  announcementText: { paddingVertical: 16, fontWeight: 700, fontSize: 18 },
   buttonContainer: {
     justifyContent: "flex-end",
     flexDirection: "row",

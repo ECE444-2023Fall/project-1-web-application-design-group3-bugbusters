@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Text,
   StyleSheet,
@@ -16,6 +16,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { setUserData } from "../store/Action";
 import EventCard from "../components/EventCard";
 import { AntDesign, Ionicons } from "@expo/vector-icons";
+import AnnouncementCard from "../components/AnnouncementCard";
 
 const LandingPageScreen = function ({ navigation }) {
   // const [text, setText] = useState("");
@@ -25,6 +26,7 @@ const LandingPageScreen = function ({ navigation }) {
   const contrastColor = useSelector((state) => state.main.contrastColor);
 
   const [events, setEvents] = useState([]);
+  const [announcements, setAnnouncements] = useState([]);
   const [displaySearchBar, setDisplaySearchBar] = useState(false);
   const [searchText, setSearchText] = useState("");
   const refInput = useRef();
@@ -41,6 +43,15 @@ const LandingPageScreen = function ({ navigation }) {
     }
   };
 
+  const fetchAnnouncements = async () => {
+    const response = await api.getAllAnnouncements();
+    if (response.result == "SUCCESSFUL") {
+      setAnnouncements(response.data);
+    } else {
+      alert("FAILED TO GET ALL ANNOUNCEMENTS");
+    }
+  };
+
   // Search case (this will be combined with the above function once getAllEvents endpoint is obsolete)
   const searchEvents = async () => {
     const response = await api.search({ query: searchText, filters: [] });
@@ -53,8 +64,17 @@ const LandingPageScreen = function ({ navigation }) {
   };
 
   useEffect(() => {
-    fetchEvents();
-  }, []);
+    const unsubscribe = navigation.addListener("focus", () => {
+      // The screen is focused
+      // Call any action
+      setAnnouncements([]); // must reset state for some weird reason
+      fetchEvents();
+      fetchAnnouncements();
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <View style={{ flex: 1, backgroundColor: contrastColor }}>
@@ -73,8 +93,25 @@ const LandingPageScreen = function ({ navigation }) {
           </TouchableOpacity>
         }
       />
+      {announcements.map((announcement, key) => {
+        return (
+          <AnnouncementCard
+            key={key}
+            announcement_data={announcement}
+            hide_edit_button
+            hide_delete_button
+          />
+        );
+      })}
       <ScrollView
-        refreshControl={<RefreshControl onRefresh={() => fetchEvents()} />}
+        refreshControl={
+          <RefreshControl
+            onRefresh={() => {
+              fetchEvents();
+              fetchAnnouncements();
+            }}
+          />
+        }
       >
         {/* Sample event, TODO: Remove when done testing */}
         <TouchableOpacity onPress={() => navigation.navigate("Event Details")}>
