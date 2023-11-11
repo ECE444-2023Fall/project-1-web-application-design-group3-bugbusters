@@ -21,7 +21,9 @@ const LandingPageScreen = function ({ navigation }) {
   const primaryColor = useSelector((state) => state.main.primaryColor);
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
   const contrastColor = useSelector((state) => state.main.contrastColor);
-  const userProfileRedux = useSelector((state) => state.userProfileData);
+  const userProfileRedux = useSelector(
+    (state) => state.main.userProfileData.data
+  );
 
   const [events, setEvents] = useState([]);
   const [displaySearchBar, setDisplaySearchBar] = useState(false);

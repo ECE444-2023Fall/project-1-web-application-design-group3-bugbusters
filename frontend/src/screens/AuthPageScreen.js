@@ -64,7 +64,7 @@ const AuthPageScreen = function ({ navigation }) {
     if (!endsWithAny(email, validEmails)) {
       Alert.alert(
         "Invalid Email",
-        (message = "You must use an official University of Toronto email."),
+        (message = "You must use an official University of Toronto email.")
       );
       return;
     }
@@ -83,7 +83,7 @@ const AuthPageScreen = function ({ navigation }) {
             "Email Verification",
             (message =
               "A verification receipt has been send to " +
-              "the email you used to register."),
+              "the email you used to register.")
           );
         });
         api
@@ -109,7 +109,7 @@ const AuthPageScreen = function ({ navigation }) {
               navigation.navigate("Authentication Page");
               Alert.alert(
                 "Email is not verified!",
-                (message = "Please check the email you used to register."),
+                (message = "Please check the email you used to register.")
               );
             })
             .catch((error) => {
