@@ -56,6 +56,13 @@ export class Api {
   async report(id) {
     return this.makeRequest(`report-service/report/${id}`, null, "POST");
   }
+  async rsvp(data) {
+    return this.makeRequest("event-service/rsvp", data, "PUT");
+  }
+
+  async sendRsvp(data) {
+    return this.makeRequest("event-service/send-rsvp", data, "PUT");
+  }
 }
 
 const api = new Api("apiKey");

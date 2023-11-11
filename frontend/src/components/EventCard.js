@@ -19,7 +19,7 @@ const EventCard = function ({ navigation, image, title, owner, id }) {
 
   return (
     <View style={styles.cardContainer}>
-      <Image style={{ height: 140 }} source={{ uri: image }} />
+      <Image style={{ height: 200 }} source={{ uri: image }} />
       <View style={styles.cardBar}>
         <View style={{ width: 50 }}></View>
         <View>
@@ -41,7 +41,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     margin: 20,
     borderRadius: 10,
-    height: 220,
+    height: 280,
     overflow: "hidden",
   },
   cardBar: {
