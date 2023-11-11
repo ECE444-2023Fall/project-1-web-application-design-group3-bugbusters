@@ -24,18 +24,21 @@ const EditProfileScreen = function ({ navigation, route }) {
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
   const contrastColor = useSelector((state) => state.main.contrastColor);
 
+  const [profileUrl, setProfileUrl] = useState(userProfile?.photo_url);
+
   const pickImage = () => {
     // No permissions request is necessary for launching the image library
     ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
-      aspect: [4, 3],
+      aspect: [1, 1],
       quality: 1,
     }).then(async (pickerResult) => {
       console.log(pickerResult);
       if (!pickerResult.cancelled) {
         const uploadUrl = await uploadImageAsync(pickerResult.uri);
         // handle uploadUrl has desired
+        setProfileUrl(uploadUrl);
       }
     });
 
@@ -83,8 +86,8 @@ const EditProfileScreen = function ({ navigation, route }) {
         <Image
           style={styles.profile_picture}
           source={{
-            uri: userProfile.photo_url
-              ? "https://reactnative.dev/img/tiny_logo.png"
+            uri: profileUrl
+              ? profileUrl
               : "https://media.istockphoto.com/id/1451587807/vector/user-profile-icon-vector-avatar-or-person-icon-profile-picture-portrait-symbol-vector.jpg?s=612x612&w=0&k=20&c=yDJ4ITX1cHMh25Lt1vI1zBn2cAKKAlByHBvPJ8gEiIg=",
           }}
         ></Image>
