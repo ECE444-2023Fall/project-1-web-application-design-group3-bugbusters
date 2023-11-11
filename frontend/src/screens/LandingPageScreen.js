@@ -76,14 +76,6 @@ const LandingPageScreen = function ({ navigation }) {
       <ScrollView
         refreshControl={<RefreshControl onRefresh={() => fetchEvents()} />}
       >
-        {/* Sample event, TODO: Remove when done testing */}
-        <TouchableOpacity onPress={() => navigation.navigate("Event Details")}>
-          <EventCard
-            title="Test event"
-            owner="Me"
-            image="https://picsum.photos/200"
-          />
-        </TouchableOpacity>
         {events.map((event) => {
           return (
             <TouchableOpacity

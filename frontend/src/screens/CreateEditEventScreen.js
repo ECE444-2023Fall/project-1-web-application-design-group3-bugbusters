@@ -9,13 +9,15 @@ import {
   Keyboard,
   ScrollView,
   Image,
+  ActivityIndicator,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import HeaderBar from "../components/HeaderBar";
 import { Ionicons, Feather } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
-// const { DateTime } = require("luxon");
+import api from "../helpers/API";
+const { DateTime } = require("luxon");
 
 const CreateEditEventScreen = function ({ navigation, route }) {
   // Signifies from where we navigate to this screen
@@ -24,6 +26,8 @@ const CreateEditEventScreen = function ({ navigation, route }) {
   const primaryColor = useSelector((state) => state.main.primaryColor);
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
   const contrastColor = useSelector((state) => state.main.contrastColor);
+
+  const userProfileRedux = useSelector((state) => state.userProfileData);
 
   const [img, setImg] = useState(eventObject?._images?._header_image);
   const [title, setTitle] = useState(eventObject?._event_title);
@@ -65,8 +69,54 @@ const CreateEditEventScreen = function ({ navigation, route }) {
     setImg(pickerResult.assets[0].uri);
   };
 
-  // TODO: When sending date to api, make sure to convert timezone to toronto
   // TODO: Set correct image when sending to api
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [failedToSubmit, setFailedToSubmit] = useState(false);
+
+  const sendEvent = async () => {
+    setIsSubmitting(true);
+
+    const startTimeString = DateTime.fromJSDate(startTime, {
+      zone: "America/Toronto",
+    }).toISO();
+    const endTimeString = DateTime.fromJSDate(endTime, {
+      zone: "America/Toronto",
+    }).toISO();
+    const expiryTimeString = DateTime.fromJSDate(expiryTime, {
+      zone: "America/Toronto",
+    }).toISO();
+
+    const newEventObj = {
+      _creator_id: userProfileRedux?.uid,
+      _event_title: title,
+      _location: location,
+      _event_start_time: startTimeString,
+      _event_end_time: endTimeString,
+      _description: description,
+      _images: { _header_image: img },
+      _event_expiry_time: expiryTimeString,
+    };
+
+    let response;
+    if (isCreate) {
+      response = await api.createEvent(newEventObj);
+    } else {
+      response = await api.editEvent(
+        (data = newEventObj),
+        (id = eventObject?._event_id),
+      );
+    }
+
+    if (response.result == "SUCCESSFUL") {
+      // Event created
+      setFailedToSubmit(false);
+      navigation.goBack();
+    } else {
+      // Event cannot be created
+      setFailedToSubmit(true);
+    }
+    setIsSubmitting(false);
+  };
 
   return (
     <View>
@@ -197,13 +247,22 @@ const CreateEditEventScreen = function ({ navigation, route }) {
             timeZoneName="America/Toronto"
             accentColor={primaryColor}
           />
-          <TouchableOpacity
-            style={{ ...styles.createButton, backgroundColor: primaryColor }}
-          >
-            <Text style={{ color: contrastColor, fontSize: 16 }}>
-              {isCreate ? "Create" : "Submit"}
-            </Text>
-          </TouchableOpacity>
+          {isSubmitting ? (
+            <View
+              style={{ ...styles.createButton, backgroundColor: primaryColor }}
+            >
+              <ActivityIndicator color="white" />
+            </View>
+          ) : (
+            <TouchableOpacity
+              style={{ ...styles.createButton, backgroundColor: primaryColor }}
+              onPress={sendEvent}
+            >
+              <Text style={{ color: contrastColor, fontSize: 16 }}>
+                {isCreate ? "Create" : "Submit"}
+              </Text>
+            </TouchableOpacity>
+          )}
         </ScrollView>
       </TouchableWithoutFeedback>
     </View>
