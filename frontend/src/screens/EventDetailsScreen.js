@@ -34,13 +34,11 @@ const EventDetailsScreen = function ({ route, navigation }) {
 
   const [currentEvent, setCurrentEvent] = useState({});
   const [currentEventUser, setCurrentEventUser] = useState({});
-  // TODO: Uncomment this when done editing
-  // const [isOwner, setOwner] = useState(
-  //   userProfileRedux?.uid &&
-  //     currentEvent?._creator_id &&
-  //     userProfileRedux?.uid == currentEvent?._creator_id,
-  // );
-  const [isOwner, setOwner] = useState(true);
+  const [isOwner, setOwner] = useState(
+    userProfileRedux?.uid &&
+      currentEvent?._creator_id &&
+      userProfileRedux?.uid == currentEvent?._creator_id,
+  );
 
   useEffect(() => {
     async function retrieveEvent(id) {
