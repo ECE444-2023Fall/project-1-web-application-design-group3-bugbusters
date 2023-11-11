@@ -23,7 +23,10 @@ const PopUp = function ({ children, visible, setVisible, onClose }) {
     >
       <TouchableWithoutFeedback
         onPress={() => {
-          onClose();
+          console.log("DEBUG");
+          if (onClose) {
+            onClose();
+          }
           setVisible(false);
         }}
       >

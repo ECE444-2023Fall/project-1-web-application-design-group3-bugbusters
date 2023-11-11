@@ -149,8 +149,9 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
             setMenuPopup(true);
           }}
         >
-          <Ionicons name="ellipsis-horizontal" size={28} color={primaryColor} />
+          <Ionicons name="menu" size={36} color={primaryColor} />
         </TouchableOpacity>
+        {/* Menu */}
         <PopUp visible={menuPopup} setVisible={setMenuPopup}>
           <TouchableOpacity onPress={handleSignOut} style={styles.menu_item}>
             <Octicons name="sign-out" size={20} color={primaryColor} />
@@ -200,7 +201,7 @@ const styles = StyleSheet.create({
   },
   menu_button: {
     position: "absolute",
-    start: "90%",
+    start: "87%",
   },
   display_name_container: {
     paddingBottom: 16,
