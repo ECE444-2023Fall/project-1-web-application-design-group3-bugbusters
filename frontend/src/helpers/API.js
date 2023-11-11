@@ -50,11 +50,11 @@ export class Api {
   }
 
   async createEvent(data) {
-    return this.makeRequest("/event-service/event", data, "POST");
+    return this.makeRequest("/event-service/create-event", data, "POST");
   }
 
   async editEvent(data, id) {
-    return this.makeRequest(`/event-service/${id}`, data, "POST");
+    return this.makeRequest(`/event-service/edit-event/${id}`, data, "POST");
   }
 
   async search(data) {
