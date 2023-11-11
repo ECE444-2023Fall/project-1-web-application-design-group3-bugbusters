@@ -1,6 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import {
   Text,
+  TextInput,
   Image,
   StyleSheet,
   View,
@@ -9,6 +10,7 @@ import {
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import HeaderBar from "../components/HeaderBar";
+import PopUp from "../components/PopUp";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
@@ -26,6 +28,9 @@ const EditProfileScreen = function ({ navigation, route }) {
   const contrastColor = useSelector((state) => state.main.contrastColor);
 
   const [profileUrl, setProfileUrl] = useState(userProfile?.photo_url);
+  const [displayName, setDisplayName] = useState(userProfile?.display_name);
+  const [editPopup, setEditPopup] = useState(false);
+  const [editText, setEditText] = useState(userProfile?.display_name);
 
   const callEditUserProfile = ({ uid, display_name, photo_url }) => {
     api
@@ -112,7 +117,8 @@ const EditProfileScreen = function ({ navigation, route }) {
         ></Image>
         <View
           style={{
-            ...styles.profile_edit_button_container,
+            ...styles.edit_button_container,
+            bottom: "0%",
             transform: [{ translateX: 32 }],
           }}
         >
@@ -131,16 +137,16 @@ const EditProfileScreen = function ({ navigation, route }) {
       </View>
       {/* Display name container */}
       <View style={styles.display_name_container}>
-        <Text style={styles.display_name_text}>{userProfile.display_name}</Text>
+        <Text style={styles.display_name_text}>{displayName}</Text>
         <View
           style={{
-            ...styles.profile_edit_button_container,
-            transform: [{ translateX: 80 }],
+            ...styles.edit_button_container,
+            right: "5%",
           }}
         >
           <TouchableOpacity
             onPress={() => {
-              console.log("EDIT DISPLAY NAME");
+              setEditPopup(true);
             }}
           >
             <Feather
@@ -154,6 +160,45 @@ const EditProfileScreen = function ({ navigation, route }) {
           </TouchableOpacity>
         </View>
       </View>
+      <PopUp
+        visible={editPopup}
+        setVisible={setEditPopup}
+        onClose={() => {
+          setEditText(displayName);
+        }}
+      >
+        <TextInput
+          value={editText}
+          onChangeText={(text) => {
+            setEditText(text);
+          }}
+          style={{ ...styles.input, borderColor: primaryColor }}
+          autoFocus
+          selectTextOnFocus
+          multiline
+          placeholder="Enter description"
+          placeholderTextColor={"grey"}
+        />
+        <TouchableOpacity
+          style={styles.done_editing_button}
+          onPress={() => {
+            // only edit description if text has changed
+            if (editText != displayName) {
+              setDisplayName(editText);
+              callEditUserProfile({
+                uid: userProfile.uid,
+                display_name: editText,
+                photo_url: userProfile.photo_url,
+              });
+              setEditPopup(false);
+            } else {
+              setEditPopup(false);
+            }
+          }}
+        >
+          <Text style={styles.done_editing_text}>DONE</Text>
+        </TouchableOpacity>
+      </PopUp>
     </KeyboardAvoidingView>
   );
 };
@@ -177,20 +222,43 @@ const styles = StyleSheet.create({
     borderWidth: 3,
     borderRadius: 20,
   },
-  profile_edit_button_container: {
-    position: "absolute",
-    bottom: "0%",
+  edit_button_container: {
     borderColor: "black",
     borderWidth: 1,
     backgroundColor: "white",
     borderRadius: "50%",
+    position: "absolute",
   },
   display_name_container: {
     alignItems: "center",
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "center",
   },
   display_name_text: {
     fontWeight: 700,
     fontSize: 24,
+  },
+  input: {
+    backgroundColor: "white",
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    marginTop: 5,
+    borderRadius: 10,
+    borderWidth: 3,
+    outlineStyle: "none",
+    width: "calc(100% - 24px)",
+  },
+  done_editing_button: {
+    backgroundColor: "#16aed9",
+    marginTop: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderRadius: 6,
+  },
+  done_editing_text: {
+    fontWeight: 700,
+    color: "white",
   },
 });
 
