@@ -75,7 +75,7 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
   // edit callback for announcements
   announcement_editer = ({ text, id, textSetter, popupSetter }) => {
     api
-      .editAnnouncement(text, id)
+      .editAnnouncement({ description: text, id: id })
       .then((response) => {
         if (response.result == "SUCCESSFUL") {
           textSetter(text);

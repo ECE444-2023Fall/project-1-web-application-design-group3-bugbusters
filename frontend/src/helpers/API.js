@@ -66,6 +66,16 @@ export class Api {
     return this.makeRequest(`announcement-service`, null, "GET");
   }
 
+  async createAnnouncement({ description }) {
+    return this.makeRequest(
+      `announcement-service`,
+      {
+        description: description,
+      },
+      "POST"
+    );
+  }
+
   async deleteAnnouncement(id) {
     query_params = { id: id };
     return this.makeRequest(
@@ -76,7 +86,7 @@ export class Api {
     );
   }
 
-  editAnnouncement(description, id) {
+  async editAnnouncement({ description, id }) {
     data = { description: description };
     query_params = {
       id: id,

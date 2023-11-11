@@ -2,7 +2,7 @@ import { useState, useContext, useEffect } from "react";
 import { Text, StyleSheet, View, TouchableOpacity } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import HeaderBar from "../components/HeaderBar";
-import PopUp from "../components/PopUp";
+import api from "../helpers/API";
 import { Ionicons } from "@expo/vector-icons";
 import AnnouncementCard from "../components/AnnouncementCard";
 
@@ -15,6 +15,11 @@ const CreateAnnouncementScreen = ({ navigation }) => {
     if (!proposedText) {
       alert("Invalid: Cannot create announcement with no description");
     } else {
+      api.createAnnouncement({ description: proposedText }).then((response) => {
+        if (response.result == "SUCCESSFUL") {
+          navigation.goBack();
+        }
+      });
     }
   };
 
