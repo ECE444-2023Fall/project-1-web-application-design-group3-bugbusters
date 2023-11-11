@@ -12,26 +12,38 @@ import {
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import HeaderBar from "../components/HeaderBar";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, Feather } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
 // const { DateTime } = require("luxon");
 
 const CreateEditEventScreen = function ({ navigation, route }) {
   // Signifies from where we navigate to this screen
-  const { navigateFromCreate = false } = route?.params ? route?.params : {};
+  const { isCreate = false, eventObject } = route?.params ? route?.params : {};
   const dispatchRedux = useDispatch();
   const primaryColor = useSelector((state) => state.main.primaryColor);
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
   const contrastColor = useSelector((state) => state.main.contrastColor);
 
-  const [img, setImg] = useState("");
-  const [title, setTitle] = useState("");
-  const [location, setLocation] = useState("");
-  const [description, setDescription] = useState("");
-  const [startTime, setStartTime] = useState(new Date());
-  const [endTime, setEndTime] = useState(new Date());
-  const [expiryTime, setExpiryTime] = useState(new Date());
+  const [img, setImg] = useState(eventObject?._images?._header_image);
+  const [title, setTitle] = useState(eventObject?._event_title);
+  const [location, setLocation] = useState(eventObject?._location);
+  const [description, setDescription] = useState(eventObject?._description);
+  const [startTime, setStartTime] = useState(
+    eventObject?._event_start_time
+      ? new Date(eventObject?._event_start_time)
+      : new Date(),
+  );
+  const [endTime, setEndTime] = useState(
+    eventObject?._event_end_time
+      ? new Date(eventObject?._event_end_time)
+      : new Date(),
+  );
+  const [expiryTime, setExpiryTime] = useState(
+    eventObject?._event_expiry_time
+      ? new Date(eventObject?._event_expiry_time)
+      : new Date(),
+  );
 
   const refTitleInput = useRef();
   const refLocationInput = useRef();
@@ -49,7 +61,7 @@ const CreateEditEventScreen = function ({ navigation, route }) {
     let pickerResult = await ImagePicker.launchImageLibraryAsync();
     if (pickerResult.canceled === true) return;
 
-    console.log(pickerResult.assets[0].uri);
+    // console.log(pickerResult.assets[0].uri);
     setImg(pickerResult.assets[0].uri);
   };
 
@@ -59,7 +71,7 @@ const CreateEditEventScreen = function ({ navigation, route }) {
   return (
     <View>
       <HeaderBar
-        title={navigateFromCreate ? "Create Event" : "Edit Event"}
+        title={isCreate ? "Create Event" : "Edit Event"}
         childrenLeft={
           <TouchableOpacity
             style={styles.backButton}
@@ -188,7 +200,9 @@ const CreateEditEventScreen = function ({ navigation, route }) {
           <TouchableOpacity
             style={{ ...styles.createButton, backgroundColor: primaryColor }}
           >
-            <Text style={{ color: contrastColor, fontSize: 16 }}>Create</Text>
+            <Text style={{ color: contrastColor, fontSize: 16 }}>
+              {isCreate ? "Create" : "Submit"}
+            </Text>
           </TouchableOpacity>
         </ScrollView>
       </TouchableWithoutFeedback>

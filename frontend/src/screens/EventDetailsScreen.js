@@ -14,11 +14,13 @@ import {
   MaterialCommunityIcons,
   AntDesign,
   FontAwesome,
+  Feather,
 } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 import ProfilePicture from "../components/ProfilePicture";
 import PopUp from "../components/PopUp";
 import api from "../helpers/API";
+import exampleEventObject from "../../assets/exampleEventObject.json";
 
 const EventDetailsScreen = function ({ route, navigation }) {
   const event_id = route?.params?.event_id;
@@ -32,11 +34,13 @@ const EventDetailsScreen = function ({ route, navigation }) {
 
   const [currentEvent, setCurrentEvent] = useState({});
   const [currentEventUser, setCurrentEventUser] = useState({});
-  const [isOwner, setOwner] = useState(
-    userProfileRedux?.uid &&
-      currentEvent?._creator_id &&
-      userProfileRedux?.uid == currentEvent?._creator_id,
-  );
+  // TODO: Uncomment this when done editing
+  // const [isOwner, setOwner] = useState(
+  //   userProfileRedux?.uid &&
+  //     currentEvent?._creator_id &&
+  //     userProfileRedux?.uid == currentEvent?._creator_id,
+  // );
+  const [isOwner, setOwner] = useState(true);
 
   useEffect(() => {
     async function retrieveEvent(id) {
@@ -103,7 +107,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
         title={
           currentEvent?._event_title
             ? currentEvent?._event_title
-            : "Event Doesn't Have Title"
+            : "No Event Title"
         }
         childrenLeft={
           <TouchableOpacity
@@ -113,7 +117,23 @@ const EventDetailsScreen = function ({ route, navigation }) {
             <Ionicons name="arrow-back" size={30} color={contrastColor} />
           </TouchableOpacity>
         }
-        childrenRight={<View style={{ marginRight: 30 }} />}
+        childrenRight={
+          isOwner ? (
+            <TouchableOpacity
+              style={{ width: 30 }}
+              onPress={() =>
+                navigation.navigate("Create/Edit Event", {
+                  isCreate: false,
+                  eventObject: exampleEventObject,
+                })
+              }
+            >
+              <Feather name="edit-2" size={24} color={contrastColor} />
+            </TouchableOpacity>
+          ) : (
+            <View style={{ marginRight: 30 }} />
+          )
+        }
       />
 
       {/* Image gallery (Swipeable) */}
@@ -166,7 +186,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
         <View style={{ flexDirection: "row" }}>
           <Text style={{ fontWeight: "bold" }}>Creator: </Text>
           <Text>
-            {currentEventUser
+            {currentEventUser?.display_name
               ? currentEventUser?.display_name
               : "No creator name"}
           </Text>

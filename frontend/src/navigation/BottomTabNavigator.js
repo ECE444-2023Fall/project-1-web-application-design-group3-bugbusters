@@ -65,7 +65,7 @@ export default function BottomTab({ navigation }) {
           tabPress: (e) => {
             e.preventDefault();
             navigation.navigate("Create/Edit Event", {
-              navigateFromCreate: true,
+              isCreate: true,
             });
           },
         }}
