@@ -60,8 +60,6 @@ const ProfilePageScreen = function ({
       }
     };
 
-    console.log(route?.params);
-    console.log(showBackArrow);
     if (userProfile?.is_admin) {
       callGetAllAnnouncements();
     } else {

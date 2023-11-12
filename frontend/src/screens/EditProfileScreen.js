@@ -47,6 +47,11 @@ const EditProfileScreen = function ({ navigation, route }) {
       if (response.result == "SUCCESSFUL") {
         // do something if profile screen set successfully
         // update user profile data
+        data = {
+          ...data,
+          email: userProfile.email,
+          is_admin: userProfile.is_admin,
+        };
         dispatchRedux(setUserProfileData({ data: data }));
         // console.log(userProfileSelector);
       }
@@ -61,7 +66,7 @@ const EditProfileScreen = function ({ navigation, route }) {
       aspect: [1, 1],
       quality: 1,
     }).then(async (pickerResult) => {
-      if (!pickerResult.cancelled) {
+      if (!pickerResult.canceled) {
         const uploadUrl = await uploadImageAsync(pickerResult.assets[0].uri);
         // handle uploadUrl has desired
         setProfileUrl(uploadUrl);
