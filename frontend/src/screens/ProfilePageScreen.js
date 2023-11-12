@@ -215,6 +215,9 @@ const ProfilePageScreen = function ({
       {/* Profile list */}
       <ProfileList
         title={userProfile?.is_admin ? "Announcements" : "Events"}
+        placeholder_text={
+          userProfile?.is_admin ? "No announcements" : "No events"
+        }
         data={userProfile?.is_admin ? announcement_data : event_data}
         RenderItem={userProfile?.is_admin ? AnnouncementItem : EventItem}
         keyExtractor={(item) =>

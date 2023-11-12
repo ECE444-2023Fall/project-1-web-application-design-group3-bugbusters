@@ -9,6 +9,7 @@ import {
 
 const ProfileList = ({
   title,
+  placeholder_text,
   data,
   RenderItem,
   keyExtractor,
@@ -20,7 +21,7 @@ const ProfileList = ({
   const EmptyItem = () => (
     <View style={styles.list_item_container}>
       <TouchableOpacity style={styles.button}>
-        <Text style={styles.list_item_text}>No events</Text>
+        <Text style={styles.list_item_text}>{placeholder_text}</Text>
       </TouchableOpacity>
     </View>
   );
