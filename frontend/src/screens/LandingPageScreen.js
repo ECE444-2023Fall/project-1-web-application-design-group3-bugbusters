@@ -36,7 +36,7 @@ const LandingPageScreen = function ({ navigation }) {
     if (response.result == "SUCCESSFUL") {
       setEvents(response.data.results);
     } else {
-      console.error("Events cannot be obtained!!\n");
+      // console.error("Events cannot be obtained!!\n");
     }
   };
 
@@ -50,7 +50,7 @@ const LandingPageScreen = function ({ navigation }) {
     if (response.result == "SUCCESSFUL") {
       setEvents(response.data.results);
     } else {
-      console.error("Events cannot be obtained!!\n");
+      // console.error("Events cannot be obtained!!\n");
     }
   };
 
@@ -78,29 +78,45 @@ const LandingPageScreen = function ({ navigation }) {
       <ScrollView
         refreshControl={<RefreshControl onRefresh={() => fetchEvents()} />}
       >
-        {events.map((event) => {
-          return (
-            <TouchableOpacity
-              onPress={() =>
-                navigation.navigate("Event Details", {
-                  event_id: event?.event_id,
-                })
-              }
-              key={event?.event_id}
-            >
-              <EventCard
-                title={event?.event_title}
-                owner={event?.friendly_creator_name}
-                image={
-                  event?.header_image_URL
-                    ? event?.header_image_URL
-                    : "https://picsum.photos/200"
+        {events.length ? (
+          events.map((event) => {
+            return (
+              <TouchableOpacity
+                onPress={() =>
+                  navigation.navigate("Event Details", {
+                    event_id: event?.event_id,
+                  })
                 }
-                id={event?.event_id}
-              />
-            </TouchableOpacity>
-          );
-        })}
+                key={event?.event_id}
+              >
+                <EventCard
+                  title={event?.event_title}
+                  owner={event?.friendly_creator_name}
+                  image={
+                    event?.header_image_URL
+                      ? event?.header_image_URL
+                      : "https://picsum.photos/200"
+                  }
+                  id={event?.event_id}
+                />
+              </TouchableOpacity>
+            );
+          })
+        ) : (
+          <View
+            style={{
+              alignItems: "center",
+              paddingTop: 80,
+              justifyContent: "space-between",
+              height: 150,
+            }}
+          >
+            <Text style={styles.noEventsText}>
+              No events to view at this moment.
+            </Text>
+            <Text style={styles.noEventsText}>Tune in later!</Text>
+          </View>
+        )}
       </ScrollView>
 
       {/* Search bar placed here due to React Native view display */}
@@ -174,6 +190,9 @@ const styles = StyleSheet.create({
   },
   checkBox: {
     marginHorizontal: 10,
+  },
+  noEventsText: {
+    fontSize: 18,
   },
 });
 
