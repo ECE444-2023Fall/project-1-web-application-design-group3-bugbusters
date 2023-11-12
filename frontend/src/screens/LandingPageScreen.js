@@ -22,7 +22,7 @@ const LandingPageScreen = function ({ navigation }) {
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
   const contrastColor = useSelector((state) => state.main.contrastColor);
   const userProfileRedux = useSelector(
-    (state) => state.main.userProfileData.data
+    (state) => state.main.userProfileData.data,
   );
 
   const [events, setEvents] = useState([]);
@@ -46,7 +46,7 @@ const LandingPageScreen = function ({ navigation }) {
   const searchEvents = async () => {
     const response = await api.search({
       query: searchText,
-      filter: [],
+      filters: [],
       reported: reportedEvents,
     });
     if (response.result == "SUCCESSFUL") {
