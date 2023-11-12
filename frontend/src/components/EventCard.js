@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Text, StyleSheet, View, TouchableOpacity, Image } from "react-native";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useSelector, useDispatch } from "react-redux";
@@ -10,7 +10,9 @@ const EventCard = function ({ navigation, image, title, owner, id }) {
   const primaryColor = useSelector((state) => state.main.primaryColor);
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
   const contrastColor = useSelector((state) => state.main.contrastColor);
-  const userProfileRedux = useSelector((state) => state.userProfileData);
+  const userProfileRedux = useSelector(
+    (state) => state.main.userProfileData.data,
+  );
 
   const [isReported, setIsReported] = useState(false);
   const [isAdmin, setIsAdmin] = useState(userProfileRedux?.is_admin);
@@ -22,6 +24,10 @@ const EventCard = function ({ navigation, image, title, owner, id }) {
       setIsReported(true);
     }
   };
+
+  useEffect(() => {
+    setIsAdmin(userProfileRedux?.is_admin);
+  }, [userProfileRedux]);
 
   return (
     <View style={styles.cardContainer}>
