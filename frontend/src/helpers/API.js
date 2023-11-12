@@ -53,6 +53,10 @@ export class Api {
     return this.makeRequest("search-service/search", data, "POST");
   }
 
+  async deleteEvent(id) {
+    return this.makeRequest(`event-service/delete-event/${id}`, data, "DELETE");
+  }
+
   async report(id) {
     return this.makeRequest(`report-service/report/${id}`, null, "POST");
   }

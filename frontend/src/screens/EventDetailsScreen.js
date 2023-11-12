@@ -118,6 +118,14 @@ const EventDetailsScreen = function ({ route, navigation }) {
     }
   };
 
+  const deleteEventAdmin = async () => {
+    const response = await api.deleteEvent(event_id);
+    if (response.result == "SUCCESSFUL") {
+      // Event reported
+      navigation.goBack();
+    }
+  };
+
   return (
     <View>
       <HeaderBar
@@ -181,7 +189,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
         {isAdmin ? (
           <TouchableOpacity
             onPress={() => {
-              // TODO: Delete event here
+              deleteEventAdmin();
             }}
           >
             <MaterialIcons
