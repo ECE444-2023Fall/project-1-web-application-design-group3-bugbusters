@@ -1,5 +1,6 @@
 from algoliasearch.search_client import SearchClient
 from datetime import datetime
+from dateutil.parser import parse as DateParser
 
 class AlgoliaSearchClient:
     
@@ -108,9 +109,4 @@ class AlgoliaSearchClient:
 
     @staticmethod
     def parse_search_datetime(datetime_str):
-        try:
-            # Try to parse with timezone information
-            return datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M:%S%z').timestamp()
-        except ValueError:
-            # If it fails, try to parse without timezone information
-            return datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M:%S.%f').timestamp()
+        return DateParser(datetime_str).timestamp()
