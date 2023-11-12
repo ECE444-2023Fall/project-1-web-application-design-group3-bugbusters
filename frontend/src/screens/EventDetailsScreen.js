@@ -116,10 +116,17 @@ const EventDetailsScreen = function ({ route, navigation }) {
   };
 
   const deleteEventAdmin = async () => {
-    const response = await api.deleteEvent(event_id);
+    const response = await api.deleteEventfromSearch(event_id);
     if (response.result == "SUCCESSFUL") {
-      // Event reported
-      navigation.goBack();
+      const response2 = await api.deleteEvent(event_id);
+      if (response2.result == "SUCCESSFUL") {
+        // Event deleted from both algolia and firebase
+        navigation.goBack();
+      } else {
+        // Failed to delete event from firebase
+      }
+    } else {
+      // Failed to delete event from algolia
     }
   };
 
