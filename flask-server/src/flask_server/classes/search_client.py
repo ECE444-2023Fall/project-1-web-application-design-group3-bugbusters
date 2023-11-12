@@ -74,12 +74,12 @@ class AlgoliaSearchClient:
 
             else:
                 obj = {}
-                obj['description'] = result.get('description', '')
                 obj['event_title'] = result.get('event_title', '')
                 obj['header_image_URL'] = result.get('header_image_URL', '')
                 obj['friendly_creator_name'] = result.get('friendly_creator_name', '')
                 obj['start_time'] = result.get('event_start_time', '')
                 obj['end_time'] = result.get('event_end_time', '')
+                obj['event_ID'] = result.get('objectID', '')
                 return_result['results'].append(obj)
         
         return_result['nbHits'] = len(return_result['results'])
