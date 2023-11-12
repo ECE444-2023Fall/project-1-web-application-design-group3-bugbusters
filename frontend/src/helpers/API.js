@@ -49,6 +49,14 @@ export class Api {
     return this.makeRequest("user-service/create-profile", data, "POST");
   }
 
+  async createEvent(data) {
+    return this.makeRequest("/event-service/create-event", data, "POST");
+  }
+
+  async editEvent(data, id) {
+    return this.makeRequest(`/event-service/edit-event/${id}`, data, "POST");
+  }
+
   async search(data) {
     return this.makeRequest("search-service/search", data, "POST");
   }

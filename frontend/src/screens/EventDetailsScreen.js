@@ -14,11 +14,13 @@ import {
   MaterialCommunityIcons,
   AntDesign,
   FontAwesome,
+  Feather,
 } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 import ProfilePicture from "../components/ProfilePicture";
 import PopUp from "../components/PopUp";
 import api from "../helpers/API";
+import exampleEventObject from "../../assets/exampleEventObject.json";
 
 const EventDetailsScreen = function ({ route, navigation }) {
   const event_id = route?.params?.event_id;
@@ -31,19 +33,20 @@ const EventDetailsScreen = function ({ route, navigation }) {
 
   const [currentEvent, setCurrentEvent] = useState({});
   const [currentEventUser, setCurrentEventUser] = useState({});
-  const [isOwner, setOwner] = useState(
-    userProfileRedux?.uid &&
-      currentEvent?._creator_id &&
-      userProfileRedux?.uid == currentEvent?._creator_id,
-  );
   const [isReported, setIsReported] = useState(false);
   const [isAdmin, setIsAdmin] = useState(userProfileRedux?.is_admin);
+  const [isOwner, setOwner] = useState(
+    userProfileRedux?.uid &&
+      currentEventUser?.uid &&
+      userProfileRedux?.uid == currentEventUser?.uid,
+  );
 
   useEffect(() => {
     async function retrieveEvent(id) {
       const response = await api.getEvent(id);
       if (response.result == "SUCCESSFUL") {
         setCurrentEvent(response.data);
+        return response.data;
       }
     }
     async function retrieveEventUser(uid) {
@@ -52,13 +55,14 @@ const EventDetailsScreen = function ({ route, navigation }) {
         setCurrentEventUser(response.data);
       }
     }
-    retrieveEvent(event_id);
-
-    if (isOwner) {
-      setCurrentEventUser(userProfileRedux);
-    } else {
-      retrieveEventUser(currentEvent?._creator_id);
-    }
+    retrieveEvent(event_id).then((event) => {
+      if (event?._creator_id == userProfileRedux?.uid) {
+        setCurrentEventUser(userProfileRedux);
+        setOwner(true);
+      } else {
+        retrieveEventUser(event?._creator_id);
+      }
+    });
   }, [event_id]);
 
   const [rsvpPopup, setRsvpPopup] = useState(false);
@@ -146,7 +150,23 @@ const EventDetailsScreen = function ({ route, navigation }) {
             <Ionicons name="arrow-back" size={30} color={contrastColor} />
           </TouchableOpacity>
         }
-        childrenRight={<View style={{ marginRight: 30 }} />}
+        childrenRight={
+          isOwner ? (
+            <TouchableOpacity
+              style={{ width: 30 }}
+              onPress={() =>
+                navigation.navigate("Create/Edit Event", {
+                  isCreate: false,
+                  eventObject: currentEvent,
+                })
+              }
+            >
+              <Feather name="edit-2" size={24} color={contrastColor} />
+            </TouchableOpacity>
+          ) : (
+            <View style={{ marginRight: 30 }} />
+          )
+        }
       />
 
       {/* Image gallery (Swipeable) */}

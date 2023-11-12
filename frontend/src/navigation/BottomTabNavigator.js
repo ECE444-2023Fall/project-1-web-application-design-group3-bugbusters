@@ -17,6 +17,7 @@ export default function BottomTab({ navigation }) {
   const contrastColor = useSelector((state) => state.main.contrastColor);
 
   const auth = getAuth();
+  console.log(auth);
 
   return (
     <Tab.Navigator
@@ -63,7 +64,13 @@ export default function BottomTab({ navigation }) {
         listeners={{
           tabPress: (e) => {
             e.preventDefault();
-            navigation.navigate("Create/Edit Event");
+            if (auth?.currentUser) {
+              navigation.navigate("Create/Edit Event", {
+                isCreate: true,
+              });
+            } else {
+              navigation.navigate("Authentication Page");
+            }
           },
         }}
       />
