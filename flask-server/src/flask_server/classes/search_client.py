@@ -108,15 +108,17 @@ class AlgoliaSearchClient:
 
     @staticmethod
     def parse_search_datetime(datetime_str):
-        try:
-            # Try to parse with timezone information
-            dt = datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M:%S.%z').timestamp()
+        try:                
+            # Try to parse with timezone and milliseconds
+            dt = datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M:%S.%f%z').timestamp()
             return dt
         except:
             try:
-                # If it fails, try to parse without timezone information
+                # If it fails, try to parse without timezone information with milliseconds
                 dt = datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M:%S.%f').timestamp()
                 return dt
+            
             except:
-                dt = datetime.strpTime(datetime_str, '%Y-%m-%dT%H:%M:%S.%f%z')
+                # Try to parse with timezone information no milliseconds
+                dt = datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M:%S.%z').timestamp()
                 return dt
