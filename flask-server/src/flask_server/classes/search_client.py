@@ -109,4 +109,5 @@ class AlgoliaSearchClient:
 
     @staticmethod
     def parse_search_datetime(datetime_str):
+        # use datetime parsing
         return DateParser(datetime_str).timestamp()
