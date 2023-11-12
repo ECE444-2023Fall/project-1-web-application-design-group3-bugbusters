@@ -10,6 +10,7 @@ import {
   ScrollView,
   Image,
   ActivityIndicator,
+  KeyboardAvoidingView,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
 import HeaderBar from "../components/HeaderBar";
@@ -168,7 +169,11 @@ const CreateEditEventScreen = function ({ navigation, route }) {
         childrenRight={<View style={{ width: 26 }} />}
       />
       <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-        <ScrollView style={{ marginBottom: 100 }}>
+        <ScrollView
+          style={{ marginBottom: 40 }}
+          showsVerticalScrollIndicator={false}
+          automaticallyAdjustKeyboardInsets={true}
+        >
           {/* Image */}
           <TouchableOpacity onPress={openImagePickerAsync}>
             <Image
@@ -284,13 +289,19 @@ const CreateEditEventScreen = function ({ navigation, route }) {
           />
           {isSubmitting ? (
             <View
-              style={{ ...styles.createButton, backgroundColor: primaryColor }}
+              style={{
+                ...styles.createButton,
+                backgroundColor: primaryColor,
+              }}
             >
               <ActivityIndicator color="white" />
             </View>
           ) : (
             <TouchableOpacity
-              style={{ ...styles.createButton, backgroundColor: primaryColor }}
+              style={{
+                ...styles.createButton,
+                backgroundColor: primaryColor,
+              }}
               onPress={sendEvent}
             >
               <Text style={{ color: contrastColor, fontSize: 16 }}>
