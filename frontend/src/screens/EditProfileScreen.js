@@ -24,9 +24,6 @@ const profileWidth = 80;
 
 const EditProfileScreen = function ({ navigation, route }) {
   const { userProfile } = route.params;
-  const userProfileSelector = useSelector((state) => {
-    return state.main.userProfileData;
-  });
   const dispatchRedux = useDispatch();
   const primaryColor = useSelector((state) => state.main.primaryColor);
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
@@ -52,7 +49,7 @@ const EditProfileScreen = function ({ navigation, route }) {
           email: userProfile.email,
           is_admin: userProfile.is_admin,
         };
-        dispatchRedux(setUserProfileData({ data: data }));
+        dispatchRedux(setUserProfileData(data));
         // console.log(userProfileSelector);
       }
     });

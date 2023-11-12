@@ -77,7 +77,7 @@ export default function BottomTab({ navigation }) {
         name="Create Edit"
         // navigation logic
         component={
-          userProfileSelector.data?.is_admin
+          userProfileSelector?.is_admin
             ? CreateAnnouncementScreen
             : CreateEditEventScreen
         }
@@ -106,7 +106,7 @@ export default function BottomTab({ navigation }) {
             ? () => (
                 <ProfilePageScreen
                   navigation={navigation}
-                  userProfileProp={userProfileSelector.data}
+                  userProfileProp={userProfileSelector}
                 />
               )
             : AuthPageScreen
