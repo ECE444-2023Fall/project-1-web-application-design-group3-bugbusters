@@ -28,7 +28,9 @@ const EventDetailsScreen = function ({ route, navigation }) {
   const contrastColor = useSelector((state) => state.main.contrastColor);
 
   // const currentEventRedux = useSelector((state) => state.currentEventData);
-  const userProfileRedux = useSelector((state) => state.userProfileData);
+  const userProfileRedux = useSelector(
+    (state) => state.main.userProfileData.data,
+  );
 
   const [currentEvent, setCurrentEvent] = useState({});
   const [currentEventUser, setCurrentEventUser] = useState({});
