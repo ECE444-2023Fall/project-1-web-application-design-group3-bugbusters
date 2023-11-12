@@ -114,14 +114,20 @@ const EditProfileScreen = function ({ navigation, route }) {
       />
       {/* Profile picture container */}
       <View style={styles.profile_picture_container}>
-        <Image
-          style={styles.profile_picture}
-          source={{
-            uri: profileUrl
-              ? profileUrl
-              : "https://media.istockphoto.com/id/1451587807/vector/user-profile-icon-vector-avatar-or-person-icon-profile-picture-portrait-symbol-vector.jpg?s=612x612&w=0&k=20&c=yDJ4ITX1cHMh25Lt1vI1zBn2cAKKAlByHBvPJ8gEiIg=",
+        <TouchableOpacity
+          onPress={() => {
+            pickImage();
           }}
-        ></Image>
+        >
+          <Image
+            style={styles.profile_picture}
+            source={{
+              uri: profileUrl
+                ? profileUrl
+                : "https://media.istockphoto.com/id/1451587807/vector/user-profile-icon-vector-avatar-or-person-icon-profile-picture-portrait-symbol-vector.jpg?s=612x612&w=0&k=20&c=yDJ4ITX1cHMh25Lt1vI1zBn2cAKKAlByHBvPJ8gEiIg=",
+            }}
+          ></Image>
+        </TouchableOpacity>
         <View
           style={{
             ...styles.edit_button_container,

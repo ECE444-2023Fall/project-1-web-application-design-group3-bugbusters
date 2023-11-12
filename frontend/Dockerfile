@@ -10,5 +10,4 @@ RUN apt-get update
 RUN apt-get -y install gcc wget git
 COPY . /app/
 
-CMD /bin/bash
-# CMD npx expo start --web --port=${PORT}
+CMD npx expo start --web --port=${PORT}
