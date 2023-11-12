@@ -62,7 +62,7 @@ const EditProfileScreen = function ({ navigation, route }) {
       quality: 1,
     }).then(async (pickerResult) => {
       if (!pickerResult.cancelled) {
-        const uploadUrl = await uploadImageAsync(pickerResult.uri);
+        const uploadUrl = await uploadImageAsync(pickerResult.assets[0].uri);
         // handle uploadUrl has desired
         setProfileUrl(uploadUrl);
         // call edit profile
