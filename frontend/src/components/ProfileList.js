@@ -34,6 +34,7 @@ const ProfileList = ({
   return (
     <View style={{ width: "100%", flex: 1 }}>
       <FlatList
+        style={{ marginBottom: 80 }}
         data={data}
         renderItem={({ item }) => (
           <RenderItem item={item} editer={editer} deleter={deleter} />
