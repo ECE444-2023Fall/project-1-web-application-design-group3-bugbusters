@@ -10,9 +10,7 @@ const EventCard = function ({ navigation, image, title, owner, id }) {
   const primaryColor = useSelector((state) => state.main.primaryColor);
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
   const contrastColor = useSelector((state) => state.main.contrastColor);
-  const userProfileRedux = useSelector(
-    (state) => state.main.userProfileData.data,
-  );
+  const userProfileRedux = useSelector((state) => state.main.userProfileData);
 
   const [isReported, setIsReported] = useState(false);
   const [isAdmin, setIsAdmin] = useState(userProfileRedux?.is_admin);
