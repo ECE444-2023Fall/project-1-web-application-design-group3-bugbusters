@@ -7,7 +7,6 @@ import AuthPageScreen from "../screens/AuthPageScreen";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import ProfilePageScreen from "../screens/ProfilePageScreen";
 import CreateEditEventScreen from "../screens/CreateEditEventScreen";
-import { reset, setUserProfileData } from "../store/Action";
 
 const Tab = createBottomTabNavigator();
 
