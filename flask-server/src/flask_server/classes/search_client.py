@@ -44,7 +44,7 @@ class AlgoliaSearchClient:
         content["event_start_time"] = data.get("_event_start_time", "")
         content["event_end_time"] = data.get("_event_end_time", "")
         content["_tags"] = data.get("_tags", [])
-        content["header_image_URL"] = data.get('_header_image', '')
+        content["header_image_URL"] = data.get('_images', {}).get('_header_image', '')
         content["friendly_creator_name"] = data.get('_friendly_creator_name', '')
         content["reported"] = False
 
@@ -96,6 +96,9 @@ class AlgoliaSearchClient:
             value = data.get(data_key)
             if value is not None:  # This ensures that only non-None values are added
                 content[content_key] = value
+
+        if data.get('_images', {}).get('_header_image', None) != None:
+            content['header_image_URL'] = data.get('_images', {}).get('_header_image', None)
         
         # Send the partial update to the index
         self.index.partial_update_object(content)
@@ -120,5 +123,5 @@ class AlgoliaSearchClient:
             
             except:
                 # Try to parse with timezone information no milliseconds
-                dt = datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M:%S.%z').timestamp()
+                dt = datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M:%S%z').timestamp()
                 return dt
