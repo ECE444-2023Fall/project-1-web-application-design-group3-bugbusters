@@ -21,9 +21,7 @@ const LandingPageScreen = function ({ navigation }) {
   const primaryColor = useSelector((state) => state.main.primaryColor);
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
   const contrastColor = useSelector((state) => state.main.contrastColor);
-  const userProfileRedux = useSelector(
-    (state) => state.main.userProfileData.data,
-  );
+  const userProfileRedux = useSelector((state) => state.main.userProfileData);
 
   const [events, setEvents] = useState([]);
   const [displaySearchBar, setDisplaySearchBar] = useState(false);
@@ -107,6 +105,7 @@ const LandingPageScreen = function ({ navigation }) {
                     ? event?.header_image_URL
                     : "https://picsum.photos/200"
                 }
+                id={event?.event_id}
               />
             </TouchableOpacity>
           );

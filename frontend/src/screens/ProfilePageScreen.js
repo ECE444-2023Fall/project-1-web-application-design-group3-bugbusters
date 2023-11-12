@@ -13,9 +13,9 @@ import { useSelector } from "react-redux";
 const ProfilePageScreen = function ({ navigation }) {
   const [text, setText] = useState("");
   // read from redux store
-  const userProfileSelector = useSelector((state) => {
-    return state.main.userProfileData;
-  });
+  const userProfileSelector = useSelector(
+    (state) => state.main.userProfileData,
+  );
 
   const auth = getAuth();
 

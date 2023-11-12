@@ -53,6 +53,21 @@ export class Api {
     return this.makeRequest("search-service/search", data, "POST");
   }
 
+  async deleteEventfromSearch(id) {
+    return this.makeRequest(
+      `search-service/delete`,
+      { objectID: id },
+      "DELETE",
+    );
+  }
+
+  async deleteEvent(id) {
+    return this.makeRequest(`event-service/delete-event/${id}`, null, "DELETE");
+  }
+
+  async report(id) {
+    return this.makeRequest(`report-service/report/${id}`, null, "POST");
+  }
   async rsvp(data) {
     return this.makeRequest("event-service/rsvp", data, "PUT");
   }
