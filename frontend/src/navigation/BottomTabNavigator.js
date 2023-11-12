@@ -52,7 +52,7 @@ export default function BottomTab({ navigation }) {
           tabBarInactiveTintColor: color,
           tabBarStyle: {
             position: "absolute",
-            justifyContent: "center",
+            paddingTop: 8,
             backgroundColor: primaryColor,
             backgroundColor: primaryColor,
           },
