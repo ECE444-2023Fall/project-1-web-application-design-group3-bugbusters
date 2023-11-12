@@ -38,6 +38,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
       userProfileRedux?.uid == currentEvent?._creator_id,
   );
   const [isReported, setIsReported] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(userProfileRedux?.is_admin);
 
   useEffect(() => {
     async function retrieveEvent(id) {
@@ -158,22 +159,38 @@ const EventDetailsScreen = function ({ route, navigation }) {
               : "https://picsum.photos/200",
           }}
         />
-        <TouchableOpacity
-          onPress={() => {
-            setRsvpPopup(true);
-          }}
-        >
-          {isOwner ? (
-            <MaterialCommunityIcons
-              name="email-outline"
-              size={34}
+        {isAdmin ? null : (
+          <TouchableOpacity
+            onPress={() => {
+              setRsvpPopup(true);
+            }}
+          >
+            {isOwner ? (
+              <MaterialCommunityIcons
+                name="email-outline"
+                size={34}
+                color={contrastColor}
+              />
+            ) : (
+              <AntDesign name="adduser" color={contrastColor} size={30} />
+            )}
+          </TouchableOpacity>
+        )}
+        {isAdmin ? (
+          <TouchableOpacity
+            onPress={() => {
+              // TODO: Delete event here
+            }}
+          >
+            <MaterialIcons
+              name="delete-outline"
+              size={32}
               color={contrastColor}
             />
-          ) : (
-            <AntDesign name="adduser" color={contrastColor} size={30} />
-          )}
-        </TouchableOpacity>
-        {isReported ? (
+          </TouchableOpacity>
+        ) : isOwner ? (
+          <View style={{ width: 40 }} />
+        ) : isReported ? (
           <View style={styles.reportButton}>
             <Ionicons name="checkmark-sharp" size={36} color={contrastColor} />
           </View>

@@ -10,8 +10,10 @@ const EventCard = function ({ navigation, image, title, owner, id }) {
   const primaryColor = useSelector((state) => state.main.primaryColor);
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
   const contrastColor = useSelector((state) => state.main.contrastColor);
+  const userProfileRedux = useSelector((state) => state.userProfileData);
 
   const [isReported, setIsReported] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(userProfileRedux?.is_admin);
 
   const reportEvent = async () => {
     const response = await api.report(id);
@@ -30,7 +32,9 @@ const EventCard = function ({ navigation, image, title, owner, id }) {
           <Text style={styles.eventTitle}>{title}</Text>
           <Text style={styles.eventOwner}>{owner}</Text>
         </View>
-        {isReported ? (
+        {isAdmin ? (
+          <View style={{ width: 60 }} />
+        ) : isReported ? (
           <View style={styles.reportButton}>
             <Ionicons name="checkmark-sharp" size={40} color={primaryColor} />
           </View>
