@@ -32,6 +32,7 @@ const LandingPageScreen = function ({ navigation }) {
   // Land or refresh case
   const fetchEvents = async () => {
     const response = await api.search({ query: "", filters: [] });
+    console.log(response);
     if (response.result == "SUCCESSFUL") {
       setEvents(response.data.results);
     } else {

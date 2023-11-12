@@ -29,7 +29,7 @@ const CreateEditEventScreen = function ({ navigation, route }) {
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
   const contrastColor = useSelector((state) => state.main.contrastColor);
 
-  const userProfileRedux = useSelector((state) => state.userProfileData);
+  const userProfileRedux = useSelector((state) => state.main.userProfileData);
 
   const [img, setImg] = useState(eventObject?._images?._header_image);
   const [title, setTitle] = useState(eventObject?._event_title);
@@ -128,6 +128,8 @@ const CreateEditEventScreen = function ({ navigation, route }) {
       _event_expiry_time: expiryTimeString,
     };
 
+    console.log(newEventObj);
+
     let response;
     if (isCreate) {
       response = await api.createEvent(newEventObj);
@@ -137,6 +139,8 @@ const CreateEditEventScreen = function ({ navigation, route }) {
         (id = eventObject?._event_id),
       );
     }
+
+    console.log(response);
 
     if (response.result == "SUCCESSFUL") {
       // Event created
