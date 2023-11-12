@@ -96,6 +96,30 @@ def test_edit_event(test_client):
     
     return
 
+
+def test_delete_event(test_client):
+    required_keys = Event.required_keys
+    data = {key: "TEST" for key in required_keys}
+    id = "test-id-to-be-deleted" 
+    data['_creator_id'] = id
+    data['_event_start_time'] = "2023-11-07T14:00:00-05:00"
+    data['_event_end_time'] = "2023-11-08T14:00:00-05:00"
+
+    # get events collection ref
+    events_ref = db_client.events_collection
+
+    # create test document
+    events_ref.document(id).set(data)
+
+    # call event-service/delete-event/<event_id>
+    response = test_client.delete(f'/event-service/delete-event/{id}')
+
+    assert response.status_code == 204
+
+    # make sure event was deleted
+    assert not events_ref.document(id).get().exists
+
+
 def test_event_rsvp(test_client):
     event_id =  'fc48bf4d-6445-47ec-bbb6-67cc29397295'
     email = 'some_email@mail.utoronto.ca'

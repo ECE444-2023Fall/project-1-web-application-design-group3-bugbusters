@@ -31,7 +31,7 @@ export default function BottomTab({ navigation }) {
         // user is signed in
         // get UserProfile and store in redux
         api.getUserProfile(user.uid).then((userProfile) => {
-          dispatchRedux(setUserProfileData(userProfile));
+          dispatchRedux(setUserProfileData(userProfile.data));
         });
       } else {
         // user is signed out

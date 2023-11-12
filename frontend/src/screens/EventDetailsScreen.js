@@ -14,11 +14,13 @@ import {
   MaterialCommunityIcons,
   AntDesign,
   FontAwesome,
+  Feather,
 } from "@expo/vector-icons";
 import { useSelector, useDispatch } from "react-redux";
 import ProfilePicture from "../components/ProfilePicture";
 import PopUp from "../components/PopUp";
 import api from "../helpers/API";
+import exampleEventObject from "../../assets/exampleEventObject.json";
 
 const EventDetailsScreen = function ({ route, navigation }) {
   const event_id = route?.params?.event_id;
@@ -27,15 +29,16 @@ const EventDetailsScreen = function ({ route, navigation }) {
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
   const contrastColor = useSelector((state) => state.main.contrastColor);
 
-  // const currentEventRedux = useSelector((state) => state.currentEventData);
-  const userProfileRedux = useSelector((state) => state.userProfileData);
+  const userProfileRedux = useSelector((state) => state.main.userProfileData);
 
   const [currentEvent, setCurrentEvent] = useState({});
   const [currentEventUser, setCurrentEventUser] = useState({});
+  const [isReported, setIsReported] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(userProfileRedux?.is_admin);
   const [isOwner, setOwner] = useState(
     userProfileRedux?.uid &&
-      currentEvent?._creator_id &&
-      userProfileRedux?.uid == currentEvent?._creator_id
+      currentEventUser?.uid &&
+      userProfileRedux?.uid == currentEventUser?.uid
   );
 
   useEffect(() => {
@@ -43,7 +46,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
       const response = await api.getEvent(id);
       if (response.result == "SUCCESSFUL") {
         setCurrentEvent(response.data);
-        return response.data._creator_id;
+        return response.data;
       }
     }
     async function retrieveEventUser(uid) {
@@ -52,13 +55,12 @@ const EventDetailsScreen = function ({ route, navigation }) {
         setCurrentEventUser(response.data);
       }
     }
-    retrieveEvent(event_id).then((uid) => {
-      // fetch user profile if post was not created
-      // by current user
-      if (isOwner) {
+    retrieveEvent(event_id).then((event) => {
+      if (event?._creator_id == userProfileRedux?.uid) {
         setCurrentEventUser(userProfileRedux);
+        setOwner(true);
       } else {
-        retrieveEventUser(uid);
+        retrieveEventUser(event?._creator_id);
       }
     });
   }, [event_id]);
@@ -109,13 +111,36 @@ const EventDetailsScreen = function ({ route, navigation }) {
     }
   }
 
+  const reportEvent = async () => {
+    const response = await api.report(event_id);
+    if (response.result == "SUCCESSFUL") {
+      // Event reported
+      setIsReported(true);
+    }
+  };
+
+  const deleteEventAdmin = async () => {
+    const response = await api.deleteEventfromSearch(event_id);
+    if (response.result == "SUCCESSFUL") {
+      const response2 = await api.deleteEvent(event_id);
+      if (response2.result == "SUCCESSFUL") {
+        // Event deleted from both algolia and firebase
+        navigation.goBack();
+      } else {
+        // Failed to delete event from firebase
+      }
+    } else {
+      // Failed to delete event from algolia
+    }
+  };
+
   return (
     <View>
       <HeaderBar
         title={
           currentEvent?._event_title
             ? currentEvent?._event_title
-            : "Event Doesn't Have Title"
+            : "No Event Title"
         }
         childrenLeft={
           <TouchableOpacity
@@ -125,7 +150,23 @@ const EventDetailsScreen = function ({ route, navigation }) {
             <Ionicons name="arrow-back" size={30} color={contrastColor} />
           </TouchableOpacity>
         }
-        childrenRight={<View style={{ marginRight: 30 }} />}
+        childrenRight={
+          isOwner ? (
+            <TouchableOpacity
+              style={{ width: 30 }}
+              onPress={() =>
+                navigation.navigate("Create/Edit Event", {
+                  isCreate: false,
+                  eventObject: currentEvent,
+                })
+              }
+            >
+              <Feather name="edit-2" size={24} color={contrastColor} />
+            </TouchableOpacity>
+          ) : (
+            <View style={{ marginRight: 30 }} />
+          )
+        }
       />
 
       {/* Image gallery (Swipeable) */}
@@ -158,25 +199,46 @@ const EventDetailsScreen = function ({ route, navigation }) {
             });
           }}
         />
-        <TouchableOpacity
-          onPress={() => {
-            setRsvpPopup(true);
-          }}
-        >
-          {isOwner ? (
-            <MaterialCommunityIcons
-              name="email-outline"
-              size={34}
+        {isAdmin ? null : (
+          <TouchableOpacity
+            onPress={() => {
+              setRsvpPopup(true);
+            }}
+          >
+            {isOwner ? (
+              <MaterialCommunityIcons
+                name="email-outline"
+                size={34}
+                color={contrastColor}
+              />
+            ) : (
+              <AntDesign name="adduser" color={contrastColor} size={30} />
+            )}
+          </TouchableOpacity>
+        )}
+        {isAdmin ? (
+          <TouchableOpacity
+            onPress={() => {
+              deleteEventAdmin();
+            }}
+          >
+            <MaterialIcons
+              name="delete-outline"
+              size={32}
               color={contrastColor}
             />
-          ) : (
-            <AntDesign name="adduser" color={contrastColor} size={30} />
-          )}
-        </TouchableOpacity>
-
-        <TouchableOpacity /* Add reporting functionality */>
-          <MaterialIcons name="report" size={40} color={contrastColor} />
-        </TouchableOpacity>
+          </TouchableOpacity>
+        ) : isOwner ? (
+          <View style={{ width: 40 }} />
+        ) : isReported ? (
+          <View style={styles.reportButton}>
+            <Ionicons name="checkmark-sharp" size={36} color={contrastColor} />
+          </View>
+        ) : (
+          <TouchableOpacity onPress={() => reportEvent()}>
+            <MaterialIcons name="report" size={40} color={contrastColor} />
+          </TouchableOpacity>
+        )}
       </View>
 
       {/* Event Information */}
@@ -184,7 +246,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
         <View style={{ flexDirection: "row" }}>
           <Text style={{ fontWeight: "bold" }}>Creator: </Text>
           <Text>
-            {currentEventUser
+            {currentEventUser?.display_name
               ? currentEventUser?.display_name
               : "No creator name"}
           </Text>

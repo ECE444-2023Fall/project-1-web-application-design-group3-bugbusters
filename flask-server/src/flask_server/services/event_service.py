@@ -9,6 +9,7 @@ import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from datetime import datetime
+from werkzeug.exceptions import BadRequest
 import uuid
 import os
 
@@ -119,6 +120,23 @@ def editEvent(event_id):
         return {'message': 'Event edited successfully!', 'event_id': event_id}, 200
 
     return {'message': 'Event editing failed!', 'event_id': event_id}, 400
+
+@event_service.route('/delete-event/<event_id>', methods=["DELETE"])
+def deleteEvent(event_id):
+    # abort 400 if no id is passed in query
+    if event_id is None:
+        abort(BadRequest.code)
+
+    # get events collection ref
+    events_ref = db_client.events_collection
+
+    # delete document
+    doc_ref = events_ref.document(event_id).delete()
+
+    # status 204 means No Content, the request has succeeded
+    # but the client doesn't need to navigate away from it's
+    # current view
+    return '', 204
 
 
 @event_service.route('/rsvp', methods=['PUT'])

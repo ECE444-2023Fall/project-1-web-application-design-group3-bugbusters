@@ -1,5 +1,5 @@
 from algoliasearch.search_client import SearchClient
-from datetime import datetime
+from dateutil.parser import parse as DateParser
 
 class AlgoliaSearchClient:
     
@@ -44,7 +44,7 @@ class AlgoliaSearchClient:
         content["event_start_time"] = data.get("_event_start_time", "")
         content["event_end_time"] = data.get("_event_end_time", "")
         content["_tags"] = data.get("_tags", [])
-        content["header_image_URL"] = data.get('_header_image', '')
+        content["header_image_URL"] = data.get('_images', {}).get('_header_image', '')
         content["friendly_creator_name"] = data.get('_friendly_creator_name', '')
         content["reported"] = False
 
@@ -74,12 +74,12 @@ class AlgoliaSearchClient:
 
             else:
                 obj = {}
-                obj['description'] = result.get('description', '')
                 obj['event_title'] = result.get('event_title', '')
                 obj['header_image_URL'] = result.get('header_image_URL', '')
                 obj['friendly_creator_name'] = result.get('friendly_creator_name', '')
                 obj['start_time'] = result.get('event_start_time', '')
                 obj['end_time'] = result.get('event_end_time', '')
+                obj['event_ID'] = result.get('objectID', '')
                 return_result['results'].append(obj)
         
         return_result['nbHits'] = len(return_result['results'])
@@ -96,6 +96,9 @@ class AlgoliaSearchClient:
             value = data.get(data_key)
             if value is not None:  # This ensures that only non-None values are added
                 content[content_key] = value
+
+        if data.get('_images', {}).get('_header_image', None) != None:
+            content['header_image_URL'] = data.get('_images', {}).get('_header_image', None)
         
         # Send the partial update to the index
         self.index.partial_update_object(content)
@@ -108,9 +111,4 @@ class AlgoliaSearchClient:
 
     @staticmethod
     def parse_search_datetime(datetime_str):
-        try:
-            # Try to parse with timezone information
-            return datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M:%S%z').timestamp()
-        except ValueError:
-            # If it fails, try to parse without timezone information
-            return datetime.strptime(datetime_str, '%Y-%m-%dT%H:%M:%S.%f').timestamp()
+        return DateParser(datetime_str).timestamp()
