@@ -32,7 +32,7 @@ const LandingPageScreen = function ({ navigation }) {
   // Land or refresh case
   const fetchEvents = async () => {
     const response = await api.search({ query: "", filters: [] });
-    console.log(response);
+    console.log(response.data.results);
     if (response.result == "SUCCESSFUL") {
       setEvents(response.data.results);
     } else {
@@ -84,7 +84,7 @@ const LandingPageScreen = function ({ navigation }) {
               <TouchableOpacity
                 onPress={() =>
                   navigation.navigate("Event Details", {
-                    event_id: event?.event_id,
+                    event_id: event?.event_ID,
                   })
                 }
                 key={event?.event_id}
