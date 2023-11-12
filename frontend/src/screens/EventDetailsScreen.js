@@ -129,7 +129,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
         title={
           currentEvent?._event_title
             ? currentEvent?._event_title
-            : "Event Doesn't Have Title"
+            : "No Event Title"
         }
         childrenLeft={
           <TouchableOpacity
@@ -213,7 +213,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
         <View style={{ flexDirection: "row" }}>
           <Text style={{ fontWeight: "bold" }}>Creator: </Text>
           <Text>
-            {currentEventUser
+            {currentEventUser?.display_name
               ? currentEventUser?.display_name
               : "No creator name"}
           </Text>

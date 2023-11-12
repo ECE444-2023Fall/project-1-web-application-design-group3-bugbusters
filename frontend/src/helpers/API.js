@@ -54,7 +54,7 @@ export class Api {
   }
 
   async deleteEvent(id) {
-    return this.makeRequest(`event-service/delete-event/${id}`, data, "DELETE");
+    return this.makeRequest(`event-service/delete-event/${id}`, null, "DELETE");
   }
 
   async report(id) {
