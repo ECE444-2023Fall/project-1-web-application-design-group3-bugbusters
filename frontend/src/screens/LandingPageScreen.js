@@ -106,7 +106,7 @@ const LandingPageScreen = function ({ navigation }) {
         );
       })}
       <ScrollView
-        style={{ marginTop: 4 }}
+        style={{ marginTop: 4, marginBottom: 20 }}
         refreshControl={
           <RefreshControl
             onRefresh={() => {
