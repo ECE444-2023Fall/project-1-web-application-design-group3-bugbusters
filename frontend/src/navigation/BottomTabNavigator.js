@@ -106,7 +106,7 @@ export default function BottomTab({ navigation }) {
             ? () => (
                 <ProfilePageScreen
                   navigation={navigation}
-                  userProfile={userProfileSelector.data}
+                  userProfileProp={userProfileSelector.data}
                 />
               )
             : AuthPageScreen

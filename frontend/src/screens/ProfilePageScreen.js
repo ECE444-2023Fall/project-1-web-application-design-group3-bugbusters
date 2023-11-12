@@ -19,13 +19,27 @@ import api from "../helpers/API";
 import AnnouncementCard from "../components/AnnouncementCard";
 import HorizontalTextBuffer from "../components/HorizontalTextBuffer";
 
-const ProfilePageScreen = function ({ navigation, userProfile }) {
+const ProfilePageScreen = function ({
+  navigation,
+  route,
+  showBackArrowProp,
+  userProfileProp,
+}) {
+  // following is required because this screen can be navigated to via Stack.Screen
+  // or via BottomTabNavigator
+  const userProfile = route?.params.userProfile
+    ? route?.params?.userProfile
+    : userProfileProp;
+  const showBackArrow = route?.params.showBackArrow
+    ? route?.params.showBackArrow
+    : showBackArrowProp;
   const [event_data, setEventData] = useState([]);
   const [announcement_data, setAnnouncementData] = useState([]);
   const [menuPopup, setMenuPopup] = useState(false);
   const auth = getAuth();
 
   const primaryColor = useSelector((state) => state.main.primaryColor);
+  const contrastColor = useSelector((state) => state.main.contrastColor);
 
   useEffect(() => {
     callGetAllEvents = async () => {
@@ -46,6 +60,8 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
       }
     };
 
+    console.log(route?.params);
+    console.log(showBackArrow);
     if (userProfile?.is_admin) {
       callGetAllAnnouncements();
     } else {
@@ -133,7 +149,25 @@ const ProfilePageScreen = function ({ navigation, userProfile }) {
 
   return (
     <KeyboardAvoidingView style={styles.container}>
-      <HeaderBar title="Profile Page" align="center" />
+      <HeaderBar
+        title="Profile Page"
+        align={showBackArrow ? null : "center"}
+        childrenLeft={
+          showBackArrow ? (
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={() => {
+                navigation.goBack();
+              }}
+            >
+              <Ionicons name="arrow-back" size={30} color={contrastColor} />
+            </TouchableOpacity>
+          ) : null
+        }
+        childrenRight={
+          showBackArrow ? <View style={{ marginRight: 30 }} /> : null
+        }
+      />
       {/* Profile picture container */}
       <View style={styles.profile_picture_container}>
         <Image

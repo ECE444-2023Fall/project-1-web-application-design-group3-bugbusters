@@ -43,6 +43,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
       const response = await api.getEvent(id);
       if (response.result == "SUCCESSFUL") {
         setCurrentEvent(response.data);
+        return response.data._creator_id;
       }
     }
     async function retrieveEventUser(uid) {
@@ -51,13 +52,15 @@ const EventDetailsScreen = function ({ route, navigation }) {
         setCurrentEventUser(response.data);
       }
     }
-    retrieveEvent(event_id);
-
-    if (isOwner) {
-      setCurrentEventUser(userProfileRedux);
-    } else {
-      retrieveEventUser(currentEvent?._creator_id);
-    }
+    retrieveEvent(event_id).then((uid) => {
+      // fetch user profile if post was not created
+      // by current user
+      if (isOwner) {
+        setCurrentEventUser(userProfileRedux);
+      } else {
+        retrieveEventUser(uid);
+      }
+    });
   }, [event_id]);
 
   const [rsvpPopup, setRsvpPopup] = useState(false);
@@ -147,6 +150,12 @@ const EventDetailsScreen = function ({ route, navigation }) {
             uri: currentEvent?._images?._profile_image
               ? currentEvent?._images?._profile_image
               : "https://picsum.photos/200",
+          }}
+          onPress={() => {
+            navigation.navigate("Profile Page", {
+              userProfile: currentEventUser,
+              showBackArrow: true,
+            });
           }}
         />
         <TouchableOpacity
