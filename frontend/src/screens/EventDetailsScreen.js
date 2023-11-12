@@ -29,8 +29,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
   const contrastColor = useSelector((state) => state.main.contrastColor);
 
-  // const currentEventRedux = useSelector((state) => state.currentEventData);
-  const userProfileRedux = useSelector((state) => state.userProfileData);
+  const userProfileRedux = useSelector((state) => state.main.userProfileData);
 
   const [currentEvent, setCurrentEvent] = useState({});
   const [currentEventUser, setCurrentEventUser] = useState({});
@@ -39,6 +38,8 @@ const EventDetailsScreen = function ({ route, navigation }) {
       currentEvent?._creator_id &&
       userProfileRedux?.uid == currentEvent?._creator_id,
   );
+  const [isReported, setIsReported] = useState(false);
+  const [isAdmin, setIsAdmin] = useState(userProfileRedux?.is_admin);
 
   useEffect(() => {
     async function retrieveEvent(id) {
@@ -108,6 +109,29 @@ const EventDetailsScreen = function ({ route, navigation }) {
     }
   }
 
+  const reportEvent = async () => {
+    const response = await api.report(event_id);
+    if (response.result == "SUCCESSFUL") {
+      // Event reported
+      setIsReported(true);
+    }
+  };
+
+  const deleteEventAdmin = async () => {
+    const response = await api.deleteEventfromSearch(event_id);
+    if (response.result == "SUCCESSFUL") {
+      const response2 = await api.deleteEvent(event_id);
+      if (response2.result == "SUCCESSFUL") {
+        // Event deleted from both algolia and firebase
+        navigation.goBack();
+      } else {
+        // Failed to delete event from firebase
+      }
+    } else {
+      // Failed to delete event from algolia
+    }
+  };
+
   return (
     <View>
       <HeaderBar
@@ -167,25 +191,46 @@ const EventDetailsScreen = function ({ route, navigation }) {
               : "https://picsum.photos/200",
           }}
         />
-        <TouchableOpacity
-          onPress={() => {
-            setRsvpPopup(true);
-          }}
-        >
-          {isOwner ? (
-            <MaterialCommunityIcons
-              name="email-outline"
-              size={34}
+        {isAdmin ? null : (
+          <TouchableOpacity
+            onPress={() => {
+              setRsvpPopup(true);
+            }}
+          >
+            {isOwner ? (
+              <MaterialCommunityIcons
+                name="email-outline"
+                size={34}
+                color={contrastColor}
+              />
+            ) : (
+              <AntDesign name="adduser" color={contrastColor} size={30} />
+            )}
+          </TouchableOpacity>
+        )}
+        {isAdmin ? (
+          <TouchableOpacity
+            onPress={() => {
+              deleteEventAdmin();
+            }}
+          >
+            <MaterialIcons
+              name="delete-outline"
+              size={32}
               color={contrastColor}
             />
-          ) : (
-            <AntDesign name="adduser" color={contrastColor} size={30} />
-          )}
-        </TouchableOpacity>
-
-        <TouchableOpacity /* Add reporting functionality */>
-          <MaterialIcons name="report" size={40} color={contrastColor} />
-        </TouchableOpacity>
+          </TouchableOpacity>
+        ) : isOwner ? (
+          <View style={{ width: 40 }} />
+        ) : isReported ? (
+          <View style={styles.reportButton}>
+            <Ionicons name="checkmark-sharp" size={36} color={contrastColor} />
+          </View>
+        ) : (
+          <TouchableOpacity onPress={() => reportEvent()}>
+            <MaterialIcons name="report" size={40} color={contrastColor} />
+          </TouchableOpacity>
+        )}
       </View>
 
       {/* Event Information */}

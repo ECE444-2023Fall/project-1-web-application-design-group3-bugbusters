@@ -119,7 +119,7 @@ const AuthPageScreen = function ({ navigation }) {
         } else {
           // user is verified, now get their UserProfile
           api.getUserProfile(user.uid).then((userProfile) => {
-            dispatchRedux(setUserProfileData(userProfile));
+            dispatchRedux(setUserProfileData(userProfile.data));
           });
           navigation.navigate("Landing Page");
         }
@@ -247,7 +247,7 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   buttonOutlineText: {
-    color: "1E3765",
+    color: "#1E3765",
     fontWeight: 700,
     fontSize: 16,
   },

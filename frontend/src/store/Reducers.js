@@ -5,7 +5,6 @@ const initialState = {
   secondaryColor: "#007FA3",
   contrastColor: "white",
   userProfileData: {},
-  currentEventData: {},
 };
 
 export const mainReducer = (state = initialState, action) => {
