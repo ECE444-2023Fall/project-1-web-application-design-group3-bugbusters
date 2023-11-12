@@ -87,7 +87,7 @@ const LandingPageScreen = function ({ navigation }) {
                     event_id: event?.event_ID,
                   })
                 }
-                key={event?.event_id}
+                key={event?.event_ID}
               >
                 <EventCard
                   title={event?.event_title}
@@ -97,7 +97,7 @@ const LandingPageScreen = function ({ navigation }) {
                       ? event?.header_image_URL
                       : "https://picsum.photos/200"
                   }
-                  id={event?.event_id}
+                  id={event?.event_ID}
                 />
               </TouchableOpacity>
             );
