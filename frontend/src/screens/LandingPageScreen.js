@@ -44,7 +44,7 @@ const LandingPageScreen = function ({ navigation }) {
   const searchEvents = async () => {
     const response = await api.search({
       query: searchText,
-      filter: [],
+      filters: [],
       reported: reportedEvents,
     });
     if (response.result == "SUCCESSFUL") {
@@ -100,7 +100,11 @@ const LandingPageScreen = function ({ navigation }) {
               <EventCard
                 title={event?.event_title}
                 owner={event?.friendly_creator_name}
-                image={event?.header_image_URL}
+                image={
+                  event?.header_image_URL
+                    ? event?.header_image_URL
+                    : "https://picsum.photos/200"
+                }
                 id={event?.event_id}
               />
             </TouchableOpacity>
@@ -173,7 +177,6 @@ const styles = StyleSheet.create({
   },
   checkBoxContainer: {
     marginBottom: 14,
-    // alignSelf: "center",
     alignSelf: "flex-end",
     marginHorizontal: 30,
     flexDirection: "row",
