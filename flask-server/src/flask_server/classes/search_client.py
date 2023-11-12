@@ -15,7 +15,8 @@ class AlgoliaSearchClient:
         "_tags": "tags",
         "_header_image": "header_image_URL",
         "_friendly_creator_name": "friendly_creator_name",
-        "_reported": "reported"
+        "_reported": "reported",
+        "_creator_id": "creatorID"
     }
         if self._testing == False:
             self.index_name = 'ClubHubSearchIndex'
@@ -47,6 +48,7 @@ class AlgoliaSearchClient:
         content["header_image_URL"] = data.get('_images', {}).get('_header_image', '')
         content["friendly_creator_name"] = data.get('_friendly_creator_name', '')
         content["reported"] = False
+        content["creatorID"] = data.get('_creator_id', "")
 
         self.index.save_object(content)
 
