@@ -16,6 +16,7 @@ services:
   react-app:
     build:
       context: ./frontend
+      dockerfile: ./deploy/Dockerfile
       args:
         PORT: ${REACT_PORT}
     container_name: react-app-container
@@ -27,6 +28,6 @@ services:
     environment:
       - EXPO_DEVTOOLS_LISTEN_ADDRESS=0.0.0.0
       - REACT_NATIVE_PACKAGER_HOSTNAME=${HOSTNAME}
-      - EXPO_PUBLIC_BASE_API_URL=http://${HOSTNAME}:${FLASK_PORT}
+      - EXPO_PUBLIC_BASE_API_URL=${BASE_API_URL}
     stdin_open: true
     tty: true
