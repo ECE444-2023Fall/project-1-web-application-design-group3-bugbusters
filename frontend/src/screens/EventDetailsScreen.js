@@ -21,6 +21,7 @@ import ProfilePicture from "../components/ProfilePicture";
 import PopUp from "../components/PopUp";
 import api from "../helpers/API";
 import exampleEventObject from "../../assets/exampleEventObject.json";
+const { DateTime } = require("luxon");
 
 const EventDetailsScreen = function ({ route, navigation }) {
   const event_id = route?.params?.event_id;
@@ -56,6 +57,37 @@ const EventDetailsScreen = function ({ route, navigation }) {
       }
     }
     retrieveEvent(event_id).then((event) => {
+      console.log(event._event_start_time);
+      console.log(
+        DateTime.fromISO(event?._event_start_time).toLocaleString({
+          weekday: "short",
+          month: "short",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      );
+      setCurrentEvent({
+        ...event,
+        _event_start_time: DateTime.fromISO(
+          event?._event_start_time,
+        ).toLocaleString({
+          weekday: "short",
+          month: "short",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        _event_end_time: DateTime.fromISO(
+          event?._event_end_time,
+        ).toLocaleString({
+          weekday: "short",
+          month: "short",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      });
       if (event?._creator_id == userProfileRedux?.uid) {
         setCurrentEventUser(userProfileRedux);
         setOwner(true);
@@ -273,7 +305,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
             {currentEvent?._location ? currentEvent?._location : "No location"}
           </Text>
         </View>
-        <View style={{ flexDirection: "row" }}>
+        <View>
           <Text style={{ fontWeight: "bold" }}>Description: </Text>
           <Text>
             {currentEvent?._description
