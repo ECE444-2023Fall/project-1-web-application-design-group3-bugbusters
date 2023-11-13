@@ -42,10 +42,12 @@ const ProfilePageScreen = function ({
   const contrastColor = useSelector((state) => state.main.contrastColor);
 
   useEffect(() => {
-    callGetAllEvents = async () => {
-      const response = await api.getAllEvents();
+    callGetUserEvents = async () => {
+      const response = await api.search({
+        events_by_profile: userProfile?.uid,
+      });
       if (response.result == "SUCCESSFUL") {
-        setEventData(response.data);
+        setEventData(response.data.results);
       } else {
         alert("FAILED TO GET ALL EVENTS");
       }
@@ -63,7 +65,7 @@ const ProfilePageScreen = function ({
     if (userProfile?.is_admin) {
       callGetAllAnnouncements();
     } else {
-      callGetAllEvents();
+      callGetUserEvents();
     }
   }, []);
 
@@ -111,7 +113,7 @@ const ProfilePageScreen = function ({
 
   // delete callback for events
   deleteEventById = (id) => {
-    const filteredData = event_data.filter((item) => item.id !== id);
+    const filteredData = event_data.filter((item) => item.event_ID !== id);
     setEventData(filteredData);
   };
 
@@ -121,14 +123,19 @@ const ProfilePageScreen = function ({
       <TouchableOpacity
         onPress={() =>
           navigation.navigate("Event Details", {
-            event_id: item._event_id,
+            event_id: item.event_ID,
           })
         }
       >
         <EventCard
-          title={item._event_title}
-          owner={item._creator_id}
-          image={item._images._header_image}
+          title={item.event_title}
+          owner={item.friendly_creator_name}
+          image={
+            item.header_image_URL
+              ? item.header_image_URL
+              : "https://picsum.photos/200"
+          }
+          id={item.event_ID}
         />
       </TouchableOpacity>
     );
@@ -221,7 +228,7 @@ const ProfilePageScreen = function ({
         data={userProfile?.is_admin ? announcement_data : event_data}
         RenderItem={userProfile?.is_admin ? AnnouncementItem : EventItem}
         keyExtractor={(item) =>
-          userProfile?.is_admin ? item.id : item._event_id
+          userProfile?.is_admin ? item.id : item.event_ID
         }
         deleter={userProfile?.is_admin ? announcement_deleter : () => {}}
         editer={userProfile?.is_admin ? announcement_editer : () => {}}
