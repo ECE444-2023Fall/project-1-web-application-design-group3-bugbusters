@@ -59,7 +59,7 @@ export class Api {
   }
 
   async editEvent(data, id) {
-    return this.makeRequest(`/event-service/edit-event/${id}`, data, "POST");
+    return this.makeRequest(`/event-service/edit-event/${id}`, data, "PUT");
   }
 
   async search(data) {
