@@ -119,8 +119,8 @@ const EventDetailsScreen = function ({ route, navigation }) {
     }
   }
 
-  async function sendRsvp(event_id) {
-    const response = await api.sendRsvp(event_id);
+  async function sendRsvp() {
+    const response = await api.sendRsvp({ _event_id: event_id });
     if (response.result == "SUCCESSFUL") {
       setRsvpInfoSent(true);
     } else {
@@ -128,7 +128,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
         // RSVP info already sent
         setRsvpInfoSent(true);
       } else {
-        console.error("Couldn't send rsvp info");
+        // console.error("Couldn't send rsvp info");
       }
     }
   }

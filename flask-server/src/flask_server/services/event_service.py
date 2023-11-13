@@ -61,7 +61,7 @@ def createEvent():
 
     # Fetch friendly creator name and add the object to the search index
     search_data = data.copy()
-    
+
     try:
         friendly_name = getUserProfile(data['_creator_id'])[0]['display_name']
     except Exception as e:
@@ -97,8 +97,8 @@ def editEventHelper(event_obj):
         event_ref.set(event_data)
 
         return True
-    
-    except FirestoreNotFound: 
+
+    except FirestoreNotFound:
         return False
 
 @event_service.route('/edit-event/<event_id>', methods=['PUT'])
@@ -186,7 +186,7 @@ def rsvpSend():
     # Check that an RSVP email has not been sent out already
     if event_obj._rsvp_sent is True:
         return jsonify({'message': 'RSVP alread sent'}), 409
-    
+
     # Check there are emails on the RSVP  list
     if event_obj._rsvp_email_list is []:
         return jsonify({'message': 'RSVP list empty'}), 400

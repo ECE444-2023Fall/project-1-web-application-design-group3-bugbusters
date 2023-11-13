@@ -70,7 +70,7 @@ export class Api {
     return this.makeRequest(
       `search-service/delete`,
       { objectID: id },
-      "DELETE"
+      "DELETE",
     );
   }
 
@@ -83,7 +83,7 @@ export class Api {
     return this.makeRequest(
       `report-service/report/${id}`,
       { report: true },
-      "POST"
+      "POST",
     );
   }
   async rsvp(data) {
@@ -91,7 +91,7 @@ export class Api {
   }
 
   async sendRsvp(data) {
-    return this.makeRequest("event-service/send-rsvp", data, "PUT");
+    return this.makeRequest("event-service/rsvp-send", data, "POST");
   }
 
   async getAllAnnouncements() {
@@ -104,7 +104,7 @@ export class Api {
       {
         description: description,
       },
-      "POST"
+      "POST",
     );
   }
 
@@ -114,7 +114,7 @@ export class Api {
       `announcement-service`,
       null,
       "DELETE",
-      query_params
+      query_params,
     );
   }
 
