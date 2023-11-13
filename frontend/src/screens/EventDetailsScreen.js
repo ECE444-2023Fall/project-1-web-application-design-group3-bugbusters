@@ -57,16 +57,6 @@ const EventDetailsScreen = function ({ route, navigation }) {
       }
     }
     retrieveEvent(event_id).then((event) => {
-      console.log(event._event_start_time);
-      console.log(
-        DateTime.fromISO(event?._event_start_time).toLocaleString({
-          weekday: "short",
-          month: "short",
-          day: "2-digit",
-          hour: "2-digit",
-          minute: "2-digit",
-        }),
-      );
       setCurrentEvent({
         ...event,
         _event_start_time: DateTime.fromISO(
