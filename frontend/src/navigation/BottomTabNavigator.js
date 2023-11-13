@@ -6,18 +6,41 @@ import LandingPageScreen from "../screens/LandingPageScreen";
 import AuthPageScreen from "../screens/AuthPageScreen";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 import ProfilePageScreen from "../screens/ProfilePageScreen";
+import api from "../helpers/API";
 import CreateEditEventScreen from "../screens/CreateEditEventScreen";
+import { reset, setUserProfileData } from "../store/Action";
+import CreateAnnouncementScreen from "../screens/CreateAnnouncementScreen";
 
 const Tab = createBottomTabNavigator();
 
 export default function BottomTab({ navigation }) {
+  const auth = getAuth();
+  // redux for user profile data
   const dispatchRedux = useDispatch();
+  // read current user profile from redux store
+  const userProfileSelector = useSelector((state) => {
+    return state.main.userProfileData;
+  });
   const primaryColor = useSelector((state) => state.main.primaryColor);
   const secondaryColor = useSelector((state) => state.main.secondaryColor);
   const contrastColor = useSelector((state) => state.main.contrastColor);
 
-  const auth = getAuth();
-  console.log(auth);
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // user is signed in
+        // get UserProfile and store in redux
+        api.getUserProfile(user.uid).then((userProfile) => {
+          dispatchRedux(setUserProfileData(userProfile.data));
+        });
+      } else {
+        // user is signed out
+        // reset store
+        dispatchRedux(reset());
+      }
+    });
+    return unsubscribe;
+  }, []);
 
   return (
     <Tab.Navigator
@@ -51,8 +74,13 @@ export default function BottomTab({ navigation }) {
         }}
       />
       <Tab.Screen
-        name="Create Edit Event"
-        component={CreateEditEventScreen}
+        name="Create Edit"
+        // navigation logic
+        component={
+          userProfileSelector?.is_admin
+            ? CreateAnnouncementScreen
+            : CreateEditEventScreen
+        }
         options={{
           tabBarIcon: ({ color, size }) => {
             return (
@@ -63,12 +91,9 @@ export default function BottomTab({ navigation }) {
         }}
         listeners={{
           tabPress: (e) => {
-            e.preventDefault();
-            if (auth?.currentUser) {
-              navigation.navigate("Create/Edit Event", {
-                isCreate: true,
-              });
-            } else {
+            // do not navigate to component unless user is logged in
+            if (!auth.currentUser) {
+              e.preventDefault();
               navigation.navigate("Authentication Page");
             }
           },
@@ -76,7 +101,16 @@ export default function BottomTab({ navigation }) {
       />
       <Tab.Screen
         name="Authentication Page"
-        component={auth.currentUser ? ProfilePageScreen : AuthPageScreen}
+        component={
+          auth.currentUser
+            ? () => (
+                <ProfilePageScreen
+                  navigation={navigation}
+                  userProfileProp={userProfileSelector}
+                />
+              )
+            : AuthPageScreen
+        }
         options={{
           tabBarIcon: ({ color, size }) => {
             return (

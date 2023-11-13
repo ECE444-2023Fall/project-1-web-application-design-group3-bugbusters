@@ -19,16 +19,12 @@ import {
 import HeaderBar from "../components/HeaderBar";
 import HorizontalTextBuffer from "../components/HorizontalTextBuffer";
 import api from "../helpers/API";
-import { useDispatch } from "react-redux";
-import { setUserProfileData } from "../store/Action";
 
 const AuthPageScreen = function ({ navigation }) {
   const [displayName, setDisplayName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showLogin, setShowLogin] = useState(true);
-  // redux for user profile data
-  const dispatchRedux = useDispatch();
 
   const textEmailRef = useRef();
   const textUsernameRef = useRef();
@@ -64,7 +60,7 @@ const AuthPageScreen = function ({ navigation }) {
     if (!endsWithAny(email, validEmails)) {
       Alert.alert(
         "Invalid Email",
-        (message = "You must use an official University of Toronto email."),
+        (message = "You must use an official University of Toronto email.")
       );
       return;
     }
@@ -83,7 +79,7 @@ const AuthPageScreen = function ({ navigation }) {
             "Email Verification",
             (message =
               "A verification receipt has been send to " +
-              "the email you used to register."),
+              "the email you used to register.")
           );
         });
         api
@@ -109,7 +105,7 @@ const AuthPageScreen = function ({ navigation }) {
               navigation.navigate("Authentication Page");
               Alert.alert(
                 "Email is not verified!",
-                (message = "Please check the email you used to register."),
+                (message = "Please check the email you used to register.")
               );
             })
             .catch((error) => {
@@ -117,10 +113,7 @@ const AuthPageScreen = function ({ navigation }) {
               console.log(error);
             });
         } else {
-          // user is verified, now get their UserProfile
-          api.getUserProfile(user.uid).then((userProfile) => {
-            dispatchRedux(setUserProfileData(userProfile.data));
-          });
+          // user is verified
           navigation.navigate("Landing Page");
         }
       })

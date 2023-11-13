@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Text,
   StyleSheet,
@@ -13,6 +13,7 @@ import HeaderBar from "../components/HeaderBar";
 import api from "../helpers/API";
 import { useSelector, useDispatch } from "react-redux";
 import EventCard from "../components/EventCard";
+import AnnouncementCard from "../components/AnnouncementCard";
 import Checkbox from "expo-checkbox";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -24,6 +25,7 @@ const LandingPageScreen = function ({ navigation }) {
   const userProfileRedux = useSelector((state) => state.main.userProfileData);
 
   const [events, setEvents] = useState([]);
+  const [announcements, setAnnouncements] = useState([]);
   const [displaySearchBar, setDisplaySearchBar] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [reportedEvents, setReportedEvents] = useState(false);
@@ -37,6 +39,15 @@ const LandingPageScreen = function ({ navigation }) {
       setEvents(response.data.results);
     } else {
       // console.error("Events cannot be obtained!!\n");
+    }
+  };
+
+  const fetchAnnouncements = async () => {
+    const response = await api.getAllAnnouncements();
+    if (response.result == "SUCCESSFUL") {
+      setAnnouncements(response.data);
+    } else {
+      alert("FAILED TO GET ALL ANNOUNCEMENTS");
     }
   };
 
@@ -55,8 +66,17 @@ const LandingPageScreen = function ({ navigation }) {
   };
 
   useEffect(() => {
-    fetchEvents();
-  }, []);
+    const unsubscribe = navigation.addListener("focus", () => {
+      // The screen is focused
+      // Call any action
+      setAnnouncements([]); // must reset state for some weird reason
+      fetchEvents();
+      fetchAnnouncements();
+    });
+
+    // Return the function to unsubscribe from the event so it gets removed on unmount
+    return unsubscribe;
+  }, [navigation]);
 
   return (
     <View style={{ flex: 1, backgroundColor: contrastColor }}>
@@ -75,8 +95,28 @@ const LandingPageScreen = function ({ navigation }) {
           </TouchableOpacity>
         }
       />
+      {announcements.map((announcement, key) => {
+        return (
+          <AnnouncementCard
+            key={key}
+            announcement_data={announcement}
+            hide_edit_button
+            hide_delete_button
+            show_minimize_button
+            style={styles.announcement_style}
+          />
+        );
+      })}
       <ScrollView
-        refreshControl={<RefreshControl onRefresh={() => fetchEvents()} />}
+        style={{ marginTop: 4, marginBottom: 80 }}
+        refreshControl={
+          <RefreshControl
+            onRefresh={() => {
+              fetchEvents();
+              fetchAnnouncements();
+            }}
+          />
+        }
       >
         {events.length ? (
           events.map((event) => {
@@ -181,6 +221,12 @@ const styles = StyleSheet.create({
     paddingLeft: 6,
     paddingVertical: 4,
     backgroundColor: "white",
+  },
+  announcement_style: {
+    marginHorizontal: 20,
+    marginTop: 12,
+    marginBottom: 0,
+    paddingVertical: 0,
   },
   checkBoxContainer: {
     marginBottom: 14,

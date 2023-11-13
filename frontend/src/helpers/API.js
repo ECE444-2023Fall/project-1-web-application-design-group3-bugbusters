@@ -7,7 +7,7 @@ export class Api {
     this.url = process.env.EXPO_PUBLIC_BASE_API_URL;
   }
 
-  async makeRequest(endpoint, data, method) {
+  async makeRequest(endpoint, data, method, params) {
     const result = {
       result: null,
       data: null,
@@ -17,6 +17,7 @@ export class Api {
       method: method,
       url: `${this.url}/${endpoint}`,
       data: data,
+      params: params,
     }).catch((err) => ({ err }));
 
     if (!response || response.err) {
@@ -49,6 +50,10 @@ export class Api {
     return this.makeRequest("user-service/create-profile", data, "POST");
   }
 
+  async editUserProfile(data) {
+    return this.makeRequest(`user-service/edit-profile`, data, "PUT");
+  }
+
   async createEvent(data) {
     return this.makeRequest("/event-service/create-event", data, "POST");
   }
@@ -65,7 +70,7 @@ export class Api {
     return this.makeRequest(
       `search-service/delete`,
       { objectID: id },
-      "DELETE",
+      "DELETE"
     );
   }
 
@@ -82,6 +87,38 @@ export class Api {
 
   async sendRsvp(data) {
     return this.makeRequest("event-service/send-rsvp", data, "PUT");
+  }
+
+  async getAllAnnouncements() {
+    return this.makeRequest(`announcement-service`, null, "GET");
+  }
+
+  async createAnnouncement({ description }) {
+    return this.makeRequest(
+      `announcement-service`,
+      {
+        description: description,
+      },
+      "POST"
+    );
+  }
+
+  async deleteAnnouncement(id) {
+    query_params = { id: id };
+    return this.makeRequest(
+      `announcement-service`,
+      null,
+      "DELETE",
+      query_params
+    );
+  }
+
+  async editAnnouncement({ description, id }) {
+    data = { description: description };
+    query_params = {
+      id: id,
+    };
+    return this.makeRequest(`announcement-service`, data, "PUT", query_params);
   }
 }
 

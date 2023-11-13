@@ -12,6 +12,11 @@ def search():
     start_time = data.get('start_time', None)
     end_time = data.get('end_time', None)
     reported = data.get('reported', None)
+    profile_search = data.get('events_by_profile', None)
+
+    if profile_search != None:
+        filterString = "creatorID:" + profile_search
+        return jsonify(search_client.search_index("", filterString, None, None))
     
     if(reported):
         return jsonify(search_client.search_index("", "reported:true", None, None))

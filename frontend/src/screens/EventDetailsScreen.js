@@ -38,7 +38,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
   const [isOwner, setOwner] = useState(
     userProfileRedux?.uid &&
       currentEventUser?.uid &&
-      userProfileRedux?.uid == currentEventUser?.uid,
+      userProfileRedux?.uid == currentEventUser?.uid
   );
 
   useEffect(() => {
@@ -67,7 +67,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
 
   const [rsvpPopup, setRsvpPopup] = useState(false);
   const [rsvped, setRsvped] = useState(
-    currentEvent?._rsvp_email_list?.includes(userProfileRedux?.email),
+    currentEvent?._rsvp_email_list?.includes(userProfileRedux?.email)
   );
   const [rsvpInfoSent, setRsvpInfoSent] = useState(currentEvent?._rsvp_sent);
   const [rsvpTextInput, setRsvpTextInput] = useState("");
@@ -191,6 +191,12 @@ const EventDetailsScreen = function ({ route, navigation }) {
             uri: currentEvent?._images?._profile_image
               ? currentEvent?._images?._profile_image
               : "https://picsum.photos/200",
+          }}
+          onPress={() => {
+            navigation.navigate("Profile Page", {
+              userProfile: currentEventUser,
+              showBackArrow: true,
+            });
           }}
         />
         {isAdmin ? null : (

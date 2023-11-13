@@ -4,6 +4,8 @@ import { StyleSheet } from "react-native";
 import BottomTab from "./BottomTabNavigator";
 import EventDetailsScreen from "../screens/EventDetailsScreen";
 import CreateEditEventScreen from "../screens/CreateEditEventScreen";
+import EditProfileScreen from "../screens/EditProfileScreen";
+import ProfilePageScreen from "../screens/ProfilePageScreen";
 
 const Stack = createStackNavigator();
 
@@ -16,6 +18,8 @@ const MainStack = function () {
         name="Create/Edit Event"
         component={CreateEditEventScreen}
       />
+      <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
+      <Stack.Screen name="Profile Page" component={ProfilePageScreen} />
     </Stack.Navigator>
   );
 };
