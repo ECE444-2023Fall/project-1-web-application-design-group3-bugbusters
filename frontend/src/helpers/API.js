@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 // import * as SecureStore from "expo-secure-store";
 
 export class Api {
@@ -59,7 +59,7 @@ export class Api {
   }
 
   async editEvent(data, id) {
-    return this.makeRequest(`/event-service/edit-event/${id}`, data, "POST");
+    return this.makeRequest(`/event-service/edit-event/${id}`, data, "PUT");
   }
 
   async search(data) {
@@ -70,7 +70,7 @@ export class Api {
     return this.makeRequest(
       `search-service/delete`,
       { objectID: id },
-      "DELETE"
+      "DELETE",
     );
   }
 
@@ -79,7 +79,12 @@ export class Api {
   }
 
   async report(id) {
-    return this.makeRequest(`report-service/report/${id}`, null, "POST");
+    // always set reported to true
+    return this.makeRequest(
+      `report-service/report/${id}`,
+      { report: true },
+      "POST",
+    );
   }
   async rsvp(data) {
     return this.makeRequest("event-service/rsvp", data, "PUT");
@@ -99,7 +104,7 @@ export class Api {
       {
         description: description,
       },
-      "POST"
+      "POST",
     );
   }
 
@@ -109,7 +114,7 @@ export class Api {
       `announcement-service`,
       null,
       "DELETE",
-      query_params
+      query_params,
     );
   }
 

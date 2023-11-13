@@ -6,6 +6,7 @@ import EventDetailsScreen from "../screens/EventDetailsScreen";
 import CreateEditEventScreen from "../screens/CreateEditEventScreen";
 import EditProfileScreen from "../screens/EditProfileScreen";
 import ProfilePageScreen from "../screens/ProfilePageScreen";
+import CreateAnnouncementScreen from "../screens/CreateAnnouncementScreen";
 
 const Stack = createStackNavigator();
 
@@ -17,6 +18,10 @@ const MainStack = function () {
       <Stack.Screen
         name="Create/Edit Event"
         component={CreateEditEventScreen}
+      />
+      <Stack.Screen
+        name="Create Announcement"
+        component={CreateAnnouncementScreen}
       />
       <Stack.Screen name="Edit Profile" component={EditProfileScreen} />
       <Stack.Screen name="Profile Page" component={ProfilePageScreen} />

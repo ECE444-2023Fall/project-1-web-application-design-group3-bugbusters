@@ -37,6 +37,8 @@ const ProfilePageScreen = function ({
   const [announcement_data, setAnnouncementData] = useState([]);
   const [menuPopup, setMenuPopup] = useState(false);
   const auth = getAuth();
+  const showAnnouncements =
+    userProfile?.is_admin && userProfile?.uid == auth.currentUser?.uid;
 
   const primaryColor = useSelector((state) => state.main.primaryColor);
   const contrastColor = useSelector((state) => state.main.contrastColor);
@@ -184,7 +186,7 @@ const ProfilePageScreen = function ({
           }}
         ></Image>
         {/* Menu button */}
-        {userProfile?.uid == auth.currentUser.uid ? (
+        {userProfile?.uid == auth.currentUser?.uid ? (
           <TouchableOpacity
             style={styles.menu_button}
             onPress={() => {
@@ -221,17 +223,13 @@ const ProfilePageScreen = function ({
       </View>
       {/* Profile list */}
       <ProfileList
-        title={userProfile?.is_admin ? "Announcements" : "Events"}
-        placeholder_text={
-          userProfile?.is_admin ? "No announcements" : "No events"
-        }
-        data={userProfile?.is_admin ? announcement_data : event_data}
-        RenderItem={userProfile?.is_admin ? AnnouncementItem : EventItem}
-        keyExtractor={(item) =>
-          userProfile?.is_admin ? item.id : item.event_ID
-        }
-        deleter={userProfile?.is_admin ? announcement_deleter : () => {}}
-        editer={userProfile?.is_admin ? announcement_editer : () => {}}
+        title={showAnnouncements ? "Announcements" : "Events"}
+        placeholder_text={showAnnouncements ? "No announcements" : "No events"}
+        data={showAnnouncements ? announcement_data : event_data}
+        RenderItem={showAnnouncements ? AnnouncementItem : EventItem}
+        keyExtractor={(item) => (showAnnouncements ? item.id : item.event_ID)}
+        deleter={showAnnouncements ? announcement_deleter : () => {}}
+        editer={showAnnouncements ? announcement_editer : () => {}}
       />
     </KeyboardAvoidingView>
   );

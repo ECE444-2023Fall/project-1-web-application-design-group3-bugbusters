@@ -21,6 +21,7 @@ import ProfilePicture from "../components/ProfilePicture";
 import PopUp from "../components/PopUp";
 import api from "../helpers/API";
 import exampleEventObject from "../../assets/exampleEventObject.json";
+const { DateTime } = require("luxon");
 
 const EventDetailsScreen = function ({ route, navigation }) {
   const event_id = route?.params?.event_id;
@@ -38,7 +39,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
   const [isOwner, setOwner] = useState(
     userProfileRedux?.uid &&
       currentEventUser?.uid &&
-      userProfileRedux?.uid == currentEventUser?.uid
+      userProfileRedux?.uid == currentEventUser?.uid,
   );
 
   useEffect(() => {
@@ -56,6 +57,27 @@ const EventDetailsScreen = function ({ route, navigation }) {
       }
     }
     retrieveEvent(event_id).then((event) => {
+      setCurrentEvent({
+        ...event,
+        _event_start_time: DateTime.fromISO(
+          event?._event_start_time,
+        ).toLocaleString({
+          weekday: "short",
+          month: "short",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+        _event_end_time: DateTime.fromISO(
+          event?._event_end_time,
+        ).toLocaleString({
+          weekday: "short",
+          month: "short",
+          day: "2-digit",
+          hour: "2-digit",
+          minute: "2-digit",
+        }),
+      });
       if (event?._creator_id == userProfileRedux?.uid) {
         setCurrentEventUser(userProfileRedux);
         setOwner(true);
@@ -67,7 +89,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
 
   const [rsvpPopup, setRsvpPopup] = useState(false);
   const [rsvped, setRsvped] = useState(
-    currentEvent?._rsvp_email_list?.includes(userProfileRedux?.email)
+    currentEvent?._rsvp_email_list?.includes(userProfileRedux?.email),
   );
   const [rsvpInfoSent, setRsvpInfoSent] = useState(currentEvent?._rsvp_sent);
   const [rsvpTextInput, setRsvpTextInput] = useState("");
@@ -82,7 +104,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
   };
 
   async function rsvp(event_id, email) {
-    const response = await api.rsvp({ event_id, email });
+    const response = await api.rsvp({ _event_id: event_id, _email: email });
     if (response.result == "SUCCESSFUL") {
       setRsvped(true);
       setRsvpTextInput("");
@@ -92,7 +114,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
         setRsvped(true);
         setRsvpTextInput("");
       } else {
-        console.error("Could not rsvp");
+        // Could not RSVP
       }
     }
   }
@@ -188,8 +210,8 @@ const EventDetailsScreen = function ({ route, navigation }) {
       <View style={{ ...styles.imageBar, backgroundColor: primaryColor }}>
         <ProfilePicture
           source={{
-            uri: currentEvent?._images?._profile_image
-              ? currentEvent?._images?._profile_image
+            uri: currentEventUser?.photo_url
+              ? currentEventUser?.photo_url
               : "https://picsum.photos/200",
           }}
           onPress={() => {
@@ -273,7 +295,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
             {currentEvent?._location ? currentEvent?._location : "No location"}
           </Text>
         </View>
-        <View style={{ flexDirection: "row" }}>
+        <View>
           <Text style={{ fontWeight: "bold" }}>Description: </Text>
           <Text>
             {currentEvent?._description

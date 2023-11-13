@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
   cardContainer: {
     margin: 20,
     borderRadius: 10,
-    height: 280,
+    minHeight: 280,
     overflow: "hidden",
   },
   cardBar: {
@@ -68,9 +68,16 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     backgroundColor: "#ECEBEA",
+    paddingVertical: 10,
   },
-  eventTitle: { alignSelf: "center", fontSize: 18, fontWeight: "bold" },
-  eventOwner: { alignSelf: "center" },
+  eventTitle: {
+    textAlign: "center",
+    alignSelf: "center",
+    fontSize: 18,
+    fontWeight: "bold",
+    width: 200,
+  },
+  eventOwner: { alignSelf: "center", width: 200, textAlign: "center" },
   reportButton: { paddingRight: 20 },
 });
 

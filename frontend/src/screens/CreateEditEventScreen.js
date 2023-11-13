@@ -39,17 +39,17 @@ const CreateEditEventScreen = function ({ navigation, route }) {
   const [startTime, setStartTime] = useState(
     eventObject?._event_start_time
       ? new Date(eventObject?._event_start_time)
-      : new Date(),
+      : new Date()
   );
   const [endTime, setEndTime] = useState(
     eventObject?._event_end_time
       ? new Date(eventObject?._event_end_time)
-      : new Date(),
+      : new Date()
   );
   const [expiryTime, setExpiryTime] = useState(
     eventObject?._event_expiry_time
       ? new Date(eventObject?._event_expiry_time)
-      : new Date(),
+      : new Date()
   );
 
   const refTitleInput = useRef();
@@ -137,7 +137,7 @@ const CreateEditEventScreen = function ({ navigation, route }) {
     } else {
       response = await api.editEvent(
         (data = newEventObj),
-        (id = eventObject?._event_id),
+        (id = eventObject?._event_id)
       );
     }
 

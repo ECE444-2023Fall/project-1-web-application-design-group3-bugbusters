@@ -34,11 +34,10 @@ const LandingPageScreen = function ({ navigation }) {
   // Land or refresh case
   const fetchEvents = async () => {
     const response = await api.search({ query: "", filters: [] });
-    console.log(response.data.results);
     if (response.result == "SUCCESSFUL") {
       setEvents(response.data.results);
     } else {
-      // console.error("Events cannot be obtained!!\n");
+      // Events cannot be obtained
     }
   };
 
@@ -61,7 +60,7 @@ const LandingPageScreen = function ({ navigation }) {
     if (response.result == "SUCCESSFUL") {
       setEvents(response.data.results);
     } else {
-      // console.error("Events cannot be obtained!!\n");
+      // Events cannot be obtained
     }
   };
 
