@@ -91,7 +91,7 @@ export class Api {
   }
 
   async sendRsvp(data) {
-    return this.makeRequest("event-service/send-rsvp", data, "PUT");
+    return this.makeRequest("event-service/rsvp-send", data, "POST");
   }
 
   async getAllAnnouncements() {
