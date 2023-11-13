@@ -79,7 +79,12 @@ export class Api {
   }
 
   async report(id) {
-    return this.makeRequest(`report-service/report/${id}`, null, "POST");
+    // always set reported to true
+    return this.makeRequest(
+      `report-service/report/${id}`,
+      { report: true },
+      "POST"
+    );
   }
   async rsvp(data) {
     return this.makeRequest("event-service/rsvp", data, "PUT");
