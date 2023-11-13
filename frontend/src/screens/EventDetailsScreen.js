@@ -38,7 +38,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
   const [isOwner, setOwner] = useState(
     userProfileRedux?.uid &&
       currentEventUser?.uid &&
-      userProfileRedux?.uid == currentEventUser?.uid
+      userProfileRedux?.uid == currentEventUser?.uid,
   );
 
   useEffect(() => {
@@ -65,9 +65,11 @@ const EventDetailsScreen = function ({ route, navigation }) {
     });
   }, [event_id]);
 
+  console.log(currentEventUser?.photo_url);
+
   const [rsvpPopup, setRsvpPopup] = useState(false);
   const [rsvped, setRsvped] = useState(
-    currentEvent?._rsvp_email_list?.includes(userProfileRedux?.email)
+    currentEvent?._rsvp_email_list?.includes(userProfileRedux?.email),
   );
   const [rsvpInfoSent, setRsvpInfoSent] = useState(currentEvent?._rsvp_sent);
   const [rsvpTextInput, setRsvpTextInput] = useState("");
@@ -188,8 +190,8 @@ const EventDetailsScreen = function ({ route, navigation }) {
       <View style={{ ...styles.imageBar, backgroundColor: primaryColor }}>
         <ProfilePicture
           source={{
-            uri: currentEvent?._images?._profile_image
-              ? currentEvent?._images?._profile_image
+            uri: currentEventUser?.photo_url
+              ? currentEventUser?.photo_url
               : "https://picsum.photos/200",
           }}
           onPress={() => {
