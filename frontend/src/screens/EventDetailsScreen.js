@@ -65,8 +65,6 @@ const EventDetailsScreen = function ({ route, navigation }) {
     });
   }, [event_id]);
 
-  console.log(currentEventUser?.photo_url);
-
   const [rsvpPopup, setRsvpPopup] = useState(false);
   const [rsvped, setRsvped] = useState(
     currentEvent?._rsvp_email_list?.includes(userProfileRedux?.email),
@@ -84,7 +82,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
   };
 
   async function rsvp(event_id, email) {
-    const response = await api.rsvp({ event_id, email });
+    const response = await api.rsvp({ _event_id: event_id, _email: email });
     if (response.result == "SUCCESSFUL") {
       setRsvped(true);
       setRsvpTextInput("");
@@ -94,7 +92,7 @@ const EventDetailsScreen = function ({ route, navigation }) {
         setRsvped(true);
         setRsvpTextInput("");
       } else {
-        console.error("Could not rsvp");
+        // Could not RSVP
       }
     }
   }
